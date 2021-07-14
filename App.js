@@ -9,6 +9,7 @@ import CalendarScreen from "./src/screens/CalendarScreen";
 import LibraryScreen from "./src/screens/LibraryScreen";
 
 import { BottomTabIcons } from "./src/icons/BottomTabIcons";
+import { Colors } from "./src/classes/Colors";
 
 const HomeStack = createStackNavigator();
 const CalendarStack = createStackNavigator();
@@ -20,26 +21,23 @@ const Theme = {
   dark: false,
   colors: {
     //make the back button white
-    primary: "white",
+    primary: Colors.textColor,
     //make the background color an off-white
-    background: "rgb(242, 242, 242)",
+    background: Colors.backgroundColor,
     //make the header color white
-    card: "#ffffff",
+    card: Colors.textColor,
     //make the header text black
     //text: "black",
   },
 };
 
-//define the primary color of the home page
-const homeColor = "#00022e";
-
 //style the bottom tab bar
 const customTabBarStyle = {
-  activeTintColor: homeColor,
-  inactiveTintColor: "gray",
+  activeTintColor: Colors.primaryColor,
+  inactiveTintColor: Colors.tabInactiveColor,
   labelPosition: "below-icon",
   style: {
-    backgroundColor: "white",
+    backgroundColor: Colors.tabBackgroundColor,
     height: 80,
   },
   tabStyle: {
