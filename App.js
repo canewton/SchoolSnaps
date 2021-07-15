@@ -27,7 +27,7 @@ const Theme = {
     //make the header color white
     card: Colors.textColor,
     //make the header text black
-    text: Colors.textColor,
+    text: Colors.primaryColor,
   },
 };
 
@@ -37,28 +37,43 @@ const customTabBarStyle = {
   inactiveTintColor: Colors.tabInactiveColor,
   labelPosition: "below-icon",
   style: {
+    position: "absolute",
     backgroundColor: Colors.tabBackgroundColor,
-    height: 80,
+    height: 90,
+    elevation: 0,
+    borderRadius: 20,
+    borderTopWidth: 0,
+    elevation: 0,
   },
   tabStyle: {
-    height: 40,
-    marginTop: 5,
+    marginTop: 15,
   },
+  showLabel: false,
 };
 
 //style the header
 const customHeaderStyle = {
-  headerStyle: { height: 100, backgroundColor: Colors.primaryColor },
+  headerStyle: {
+    height: 120,
+    backgroundColor: Colors.backgroundColor,
+    shadowColor: "transparent",
+  },
+  headerTitleAlign: "left",
   headerTitleStyle: {
     fontWeight: "bold",
-    fontSize: 22,
+    fontSize: 26,
+    marginLeft: 10,
   },
 };
 
 const HomeStackScreen = () => {
   return (
     <HomeStack.Navigator>
-      <HomeStack.Screen name="Home" component={HomeScreen} options={customHeaderStyle} />
+      <HomeStack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{ ...customHeaderStyle, title: "Course Activity" }}
+      />
     </HomeStack.Navigator>
   );
 };
@@ -69,7 +84,7 @@ const CalendarStackScreen = () => {
       <CalendarStack.Screen
         name="Calendar"
         component={CalendarScreen}
-        options={customHeaderStyle}
+        options={{ ...customHeaderStyle, title: "Assignments" }}
       />
     </CalendarStack.Navigator>
   );
@@ -81,7 +96,7 @@ const LibraryStackScreen = () => {
       <LibraryStack.Screen
         name="Library"
         component={LibraryScreen}
-        options={customHeaderStyle}
+        options={{ ...customHeaderStyle, title: "Sorted Notes" }}
       />
     </LibraryStack.Navigator>
   );

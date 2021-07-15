@@ -1,5 +1,5 @@
 export class Colors {
-  static primaryColor = "#00022e";
+  static primaryColor = "#023e8a";
   static backgroundColor = "rgb(242, 242, 242)";
   static textColor = "white";
   static tabBackgroundColor = "white";

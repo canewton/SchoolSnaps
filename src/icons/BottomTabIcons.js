@@ -15,7 +15,7 @@ export class BottomTabIcons extends IconsList {
         title: "Classes",
       },
       {
-        icon: <AntDesign name="folder1" size={iconSize} color={iconColor} />,
+        icon: <Ionicons name="folder" size={iconSize} color={iconColor} />,
         title: "Folders",
       },
       {
