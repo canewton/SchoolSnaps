@@ -27,7 +27,7 @@ const Theme = {
     //make the header color white
     card: Colors.textColor,
     //make the header text black
-    //text: "black",
+    text: Colors.textColor,
   },
 };
 
@@ -46,10 +46,19 @@ const customTabBarStyle = {
   },
 };
 
+//style the header
+const customHeaderStyle = {
+  headerStyle: { height: 100, backgroundColor: Colors.primaryColor },
+  headerTitleStyle: {
+    fontWeight: "bold",
+    fontSize: 22,
+  },
+};
+
 const HomeStackScreen = () => {
   return (
     <HomeStack.Navigator>
-      <HomeStack.Screen name="Home" component={HomeScreen} />
+      <HomeStack.Screen name="Home" component={HomeScreen} options={customHeaderStyle} />
     </HomeStack.Navigator>
   );
 };
@@ -57,7 +66,11 @@ const HomeStackScreen = () => {
 const CalendarStackScreen = () => {
   return (
     <CalendarStack.Navigator>
-      <CalendarStack.Screen name="Calendar" component={CalendarScreen} />
+      <CalendarStack.Screen
+        name="Calendar"
+        component={CalendarScreen}
+        options={customHeaderStyle}
+      />
     </CalendarStack.Navigator>
   );
 };
@@ -65,7 +78,11 @@ const CalendarStackScreen = () => {
 const LibraryStackScreen = () => {
   return (
     <LibraryStack.Navigator>
-      <LibraryStack.Screen name="Library" component={LibraryScreen} />
+      <LibraryStack.Screen
+        name="Library"
+        component={LibraryScreen}
+        options={customHeaderStyle}
+      />
     </LibraryStack.Navigator>
   );
 };
