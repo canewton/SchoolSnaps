@@ -9,6 +9,7 @@ import LibraryScreen from "./src/screens/LibraryScreen";
 
 import { BottomTabIcons } from "./src/icons/BottomTabIcons";
 import { Colors } from "./src/classes/Colors";
+import { Provider as ClassesProvider } from "./src/context/ClassesContext";
 
 const HomeStack = createStackNavigator();
 const CalendarStack = createStackNavigator();
@@ -103,32 +104,35 @@ const LibraryStackScreen = () => {
 
 export default function App() {
   return (
-    <NavigationContainer theme={Theme}>
-      <Tab.Navigator tabBarOptions={customTabBarStyle}>
-        <Tab.Screen
-          name="Home"
-          component={HomeStackScreen}
-          options={{
-            tabBarIcon: ({ color, size }) => BottomTabIcons.findIcon("Home", size, color),
-          }}
-        />
-        <Tab.Screen
-          name="Calendar"
-          component={CalendarStackScreen}
-          options={{
-            tabBarIcon: ({ color, size }) =>
-              BottomTabIcons.findIcon("Planner", size, color),
-          }}
-        />
-        <Tab.Screen
-          name="Library"
-          component={LibraryStackScreen}
-          options={{
-            tabBarIcon: ({ color, size }) =>
-              BottomTabIcons.findIcon("Folders", size, color),
-          }}
-        />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <ClassesProvider>
+      <NavigationContainer theme={Theme}>
+        <Tab.Navigator tabBarOptions={customTabBarStyle}>
+          <Tab.Screen
+            name="Home"
+            component={HomeStackScreen}
+            options={{
+              tabBarIcon: ({ color, size }) =>
+                BottomTabIcons.findIcon("Home", size, color),
+            }}
+          />
+          <Tab.Screen
+            name="Calendar"
+            component={CalendarStackScreen}
+            options={{
+              tabBarIcon: ({ color, size }) =>
+                BottomTabIcons.findIcon("Planner", size, color),
+            }}
+          />
+          <Tab.Screen
+            name="Library"
+            component={LibraryStackScreen}
+            options={{
+              tabBarIcon: ({ color, size }) =>
+                BottomTabIcons.findIcon("Folders", size, color),
+            }}
+          />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </ClassesProvider>
   );
 }

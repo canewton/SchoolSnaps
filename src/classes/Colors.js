@@ -106,4 +106,8 @@ export class Colors {
       secondaryColor: "#23445D",
     },
   ];
+
+  static getClassColor(index) {
+    return this.classColors[index].primaryColor;
+  }
 }
