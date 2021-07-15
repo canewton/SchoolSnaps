@@ -1,5 +1,4 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -20,13 +19,13 @@ const Tab = createBottomTabNavigator();
 const Theme = {
   dark: false,
   colors: {
-    //make the back button white
+    //change the color of the back button
     primary: Colors.textColor,
-    //make the background color an off-white
+    //change the color of the background
     background: Colors.backgroundColor,
-    //make the header color white
+    //change the color of the text
     card: Colors.textColor,
-    //make the header text black
+    //change the color of the header text
     text: Colors.primaryColor,
   },
 };
@@ -103,8 +102,6 @@ const LibraryStackScreen = () => {
 };
 
 export default function App() {
-  console.log("app");
-  console.log(BottomTabIcons.iconList(5, "red"));
   return (
     <NavigationContainer theme={Theme}>
       <Tab.Navigator tabBarOptions={customTabBarStyle}>
@@ -135,12 +132,3 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

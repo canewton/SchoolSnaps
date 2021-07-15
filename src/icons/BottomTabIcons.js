@@ -8,7 +8,6 @@ import { IconsList } from "./IconsList";
 
 export class BottomTabIcons extends IconsList {
   static iconList(iconSize, iconColor) {
-    console.log("icon list");
     return [
       {
         icon: <Ionicons name="school-outline" size={iconSize} color={iconColor} />,
