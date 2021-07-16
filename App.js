@@ -40,10 +40,13 @@ const customTabBarStyle = {
     position: "absolute",
     backgroundColor: Colors.tabBackgroundColor,
     height: 90,
-    elevation: 0,
+    elevation: 4,
     borderRadius: 20,
     borderTopWidth: 0,
-    elevation: 0,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.15,
+    shadowRadius: 2,
   },
   tabStyle: {
     marginTop: 15,
@@ -54,7 +57,7 @@ const customTabBarStyle = {
 //style the header
 const customHeaderStyle = {
   headerStyle: {
-    height: 120,
+    height: 110,
     backgroundColor: Colors.backgroundColor,
     shadowColor: "transparent",
   },

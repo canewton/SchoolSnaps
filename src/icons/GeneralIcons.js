@@ -10,23 +10,23 @@ export class GeneralIcons extends IconsList {
     return [
       {
         icon: <Feather name="camera" size={iconSize} color={iconColor} />,
-        title: "Camera",
+        name: "Camera",
       },
       {
         icon: <Ionicons name="trash-outline" size={iconSize} color={iconColor} />,
-        title: "Delete",
+        name: "Delete",
       },
       {
         icon: <Ionicons name="school-outline" size={iconSize} color={iconColor} />,
-        title: "Classes",
+        name: "Classes",
       },
       {
         icon: <Entypo name="plus" size={iconSize} color={iconColor} />,
-        title: "Plus",
+        name: "Plus",
       },
       {
         icon: <SimpleLineIcons name="note" size={iconSize} color={iconColor} />,
-        title: "Notes",
+        name: "Notes",
       },
     ];
   }

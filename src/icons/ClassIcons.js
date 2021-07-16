@@ -9,6 +9,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Fontisto } from "@expo/vector-icons";
+import { IconsList } from "./IconsList";
 
 export class ClassIcons extends IconsList {
   static iconList(iconSize, iconColor) {

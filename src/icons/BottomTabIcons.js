@@ -11,23 +11,23 @@ export class BottomTabIcons extends IconsList {
     return [
       {
         icon: <Ionicons name="school-outline" size={iconSize} color={iconColor} />,
-        title: "Classes",
+        name: "Classes",
       },
       {
         icon: <Ionicons name="folder" size={iconSize} color={iconColor} />,
-        title: "Folders",
+        name: "Folders",
       },
       {
         icon: <FontAwesome5 name="calendar-check" size={iconSize} color={iconColor} />,
-        title: "Planner",
+        name: "Planner",
       },
       {
         icon: <Entypo name="home" size={iconSize} color={iconColor} />,
-        title: "Home",
+        name: "Home",
       },
       {
         icon: <SimpleLineIcons name="note" size={iconSize} color={iconColor} />,
-        title: "Notes",
+        name: "Notes",
       },
     ];
   }
