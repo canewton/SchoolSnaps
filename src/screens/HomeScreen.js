@@ -1,14 +1,16 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from "react-native";
 import { Context as ClassesContext } from "../context/ClassesContext";
 import { useNavigation } from "@react-navigation/native";
 import { ClassIcons } from "../icons/ClassIcons";
 import { GeneralIcons } from "../icons/GeneralIcons";
+import { Colors } from "../classes/Colors";
 import AddButton from "../components/AddButton";
 
 const HomeScreen = () => {
   const classes = useContext(ClassesContext);
   const navigation = useNavigation();
+  const [activeTab, setActiveTab] = useState("Current");
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -16,8 +18,41 @@ const HomeScreen = () => {
     });
   });
 
+  const tabButtons = [{ name: "All" }, { name: "Current" }, { name: "Completed" }];
+
   return (
     <View style={{ flex: 1, marginBottom: 80 }}>
+      <View style={{ marginLeft: 25 }}>
+        <FlatList
+          data={tabButtons}
+          keyExtractor={(index) => index.name}
+          scrollEnabled={false}
+          horizontal
+          renderItem={({ item }) => {
+            return (
+              <TouchableOpacity onPress={() => setActiveTab(item.name)}>
+                {item.name === activeTab && (
+                  <View style={styles.tabButton}>
+                    <Text style={styles.tabText}>{item.name}</Text>
+                  </View>
+                )}
+                {item.name !== activeTab && (
+                  <View
+                    style={{
+                      ...styles.tabButton,
+                      backgroundColor: Colors.backgroundColor,
+                    }}
+                  >
+                    <Text style={{ ...styles.tabText, color: Colors.primaryColor }}>
+                      {item.name}
+                    </Text>
+                  </View>
+                )}
+              </TouchableOpacity>
+            );
+          }}
+        />
+      </View>
       <FlatList
         data={classes.state}
         keyExtractor={(index) => index.id + ""}
@@ -91,6 +126,21 @@ const styles = StyleSheet.create({
     marginRight: 15,
     alignItems: "flex-end",
     flex: 1,
+  },
+  tabButton: {
+    marginBottom: 15,
+    backgroundColor: Colors.primaryColor,
+    marginRight: 12,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: Colors.primaryColor,
+  },
+  tabText: {
+    fontSize: 14,
+    color: "white",
+    marginVertical: 8,
+    marginHorizontal: 15,
+    fontWeight: "600",
   },
 });
 

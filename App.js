@@ -75,7 +75,7 @@ const HomeStackScreen = () => {
       <HomeStack.Screen
         name="Home"
         component={HomeScreen}
-        options={{ ...customHeaderStyle, title: "Course Activity" }}
+        options={{ ...customHeaderStyle, title: "My Courses" }}
       />
     </HomeStack.Navigator>
   );
