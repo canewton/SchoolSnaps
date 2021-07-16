@@ -28,6 +28,10 @@ export class GeneralIcons extends IconsList {
         icon: <SimpleLineIcons name="note" size={iconSize} color={iconColor} />,
         name: "Notes",
       },
+      {
+        icon: <Ionicons name="ios-chevron-forward" size={iconSize} color={iconColor} />,
+        name: "Forward",
+      },
     ];
   }
 }
