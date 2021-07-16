@@ -4,6 +4,7 @@ export class SchoolClass {
     this.name = name;
     this.primaryColor = primaryColor;
     this.iconName = iconName;
+    this.status = "current"; //status can equal "current" or "completed"
     this.active = false;
   }
 
@@ -17,7 +18,13 @@ export class SchoolClass {
       this.primaryColor +
       '","iconName":"' +
       this.iconName +
+      '","status":"' +
+      this.status +
       '"}'
     );
+  }
+
+  setStatus(status) {
+    this.status = status;
   }
 }

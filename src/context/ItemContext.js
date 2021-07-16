@@ -16,6 +16,10 @@ export class ItemContext {
       case "delete":
         //if the inputted item's id is found, remove that item from the array
         return state.filter((item) => item.id !== action.payload.id);
+      case "filter":
+        return state.filter(
+          (item) => item[action.payload.property] === action.payload.value
+        );
     }
   };
 
@@ -52,6 +56,13 @@ export class ItemContext {
       if (callback) {
         callback();
       }
+    };
+  };
+
+  static filter = (dispatch) => {
+    console.log("filter");
+    return (property, value) => {
+      dispatch({ type: "filter", payload: { property, value } });
     };
   };
 }
