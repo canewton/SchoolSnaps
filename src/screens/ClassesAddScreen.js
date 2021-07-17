@@ -1,10 +1,9 @@
 import React, { useContext } from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { SchoolClass } from "../classes/SchoolClass";
+import { View, StyleSheet } from "react-native";
 import ClassForm from "../components/ClassForm";
 import { Context as ClassesContext } from "../context/ClassesContext";
 
-const ClassesAddScreen = () => {
+const ClassesAddScreen = ({ navigation }) => {
   const classes = useContext(ClassesContext);
   return (
     <View>
@@ -12,12 +11,11 @@ const ClassesAddScreen = () => {
         initialValues={null}
         onSubmit={(schoolClass) => {
           classes.add(schoolClass);
+          navigation.pop();
         }}
       />
     </View>
   );
 };
-
-const styles = StyleSheet.create({});
 
 export default ClassesAddScreen;
