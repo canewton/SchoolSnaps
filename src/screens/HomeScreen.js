@@ -32,9 +32,7 @@ const HomeScreen = () => {
       {activeTab === "Current" && (
         <CoursesList classes={ItemArray.filter(classes.state, "status", "Current")} />
       )}
-      {activeTab === "All" && (
-        <CoursesList classes={ItemArray.filter(classes.state, "status", "All")} />
-      )}
+      {activeTab === "All" && <CoursesList classes={classes.state} />}
       {activeTab === "Completed" && (
         <CoursesList classes={ItemArray.filter(classes.state, "status", "Completed")} />
       )}

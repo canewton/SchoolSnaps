@@ -17,13 +17,13 @@ import { FontAwesome } from "@expo/vector-icons";
 
 //get the width of the window
 const windowWidth = Dimensions.get("window").width;
-const colorCircleMargin = 8;
-const colorColumns = 6;
+const optionCircleMargin = 8;
+const optionColumns = 6;
 const edgeMargin = 8;
 //calculate all of the white space around each of the color circles
-const totalColorWhiteSpace = colorColumns * colorCircleMargin * 2 + edgeMargin * 2;
+const totalColorWhiteSpace = optionColumns * optionCircleMargin * 2 + edgeMargin * 2;
 //calculate the circle diameter so that all of the circles can be spaced evenly on the screen
-const colorCircleDiameter = (windowWidth - totalColorWhiteSpace) / colorColumns;
+const optionCircleDiameter = (windowWidth - totalColorWhiteSpace) / optionColumns;
 
 const ClassForm = ({ onSubmit, initialValues }) => {
   //set default values
@@ -43,25 +43,29 @@ const ClassForm = ({ onSubmit, initialValues }) => {
     }
   });
 
-  //add a save button to the right of the header that adds a class to the context
+  //add a save and cancel button on either side of the header
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity
           onPress={() => onSubmit(new SchoolClass(id, name, primaryColor, iconName))}
         >
-          <SaveClassButton />
+          <HeaderButton name="Save" />
+        </TouchableOpacity>
+      ),
+      headerLeft: () => (
+        <TouchableOpacity onPress={() => navigation.pop()}>
+          <HeaderButton name="Cancel" />
         </TouchableOpacity>
       ),
     });
   });
 
-  //make a button that goes to the right of the header that saves the class being editted or added
-  const SaveClassButton = () => {
+  const HeaderButton = ({ name }) => {
     return (
-      <View style={{ marginRight: 15 }}>
+      <View style={{ marginHorizontal: 15 }}>
         <Text style={{ color: Colors.primaryColor, fontSize: 18, fontWeight: "400" }}>
-          Save
+          {name}
         </Text>
       </View>
     );
@@ -81,7 +85,7 @@ const ClassForm = ({ onSubmit, initialValues }) => {
         <FlatList
           data={Colors.classColors}
           keyExtractor={(index) => index.primaryColor}
-          numColumns={colorColumns}
+          numColumns={optionColumns}
           scrollEnabled={false}
           renderItem={({ item }) => {
             return (
@@ -108,13 +112,11 @@ const ClassForm = ({ onSubmit, initialValues }) => {
         <FlatList
           data={ClassIcons.iconList(25, "white")}
           keyExtractor={(index) => index.name + ""}
-          numColumns={colorColumns}
+          numColumns={optionColumns}
           scrollEnabled={false}
           renderItem={({ item }) => {
             return (
               <TouchableOpacity
-                //if this icon is pressed, set the state to this icon so that
-                //it can be used to change the values of classes context later
                 onPress={() => {
                   setIconName(item.name);
                 }}
@@ -122,7 +124,7 @@ const ClassForm = ({ onSubmit, initialValues }) => {
                 <View
                   style={
                     //if this icon is the one that the user chooses, make it have an opacity of 1
-                    //if this icon is not the one that the user chooses, make it have an opacity of .25
+                    //if this icon is not the one that the user chooses, lower its opacity
                     iconName === item.name
                       ? { ...styles.color, backgroundColor: primaryColor }
                       : {
@@ -132,7 +134,6 @@ const ClassForm = ({ onSubmit, initialValues }) => {
                         }
                   }
                 >
-                  {/* render the icon */}
                   {item.icon}
                 </View>
               </TouchableOpacity>
@@ -154,10 +155,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 3,
   },
   color: {
-    height: colorCircleDiameter,
-    width: colorCircleDiameter,
-    borderRadius: colorCircleDiameter / 2,
-    margin: colorCircleMargin,
+    height: optionCircleDiameter,
+    width: optionCircleDiameter,
+    borderRadius: optionCircleDiameter / 2,
+    margin: optionCircleMargin,
     alignItems: "center",
     justifyContent: "center",
   },
