@@ -22,7 +22,6 @@ export const { Context, Provider } = createDataContext(
     add: ClassesContext.add,
     replace: ClassesContext.replace,
     delete: ClassesContext.delete,
-    filter: ClassesContext.filter,
   },
   ClassesContext.classes
 );

@@ -1,14 +1,17 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { Context as ClassesContext } from "../context/ClassesContext";
 import { useNavigation } from "@react-navigation/native";
 import AddButton from "../components/AddButton";
 import CoursesList from "../components/CoursesList";
 import TopTabs from "../components/TopTabs";
+import { ObjectArray } from "../classes/ObjectArray";
 
 const HomeScreen = () => {
   const classes = useContext(ClassesContext);
   const navigation = useNavigation();
+
+  const [activeTab, setActiveTab] = useState("Current");
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -20,8 +23,21 @@ const HomeScreen = () => {
 
   return (
     <View style={{ flex: 1, marginBottom: 80 }}>
-      <TopTabs tabButtons={tabButtons} />
-      {<CoursesList classes={classes.state} />}
+      <TopTabs
+        tabButtons={tabButtons}
+        callback={(tab) => {
+          setActiveTab(tab);
+        }}
+      />
+      {activeTab === "Current" && (
+        <CoursesList classes={ObjectArray.filter(classes.state, "status", "Current")} />
+      )}
+      {activeTab === "All" && (
+        <CoursesList classes={ObjectArray.filter(classes.state, "status", "All")} />
+      )}
+      {activeTab === "Completed" && (
+        <CoursesList classes={ObjectArray.filter(classes.state, "status", "Completed")} />
+      )}
     </View>
   );
 };

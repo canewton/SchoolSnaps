@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from "react-native";
 import { Colors } from "../classes/Colors";
 
-const TopTabs = ({ tabButtons }) => {
+const TopTabs = ({ tabButtons, callback }) => {
   const [activeTab, setActiveTab] = useState("Current");
 
   return (
@@ -14,7 +14,12 @@ const TopTabs = ({ tabButtons }) => {
         horizontal
         renderItem={({ item }) => {
           return (
-            <TouchableOpacity onPress={() => setActiveTab(item.name)}>
+            <TouchableOpacity
+              onPress={() => {
+                setActiveTab(item.name);
+                callback(item.name);
+              }}
+            >
               {item.name === activeTab && (
                 <View style={styles.tabButton}>
                   <Text style={styles.tabText}>{item.name}</Text>
