@@ -6,11 +6,13 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "./src/screens/HomeScreen";
 import CalendarScreen from "./src/screens/CalendarScreen";
 import LibraryScreen from "./src/screens/LibraryScreen";
+import ClassesAddScreen from "./src/screens/ClassesAddScreen";
 
 import { BottomTabIcons } from "./src/icons/BottomTabIcons";
 import { Colors } from "./src/classes/Colors";
 import { Provider as ClassesProvider } from "./src/context/ClassesContext";
 
+const MainStack = createStackNavigator();
 const HomeStack = createStackNavigator();
 const CalendarStack = createStackNavigator();
 const LibraryStack = createStackNavigator();
@@ -21,7 +23,7 @@ const Theme = {
   dark: false,
   colors: {
     //change the color of the back button
-    primary: Colors.textColor,
+    primary: Colors.primaryColor,
     //change the color of the background
     background: Colors.backgroundColor,
     //change the color of the text
@@ -106,36 +108,50 @@ const LibraryStackScreen = () => {
   );
 };
 
+const TabNavigator = () => {
+  return (
+    <Tab.Navigator tabBarOptions={customTabBarStyle}>
+      <Tab.Screen
+        name="Home"
+        component={HomeStackScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => BottomTabIcons.findIcon("Home", size, color),
+        }}
+      />
+      <Tab.Screen
+        name="Calendar"
+        component={CalendarStackScreen}
+        options={{
+          tabBarIcon: ({ color, size }) =>
+            BottomTabIcons.findIcon("Planner", size, color),
+        }}
+      />
+      <Tab.Screen
+        name="Library"
+        component={LibraryStackScreen}
+        options={{
+          tabBarIcon: ({ color, size }) =>
+            BottomTabIcons.findIcon("Folders", size, color),
+        }}
+      />
+    </Tab.Navigator>
+  );
+};
+
 export default function App() {
   return (
     <ClassesProvider>
       <NavigationContainer theme={Theme}>
-        <Tab.Navigator tabBarOptions={customTabBarStyle}>
-          <Tab.Screen
-            name="Home"
-            component={HomeStackScreen}
+        <MainStack.Navigator>
+          <MainStack.Screen
+            name="Main"
+            component={TabNavigator}
             options={{
-              tabBarIcon: ({ color, size }) =>
-                BottomTabIcons.findIcon("Home", size, color),
+              headerShown: false,
             }}
           />
-          <Tab.Screen
-            name="Calendar"
-            component={CalendarStackScreen}
-            options={{
-              tabBarIcon: ({ color, size }) =>
-                BottomTabIcons.findIcon("Planner", size, color),
-            }}
-          />
-          <Tab.Screen
-            name="Library"
-            component={LibraryStackScreen}
-            options={{
-              tabBarIcon: ({ color, size }) =>
-                BottomTabIcons.findIcon("Folders", size, color),
-            }}
-          />
-        </Tab.Navigator>
+          <MainStack.Screen name="New Class" component={ClassesAddScreen} />
+        </MainStack.Navigator>
       </NavigationContainer>
     </ClassesProvider>
   );
