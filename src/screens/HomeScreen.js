@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import AddButton from "../components/AddButton";
 import CoursesList from "../components/CoursesList";
 import TopTabs from "../components/TopTabs";
-import { ObjectArray } from "../classes/ObjectArray";
+import { ItemArray } from "../classes/ItemArray";
 
 const HomeScreen = () => {
   const classes = useContext(ClassesContext);
@@ -30,13 +30,13 @@ const HomeScreen = () => {
         }}
       />
       {activeTab === "Current" && (
-        <CoursesList classes={ObjectArray.filter(classes.state, "status", "Current")} />
+        <CoursesList classes={ItemArray.filter(classes.state, "status", "Current")} />
       )}
       {activeTab === "All" && (
-        <CoursesList classes={ObjectArray.filter(classes.state, "status", "All")} />
+        <CoursesList classes={ItemArray.filter(classes.state, "status", "All")} />
       )}
       {activeTab === "Completed" && (
-        <CoursesList classes={ObjectArray.filter(classes.state, "status", "Completed")} />
+        <CoursesList classes={ItemArray.filter(classes.state, "status", "Completed")} />
       )}
     </View>
   );
