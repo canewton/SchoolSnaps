@@ -5,7 +5,6 @@ export class SchoolClass {
     this.primaryColor = primaryColor;
     this.iconName = iconName;
     this.status = "Current"; //status can equal "current" or "completed"
-    this.active = false;
   }
 
   toString() {

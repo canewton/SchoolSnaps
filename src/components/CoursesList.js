@@ -2,8 +2,11 @@ import React from "react";
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from "react-native";
 import { ClassIcons } from "../icons/ClassIcons";
 import { GeneralIcons } from "../icons/GeneralIcons";
+import { useNavigation } from "@react-navigation/native";
 
 const CoursesList = ({ classes }) => {
+  const navigation = useNavigation();
+
   return (
     <View>
       <FlatList
@@ -13,7 +16,11 @@ const CoursesList = ({ classes }) => {
         renderItem={({ item }) => {
           return (
             <View>
-              <TouchableOpacity onPress={() => {}}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("Notes", item);
+                }}
+              >
                 <View style={{ ...styles.classButton, backgroundColor: "white" }}>
                   <View
                     style={{

@@ -7,6 +7,7 @@ import HomeScreen from "./src/screens/HomeScreen";
 import CalendarScreen from "./src/screens/CalendarScreen";
 import LibraryScreen from "./src/screens/LibraryScreen";
 import ClassesAddScreen from "./src/screens/ClassesAddScreen";
+import NotesScreen from "./src/screens/NotesScreen";
 
 import { BottomTabIcons } from "./src/icons/BottomTabIcons";
 import { Colors } from "./src/classes/Colors";
@@ -58,7 +59,7 @@ const customTabBarStyle = {
 };
 
 //style the header
-const customHeaderStyle = {
+const invisibleHeaderStyle = {
   headerStyle: {
     height: 110,
     backgroundColor: Colors.backgroundColor,
@@ -72,13 +73,19 @@ const customHeaderStyle = {
   },
 };
 
+const visibleHeaderStyle = {
+  headerStyle: {
+    shadowColor: "transparent",
+  },
+};
+
 const HomeStackScreen = () => {
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen
         name="Home"
         component={HomeScreen}
-        options={{ ...customHeaderStyle, title: "My Courses" }}
+        options={{ ...invisibleHeaderStyle, title: "My Courses" }}
       />
     </HomeStack.Navigator>
   );
@@ -90,7 +97,7 @@ const CalendarStackScreen = () => {
       <CalendarStack.Screen
         name="Calendar"
         component={CalendarScreen}
-        options={{ ...customHeaderStyle, title: "Assignments" }}
+        options={{ ...invisibleHeaderStyle, title: "Assignments" }}
       />
     </CalendarStack.Navigator>
   );
@@ -102,7 +109,7 @@ const LibraryStackScreen = () => {
       <LibraryStack.Screen
         name="Library"
         component={LibraryScreen}
-        options={{ ...customHeaderStyle, title: "Sorted Notes" }}
+        options={{ ...invisibleHeaderStyle, title: "Sorted Notes" }}
       />
     </LibraryStack.Navigator>
   );
@@ -150,7 +157,16 @@ export default function App() {
               headerShown: false,
             }}
           />
-          <MainStack.Screen name="New Class" component={ClassesAddScreen} />
+          <MainStack.Screen
+            name="New Class"
+            component={ClassesAddScreen}
+            options={visibleHeaderStyle}
+          />
+          <MainStack.Screen
+            name="Notes"
+            component={NotesScreen}
+            options={visibleHeaderStyle}
+          />
         </MainStack.Navigator>
       </NavigationContainer>
     </ClassesProvider>
