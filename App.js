@@ -168,6 +168,9 @@ export default function App() {
             options={({ route }) => ({
               ...visibleHeaderStyle,
               title: route.params.name,
+              headerTitleStyle: {
+                color: route.params.primaryColor,
+              },
             })}
           />
         </MainStack.Navigator>
