@@ -32,6 +32,10 @@ export class GeneralIcons extends IconsList {
         icon: <Ionicons name="ios-chevron-forward" size={iconSize} color={iconColor} />,
         name: "Forward",
       },
+      {
+        icon: <Ionicons name="ios-chevron-back" size={iconSize} color={iconColor} />,
+        name: "Back",
+      },
     ];
   }
 }

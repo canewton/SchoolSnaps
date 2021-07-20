@@ -165,7 +165,10 @@ export default function App() {
           <MainStack.Screen
             name="Notes"
             component={NotesScreen}
-            options={visibleHeaderStyle}
+            options={({ route }) => ({
+              ...visibleHeaderStyle,
+              title: route.params.name,
+            })}
           />
         </MainStack.Navigator>
       </NavigationContainer>

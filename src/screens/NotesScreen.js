@@ -1,8 +1,15 @@
+import { useNavigation } from "@react-navigation/core";
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
+import BackButton from "../components/BackButton";
 
 const NotesScreen = ({ route }) => {
-  console.log(route);
+  const navigation = useNavigation();
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => <BackButton />,
+    });
+  });
   return (
     <View>
       <Text>List Screen</Text>
