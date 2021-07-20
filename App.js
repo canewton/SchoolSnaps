@@ -1,11 +1,6 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import {
-  createStackNavigator,
-  CardStyleInterpolators,
-  TransitionPresets,
-  HeaderStyleInterpolators,
-} from "@react-navigation/stack";
+import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MenuProvider } from "react-native-popup-menu";
 
@@ -191,14 +186,7 @@ export default function App() {
             <RootStack.Screen
               name="Camera"
               component={CameraSceen}
-              options={({ route }) => ({
-                ...visibleHeaderStyle,
-                title: route.params.name,
-                headerTitleStyle: {
-                  color: route.params.primaryColor,
-                },
-                //headerStyle: { backgroundColor: "black", height: 120 },
-              })}
+              options={{ headerShown: false }}
             />
           </RootStack.Navigator>
         </NavigationContainer>
