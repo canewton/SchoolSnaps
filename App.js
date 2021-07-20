@@ -2,6 +2,7 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { MenuProvider } from "react-native-popup-menu";
 
 import HomeScreen from "./src/screens/HomeScreen";
 import CalendarScreen from "./src/screens/CalendarScreen";
@@ -148,33 +149,35 @@ const TabNavigator = () => {
 export default function App() {
   return (
     <ClassesProvider>
-      <NavigationContainer theme={Theme}>
-        <MainStack.Navigator>
-          <MainStack.Screen
-            name="Main"
-            component={TabNavigator}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <MainStack.Screen
-            name="New Class"
-            component={ClassesAddScreen}
-            options={visibleHeaderStyle}
-          />
-          <MainStack.Screen
-            name="Notes"
-            component={NotesScreen}
-            options={({ route }) => ({
-              ...visibleHeaderStyle,
-              title: route.params.name,
-              headerTitleStyle: {
-                color: route.params.primaryColor,
-              },
-            })}
-          />
-        </MainStack.Navigator>
-      </NavigationContainer>
+      <MenuProvider>
+        <NavigationContainer theme={Theme}>
+          <MainStack.Navigator>
+            <MainStack.Screen
+              name="Main"
+              component={TabNavigator}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <MainStack.Screen
+              name="New Class"
+              component={ClassesAddScreen}
+              options={visibleHeaderStyle}
+            />
+            <MainStack.Screen
+              name="Notes"
+              component={NotesScreen}
+              options={({ route }) => ({
+                ...visibleHeaderStyle,
+                title: route.params.name,
+                headerTitleStyle: {
+                  color: route.params.primaryColor,
+                },
+              })}
+            />
+          </MainStack.Navigator>
+        </NavigationContainer>
+      </MenuProvider>
     </ClassesProvider>
   );
 }
