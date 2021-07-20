@@ -1,6 +1,11 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import {
+  createStackNavigator,
+  CardStyleInterpolators,
+  TransitionPresets,
+  HeaderStyleInterpolators,
+} from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MenuProvider } from "react-native-popup-menu";
 
@@ -9,11 +14,13 @@ import CalendarScreen from "./src/screens/CalendarScreen";
 import LibraryScreen from "./src/screens/LibraryScreen";
 import ClassesAddScreen from "./src/screens/ClassesAddScreen";
 import NotesScreen from "./src/screens/NotesScreen";
+import CameraSceen from "./src/screens/CameraScreen";
 
 import { BottomTabIcons } from "./src/icons/BottomTabIcons";
 import { Colors } from "./src/classes/Colors";
 import { Provider as ClassesProvider } from "./src/context/ClassesContext";
 
+const RootStack = createStackNavigator();
 const MainStack = createStackNavigator();
 const HomeStack = createStackNavigator();
 const CalendarStack = createStackNavigator();
@@ -146,36 +153,54 @@ const TabNavigator = () => {
   );
 };
 
+const MainStackScreen = () => {
+  return (
+    <MainStack.Navigator>
+      <MainStack.Screen
+        name="Home"
+        component={TabNavigator}
+        options={{ headerShown: false }}
+      />
+      <MainStack.Screen
+        name="Notes"
+        component={NotesScreen}
+        options={({ route }) => ({
+          ...visibleHeaderStyle,
+          title: route.params.name,
+          headerTitleStyle: {
+            color: route.params.primaryColor,
+          },
+        })}
+      />
+    </MainStack.Navigator>
+  );
+};
+
 export default function App() {
   return (
     <ClassesProvider>
       <MenuProvider>
         <NavigationContainer theme={Theme}>
-          <MainStack.Navigator>
-            <MainStack.Screen
+          <RootStack.Navigator mode="modal">
+            <RootStack.Screen
               name="Main"
-              component={TabNavigator}
-              options={{
-                headerShown: false,
-              }}
+              component={MainStackScreen}
+              options={{ headerShown: false }}
             />
-            <MainStack.Screen
-              name="New Class"
-              component={ClassesAddScreen}
-              options={visibleHeaderStyle}
-            />
-            <MainStack.Screen
-              name="Notes"
-              component={NotesScreen}
+            <RootStack.Screen name="New Class" component={ClassesAddScreen} />
+            <RootStack.Screen
+              name="Camera"
+              component={CameraSceen}
               options={({ route }) => ({
                 ...visibleHeaderStyle,
                 title: route.params.name,
                 headerTitleStyle: {
                   color: route.params.primaryColor,
                 },
+                //headerStyle: { backgroundColor: "black", height: 120 },
               })}
             />
-          </MainStack.Navigator>
+          </RootStack.Navigator>
         </NavigationContainer>
       </MenuProvider>
     </ClassesProvider>

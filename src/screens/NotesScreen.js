@@ -13,6 +13,7 @@ import {
   MenuTrigger,
   renderers,
 } from "react-native-popup-menu";
+import { GeneralIcons } from "../icons/GeneralIcons";
 
 const NotesScreen = ({ route }) => {
   const navigation = useNavigation();
@@ -36,7 +37,10 @@ const NotesScreen = ({ route }) => {
               customStyles={triggerStyles}
             />
             <MenuOptions customStyles={optionStyles}>
-              <MenuOption text="Photo" />
+              <MenuOption
+                text="Photo"
+                onSelect={() => navigation.navigate("Camera", route.params)}
+              />
               <MenuOption text="Note" />
               <MenuOption text="Task" />
             </MenuOptions>
@@ -45,6 +49,15 @@ const NotesScreen = ({ route }) => {
       </View>
     </View>
   );
+};
+
+const IconNextToText = (title, iconName) => {
+  <View style={{ alignItems: "center" }}>
+    <View style={{ flexDirection: "row", alignItems: "center", padding: 3 }}>
+      {GeneralIcons.findIcon(iconName, 16, "black")}
+      <Text style={{ marginLeft: 5, fontSize: 14 }}>{title}</Text>
+    </View>
+  </View>;
 };
 
 const styles = StyleSheet.create({
