@@ -16,7 +16,6 @@ import {
 
 const NotesScreen = ({ route }) => {
   const navigation = useNavigation();
-  const { Popover } = renderers;
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => <BackButton color={route.params.primaryColor} />,
@@ -29,11 +28,12 @@ const NotesScreen = ({ route }) => {
         <View style={FloatingButtonStyles.buttonPosition}>
           <Menu
             style={{}}
-            renderer={Popover}
-            rendererProps={{ anchorStyle: styles.anchorStyle }}
+            renderer={renderers.Popover}
+            rendererProps={{ anchorStyle: styles.anchorStyle, placement: "top" }}
           >
             <MenuTrigger
               children={<FloatingActionButton color={route.params.primaryColor} />}
+              customStyles={triggerStyles}
             />
             <MenuOptions customStyles={optionStyles}>
               <MenuOption text="Photo" />
@@ -56,13 +56,13 @@ const styles = StyleSheet.create({
 
 const optionStyles = {
   optionTouchable: {
-    underlayColor: "white",
+    underlayColor: "transparent",
     activeOpacity: 0.7,
   },
   optionWrapper: {
     backgroundColor: "#e5e5e5",
     borderRadius: 10,
-    margin: 2,
+    margin: 3,
   },
   optionText: {
     color: "black",
@@ -74,7 +74,14 @@ const optionStyles = {
     backgroundColor: "white",
     borderRadius: 10,
     width: 200,
-    padding: 1,
+    padding: 3,
+  },
+};
+
+const triggerStyles = {
+  triggerTouchable: {
+    underlayColor: "transparent",
+    activeOpacity: 0.5,
   },
 };
 
