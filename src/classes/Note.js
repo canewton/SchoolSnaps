@@ -1,6 +1,6 @@
 export class Note {
-  constructor(id, schoolClass, content) {
-    this.id = id;
+  constructor(schoolClass) {
+    this.id = Date.now();
     this.schoolClass = schoolClass;
   }
 

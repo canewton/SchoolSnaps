@@ -15,6 +15,7 @@ import ClassesEditScreen from "./src/screens/ClassesEditScreen";
 import { BottomTabIcons } from "./src/icons/BottomTabIcons";
 import { Colors } from "./src/classes/Colors";
 import { Provider as ClassesProvider } from "./src/context/ClassesContext";
+import { Provider as NotesProvider } from "./src/context/NotesContext";
 
 const RootStack = createStackNavigator();
 const MainStack = createStackNavigator();
@@ -174,25 +175,27 @@ const MainStackScreen = () => {
 
 export default function App() {
   return (
-    <ClassesProvider>
-      <MenuProvider>
-        <NavigationContainer theme={Theme}>
-          <RootStack.Navigator mode="modal">
-            <RootStack.Screen
-              name="Main"
-              component={MainStackScreen}
-              options={{ headerShown: false }}
-            />
-            <RootStack.Screen name="New Class" component={ClassesAddScreen} />
-            <RootStack.Screen name="Edit Class" component={ClassesEditScreen} />
-            <RootStack.Screen
-              name="Camera"
-              component={CameraSceen}
-              options={{ headerShown: false }}
-            />
-          </RootStack.Navigator>
-        </NavigationContainer>
-      </MenuProvider>
-    </ClassesProvider>
+    <NotesProvider>
+      <ClassesProvider>
+        <MenuProvider>
+          <NavigationContainer theme={Theme}>
+            <RootStack.Navigator mode="modal">
+              <RootStack.Screen
+                name="Main"
+                component={MainStackScreen}
+                options={{ headerShown: false }}
+              />
+              <RootStack.Screen name="New Class" component={ClassesAddScreen} />
+              <RootStack.Screen name="Edit Class" component={ClassesEditScreen} />
+              <RootStack.Screen
+                name="Camera"
+                component={CameraSceen}
+                options={{ headerShown: false }}
+              />
+            </RootStack.Navigator>
+          </NavigationContainer>
+        </MenuProvider>
+      </ClassesProvider>
+    </NotesProvider>
   );
 }

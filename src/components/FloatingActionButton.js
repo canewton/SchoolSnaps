@@ -28,7 +28,7 @@ const FloatingActionButton = ({ color }) => {
 };
 
 const FloatingButtonStyles = StyleSheet.create({
-  buttonContainer: { width: circleDiameter, flex: 1, alignSelf: "center" },
+  buttonContainer: { width: circleDiameter, alignSelf: "center" },
   buttonPosition: { position: "absolute", bottom: 80 },
 });
 

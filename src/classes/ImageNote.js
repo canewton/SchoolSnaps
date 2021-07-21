@@ -1,9 +1,9 @@
 import { Note } from "./Note";
 
 export class ImageNote extends Note {
-  constructor(id, schoolClass, image) {
-    super(id, schoolClass);
-    this.image = image;
+  constructor(schoolClass, uri) {
+    super(schoolClass);
+    this.uri = uri;
   }
 
   toString() {
@@ -12,8 +12,8 @@ export class ImageNote extends Note {
       this.id +
       '","schoolClass":"' +
       this.schoolClass +
-      '","image":"' +
-      this.image +
+      '","uri":"' +
+      this.uri +
       '"}'
     );
   }

@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/core";
-import React from "react";
+import React, { useContext } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import BackButton from "../components/BackButton";
 import {
@@ -14,9 +14,13 @@ import {
   renderers,
 } from "react-native-popup-menu";
 import { GeneralIcons } from "../icons/GeneralIcons";
+import NotesList from "../components/NotesList";
+import { Context as NotesContext } from "../context/NotesContext";
+import { WrittenNote } from "../classes/WrittenNote";
 
 const NotesScreen = ({ route }) => {
   const navigation = useNavigation();
+  const notes = useContext(NotesContext);
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => <BackButton color={route.params.primaryColor} />,
@@ -30,9 +34,10 @@ const NotesScreen = ({ route }) => {
       ),
     });
   });
+
   return (
     <View style={{ flex: 1 }}>
-      <Text>List Screen</Text>
+      <NotesList notesFilteredByDate={notes.state} />
       <View style={FloatingButtonStyles.buttonContainer}>
         <View style={FloatingButtonStyles.buttonPosition}>
           <Menu
@@ -49,7 +54,10 @@ const NotesScreen = ({ route }) => {
                 text="Photo"
                 onSelect={() => navigation.navigate("Camera", route.params)}
               />
-              <MenuOption text="Note" />
+              <MenuOption
+                text="Note"
+                onSelect={() => notes.add(new WrittenNote(route.params, "", ""))}
+              />
               <MenuOption text="Task" />
             </MenuOptions>
           </Menu>
