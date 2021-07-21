@@ -41,7 +41,7 @@ const ClassForm = ({ onSubmit, initialValues }) => {
       setPrimaryColor(initialValues.primaryColor);
       setIconName(initialValues.iconName);
     }
-  });
+  }, []);
 
   //add a save and cancel button on either side of the header
   React.useLayoutEffect(() => {

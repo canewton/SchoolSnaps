@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/core";
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import BackButton from "../components/BackButton";
 import {
   FloatingActionButton,
@@ -20,6 +20,14 @@ const NotesScreen = ({ route }) => {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => <BackButton color={route.params.primaryColor} />,
+      headerRight: () => (
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Edit Class", route.params)}
+          style={{ paddingRight: 15 }}
+        >
+          {GeneralIcons.findIcon("Edit", 24, route.params.primaryColor)}
+        </TouchableOpacity>
+      ),
     });
   });
   return (

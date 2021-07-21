@@ -5,6 +5,7 @@ import { SimpleLineIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { IconsList } from "./IconsList";
 import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export class GeneralIcons extends IconsList {
   static iconList(iconSize, iconColor) {
@@ -58,6 +59,16 @@ export class GeneralIcons extends IconsList {
       {
         icon: <Ionicons name="close-sharp" size={iconSize} color={iconColor} />,
         name: "Close",
+      },
+      {
+        icon: (
+          <MaterialCommunityIcons
+            name="circle-edit-outline"
+            size={iconSize}
+            color={iconColor}
+          />
+        ),
+        name: "Edit",
       },
     ];
   }
