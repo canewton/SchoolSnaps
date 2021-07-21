@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
 import { Camera } from "expo-camera";
-import { MaterialIcons } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import ImageRack from "../components/ImageRack";
+import CameraButtonsContainer from "../components/CameraButtonsContainer";
+import { GeneralIcons } from "../icons/GeneralIcons";
 
 const CameraSceen = ({ route }) => {
   const navigation = useNavigation();
@@ -32,40 +31,24 @@ const CameraSceen = ({ route }) => {
     return <Text>No access to camera</Text>;
   }
 
-  const FlashButton = () => {
+  const FlashButton = ({ style }) => {
     return (
       <TouchableOpacity
         onPress={() => {
           setFlash(!flash);
         }}
+        style={style}
       >
-        {!flash && <Ionicons name="flash-off" size={30} color="white" />}
-        {flash && <Ionicons name="flash" size={30} color="white" />}
+        {!flash && GeneralIcons.findIcon("Flash-Off", 25, "white")}
+        {flash && GeneralIcons.findIcon("Flash-On", 25, "white")}
       </TouchableOpacity>
     );
   };
 
-  const CapturePhotoButton = () => {
+  const ReverseCameraButton = ({ style }) => {
     return (
       <TouchableOpacity
-        onPress={async () => {
-          if (cameraRef) {
-            //take a picture, add it to ImageContext, and store it in asyncstorage
-            let photo = await cameraRef.takePictureAsync();
-          }
-        }}
-      >
-        <View style={styles.outerCameraButton}>
-          <View style={styles.innerCameraButton}></View>
-        </View>
-      </TouchableOpacity>
-    );
-  };
-
-  const ReverseCameraButton = () => {
-    return (
-      <TouchableOpacity
-        style={{}}
+        style={style}
         onPress={() => {
           setType(
             type === Camera.Constants.Type.back
@@ -74,7 +57,20 @@ const CameraSceen = ({ route }) => {
           );
         }}
       >
-        <MaterialIcons name="flip-camera-android" size={30} color="white" />
+        {GeneralIcons.findIcon("Flip", 25, "white")}
+      </TouchableOpacity>
+    );
+  };
+
+  const CloseButton = ({ style }) => {
+    return (
+      <TouchableOpacity
+        style={style}
+        onPress={() => {
+          navigation.pop();
+        }}
+      >
+        {GeneralIcons.findIcon("Close", 28, "white")}
       </TouchableOpacity>
     );
   };
@@ -91,40 +87,39 @@ const CameraSceen = ({ route }) => {
         }}
       >
         <View style={styles.cameraButtonsContainer}>
-          <FlashButton />
-          <CapturePhotoButton />
-          <ReverseCameraButton />
+          <CloseButton style={styles.button} />
+          <View style={{ flexDirection: "row" }}>
+            <ReverseCameraButton style={styles.button} />
+            <FlashButton style={styles.button} />
+          </View>
         </View>
-        <ImageRack recentImages={recentImages} />
+        <View style={styles.cameraWindow} />
+        <CameraButtonsContainer
+          schoolClass={route.params}
+          capturePhotoCallback={async () => {
+            if (cameraRef) {
+              let photo = await cameraRef.takePictureAsync();
+            }
+          }}
+        />
       </Camera>
     </View>
   );
 };
 const styles = StyleSheet.create({
-  outerCameraButton: {
-    borderWidth: 2,
-    borderRadius: 25,
-    borderColor: "white",
-    height: 50,
-    width: 50,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  innerCameraButton: {
-    borderWidth: 2,
-    borderRadius: 20,
-    borderColor: "white",
-    height: 40,
-    width: 40,
-    backgroundColor: "white",
-  },
   cameraButtonsContainer: {
-    flex: 1,
     flexDirection: "row",
     alignItems: "flex-end",
-    justifyContent: "space-around",
-    marginBottom: 20,
+    height: 100,
+    backgroundColor: "black",
+    justifyContent: "space-between",
+  },
+  cameraWindow: {
+    flex: 1,
+  },
+  button: {
+    marginBottom: 15,
+    marginHorizontal: 20,
   },
 });
 export default CameraSceen;

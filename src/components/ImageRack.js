@@ -1,17 +1,9 @@
 import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  Dimensions,
-  FlatList,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 
 const ImageRack = ({ recentImages }) => {
   return (
-    <View style={styles.imageRack}>
+    <View>
       <FlatList
         data={recentImages}
         keyExtractor={(image) => image}
@@ -19,42 +11,20 @@ const ImageRack = ({ recentImages }) => {
         renderItem={({ item }) => {
           return (
             <TouchableOpacity onPress={() => console.log("pressed")}>
-              <Image
-                style={{
-                  width: 50,
-                  height: 50,
-                  alignSelf: "flex-start",
-                }}
-                source={{
-                  uri: item,
-                }}
-              />
+              <Image style={styles.image} source={{ uri: item }} />
             </TouchableOpacity>
           );
         }}
       />
-      <View style={{ justifyContent: "center", flex: 1 }}>
-        <TouchableOpacity>
-          <Text style={[styles.editButton, { color: "gray" }]}>Edit</Text>
-        </TouchableOpacity>
-      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  imageRack: {
+  image: {
+    width: 50,
     height: 50,
-    width: Dimensions.get("window").width,
-    backgroundColor: "white",
-    flexDirection: "row",
-    borderTopWidth: StyleSheet.hairlineWidth,
-  },
-  editButton: {
-    fontSize: 16,
-    alignSelf: "flex-end",
-    marginRight: 15,
-    fontWeight: "400",
+    alignSelf: "flex-start",
   },
 });
 
