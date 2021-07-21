@@ -20,7 +20,7 @@ export const { Context, Provider } = createDataContext(
   ClassesContext.reducer,
   {
     add: ClassesContext.add,
-    replace: ClassesContext.replace,
+    edit: ClassesContext.edit,
     delete: ClassesContext.delete,
   },
   ClassesContext.classes

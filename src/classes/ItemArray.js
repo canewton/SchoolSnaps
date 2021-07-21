@@ -5,6 +5,12 @@ export class ItemArray {
     });
   }
 
+  static find(array, property, value) {
+    return array.find((item) => {
+      return item[property] === value;
+    });
+  }
+
   static generateUniqueID() {
     return Date.now();
   }

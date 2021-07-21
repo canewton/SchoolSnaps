@@ -10,7 +10,7 @@ const ClassesEditScreen = ({ navigation, route }) => {
       <ClassForm
         initialValues={route.params}
         onSubmit={(schoolClass) => {
-          classes.replace(schoolClass);
+          classes.edit(schoolClass);
           navigation.navigate("Notes", schoolClass);
         }}
       />

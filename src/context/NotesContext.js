@@ -10,7 +10,7 @@ export const { Context, Provider } = createDataContext(
   NotesContext.reducer,
   {
     add: NotesContext.add,
-    replace: NotesContext.replace,
+    edit: NotesContext.edit,
     delete: NotesContext.delete,
   },
   NotesContext.notes
