@@ -9,6 +9,7 @@ import CalendarScreen from "./src/screens/CalendarScreen";
 import LibraryScreen from "./src/screens/LibraryScreen";
 import ClassesAddScreen from "./src/screens/ClassesAddScreen";
 import NotesScreen from "./src/screens/NotesScreen";
+import NotesEditScreen from "./src/screens/NotesEditScreen";
 import CameraSceen from "./src/screens/CameraScreen";
 import ClassesEditScreen from "./src/screens/ClassesEditScreen";
 
@@ -191,6 +192,11 @@ export default function App() {
                 name="Camera"
                 component={CameraSceen}
                 options={{ headerShown: false }}
+              />
+              <RootStack.Screen
+                name="Edit Note"
+                component={NotesEditScreen}
+                //options={{ headerShown: false }}
               />
             </RootStack.Navigator>
           </NavigationContainer>

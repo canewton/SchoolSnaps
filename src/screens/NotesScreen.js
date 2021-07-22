@@ -56,7 +56,11 @@ const NotesScreen = ({ route }) => {
               />
               <MenuOption
                 text="Note"
-                onSelect={() => notes.add(new WrittenNote(route.params, "", ""))}
+                onSelect={() => {
+                  var note = new WrittenNote(route.params, "", "");
+                  notes.add(note);
+                  navigation.navigate("Edit Note", note);
+                }}
               />
               <MenuOption text="Task" />
             </MenuOptions>

@@ -45,6 +45,7 @@ const NotesList = ({ notesFilteredByDate }) => {
                     backgroundColor: item.schoolClass.primaryColor,
                   }}
                   note={item}
+                  navigation={navigation}
                 />
               )}
             </View>
@@ -55,33 +56,15 @@ const NotesList = ({ notesFilteredByDate }) => {
   );
 };
 
-const NoteButton = ({ style, note }) => {
-  const [title, setTitle] = useState(note.title);
-  const [content, setContent] = useState(note.content);
-
+const NoteButton = ({ style, note, navigation }) => {
   return (
-    <View style={style}>
-      <TextInput
-        value={title}
-        style={styles.titleInput}
-        placeholder="Untitled"
-        onChangeText={(text) => setTitle(text)}
-        onEndEditing={() => {
-          note.title = title;
-        }}
-      />
-      <TextInput
-        value={content}
-        style={styles.input}
-        placeholder="Start Typing Here..."
-        onChangeText={(text) => setContent(text)}
-        multiline={true}
-        scrollEnabled={false}
-        onEndEditing={() => {
-          note.content = content;
-        }}
-      />
-    </View>
+    <TouchableOpacity
+      style={style}
+      onPress={() => navigation.navigate("Edit Note", note)}
+    >
+      <Text style={styles.title}>{note.title === "" ? "Untitled" : note.title}</Text>
+      <Text style={styles.text}>{note.content === "" ? "" : note.content}</Text>
+    </TouchableOpacity>
   );
 };
 
@@ -117,11 +100,11 @@ const styles = StyleSheet.create({
     width: 20,
     borderColor: "#147EFB",
   },
-  input: {
+  text: {
     fontSize: 14,
     height: 170,
   },
-  titleInput: {
+  title: {
     fontSize: 16,
     marginBottom: 4,
     fontWeight: "600",
