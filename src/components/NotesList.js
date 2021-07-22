@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   View,
   Text,
@@ -13,13 +13,12 @@ import { useNavigation } from "@react-navigation/native";
 import { WrittenNote } from "../classes/WrittenNote";
 import { ImageNote } from "../classes/ImageNote";
 
-const imagesPerRow = 2;
-
 const NotesList = ({ notesFilteredByDate }) => {
   const navigation = useNavigation();
   const windowWidth = Dimensions.get("window").width;
   const outerSpacing = 3;
-  const columnWidth = windowWidth / 2 - outerSpacing;
+  const imagesPerRow = 2;
+  const columnWidth = windowWidth / imagesPerRow - outerSpacing;
 
   return (
     <View style={{ flex: 1, paddingHorizontal: outerSpacing }}>
@@ -32,7 +31,7 @@ const NotesList = ({ notesFilteredByDate }) => {
           return (
             <View style={{ width: columnWidth }}>
               {item instanceof ImageNote && (
-                <ImageUnit
+                <ImageButton
                   style={{ flex: 0.5 }}
                   navigation={navigation}
                   note={item}
@@ -40,14 +39,10 @@ const NotesList = ({ notesFilteredByDate }) => {
                 />
               )}
               {item instanceof WrittenNote && (
-                <NoteUnit
+                <NoteButton
                   style={{
-                    flex: 0.5,
+                    ...styles.note,
                     backgroundColor: item.schoolClass.primaryColor,
-                    margin: 3,
-                    height: 200,
-                    borderRadius: 10,
-                    padding: 5,
                   }}
                   note={item}
                 />
@@ -60,45 +55,32 @@ const NotesList = ({ notesFilteredByDate }) => {
   );
 };
 
-const NoteUnit = (props) => {
+const NoteButton = ({ style, note }) => {
+  const [title, setTitle] = useState(note.title);
+  const [content, setContent] = useState(note.content);
+
   return (
-    <View style={props.style}>
+    <View style={style}>
       <TextInput
-        value={props.note.title}
-        style={styles.input}
+        value={title}
+        style={styles.titleInput}
         placeholder="Untitled"
-        //onChangeText={(text) => setName(text)}
+        onChangeText={(text) => setTitle(text)}
+        onEndEditing={() => {
+          note.title = title;
+        }}
       />
       <TextInput
-        value={props.note.content}
+        value={content}
         style={styles.input}
         placeholder="Start Typing Here..."
-        //onChangeText={(text) => setName(text)}
+        onChangeText={(text) => setContent(text)}
+        multiline={true}
+        scrollEnabled={false}
+        onEndEditing={() => {
+          note.content = content;
+        }}
       />
-    </View>
-  );
-};
-
-const ImageUnit = (props) => {
-  return (
-    <View style={props.style}>
-      <TouchableOpacity
-        onPress={
-          //if this image is pressed and the mode is not "select", enter fullscreen
-          //if this image is pressed and the mode is "select",
-          //change the select property in the image context
-          props.mode !== "select"
-            ? () =>
-                props.navigation.navigate("FullscreenStack", {
-                  uri: props.item,
-                })
-            : () => {
-                props.toggleSelectImage(props.item.uri);
-              }
-        }
-      >
-        <Image source={{ uri: props.note.uri }} />
-      </TouchableOpacity>
     </View>
   );
 };
@@ -136,7 +118,20 @@ const styles = StyleSheet.create({
     borderColor: "#147EFB",
   },
   input: {
+    fontSize: 14,
+    height: 170,
+  },
+  titleInput: {
     fontSize: 16,
+    marginBottom: 4,
+    fontWeight: "600",
+  },
+  note: {
+    flex: 0.5,
+    margin: 3,
+    height: 200,
+    borderRadius: 10,
+    padding: 6,
   },
 });
 
