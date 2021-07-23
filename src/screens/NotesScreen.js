@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/core";
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import BackButton from "../components/BackButton";
 import FloatingActionButton from "../components/FloatingActionButton";
@@ -7,8 +7,6 @@ import { GeneralIcons } from "../icons/GeneralIcons";
 import NotesList from "../components/NotesList";
 import { Context as NotesContext } from "../context/NotesContext";
 import RBSheet from "react-native-raw-bottom-sheet";
-
-const bottomSheetHeight = 230;
 
 const NotesScreen = ({ route }) => {
   const navigation = useNavigation();

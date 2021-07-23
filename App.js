@@ -196,7 +196,7 @@ export default function App() {
               <RootStack.Screen
                 name="Edit Note"
                 component={NotesEditScreen}
-                //options={{ headerShown: false }}
+                options={{ headerShown: false }}
               />
             </RootStack.Navigator>
           </NavigationContainer>

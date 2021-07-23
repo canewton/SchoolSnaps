@@ -6,7 +6,7 @@ import { Context as NotesContext } from "../context/NotesContext";
 const NotesEditScreen = ({ navigation, route }) => {
   const notes = useContext(NotesContext);
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <WrittenNoteForm
         initialValues={route.params}
         onSubmit={(title, content) => {
