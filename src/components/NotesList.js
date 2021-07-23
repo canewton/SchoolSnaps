@@ -11,9 +11,11 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { WrittenNote } from "../classes/WrittenNote";
 import { ImageNote } from "../classes/ImageNote";
+import { GeneralIcons } from "../icons/GeneralIcons";
+import { ItemArray } from "../classes/ItemArray";
 
 const NotesList = ({ notesFilteredByDate, mode }) => {
-  console.log(mode);
+  const modes = ["browse", "select"];
   const navigation = useNavigation();
   const windowWidth = Dimensions.get("window").width;
   const outerSpacing = 3;
@@ -32,24 +34,50 @@ const NotesList = ({ notesFilteredByDate, mode }) => {
         renderItem={({ item }) => {
           return (
             <View style={{ width: columnWidth }}>
-              {item instanceof ImageNote && (
-                <ImageButton
-                  style={{ flex: 0.5 }}
-                  navigation={navigation}
-                  note={item}
-                  toggleSelectImage={(uri) => images.toggleSelectImage(uri)}
-                />
-              )}
-              {item instanceof WrittenNote && (
-                <NoteButton
-                  style={{
-                    ...styles.note,
-                    backgroundColor: item.schoolClass.primaryColor,
-                  }}
-                  note={item}
-                  navigation={navigation}
-                />
-              )}
+              <TouchableOpacity
+                disabled={mode === modes[0]}
+                onPress={() => {
+                  ItemArray.find(itemsSelected, "", item.id) === false
+                    ? setItemsSelected([...itemsSelected, item.id])
+                    : setItemsSelected(ItemArray.remove(itemsSelected, item.id));
+                }}
+                style={styles.note}
+              >
+                {item instanceof ImageNote && (
+                  <ImageButton
+                    style={{ flex: 0.5 }}
+                    navigation={navigation}
+                    note={item}
+                    disableButton={mode === modes[1]}
+                  />
+                )}
+                {item instanceof WrittenNote && (
+                  <NoteButton
+                    style={{
+                      backgroundColor: item.schoolClass.primaryColor,
+                      borderRadius: 10,
+                      padding: 10,
+                    }}
+                    note={item}
+                    navigation={navigation}
+                    disableButton={mode === modes[1]}
+                  />
+                )}
+                {mode === modes[1] && !ItemArray.find(itemsSelected, "", item.id) && (
+                  <View style={{ position: "absolute", right: 10, top: 8 }}>
+                    <View style={styles.checkContainter}>
+                      <View style={styles.emptyCircle} />
+                    </View>
+                  </View>
+                )}
+                {mode === modes[1] && ItemArray.find(itemsSelected, "", item.id) && (
+                  <View style={{ position: "absolute", right: 10, top: 8 }}>
+                    <View style={styles.checkContainter}>
+                      {GeneralIcons.findIcon("Checkmark Circle", 24, "#147EFB")}
+                    </View>
+                  </View>
+                )}
+              </TouchableOpacity>
             </View>
           );
         }}
@@ -58,11 +86,12 @@ const NotesList = ({ notesFilteredByDate, mode }) => {
   );
 };
 
-const NoteButton = ({ style, note, navigation }) => {
+const NoteButton = ({ style, note, navigation, disableButton }) => {
   return (
     <TouchableOpacity
       style={style}
       onPress={() => navigation.navigate("Edit Note", note)}
+      disabled={disableButton}
     >
       <Text style={styles.title}>{note.title === "" ? "Untitled" : note.title}</Text>
       <Text style={styles.text}>{note.content === "" ? "" : note.content}</Text>
@@ -115,8 +144,19 @@ const styles = StyleSheet.create({
     flex: 0.5,
     margin: 3,
     height: 200,
+  },
+  emptyCircle: {
     borderRadius: 10,
-    padding: 10,
+    borderWidth: 1.5,
+    height: 20,
+    width: 20,
+    borderColor: "#147EFB",
+  },
+  checkContainter: {
+    justifyContent: "center",
+    alignItems: "center",
+    height: 30,
+    width: 30,
   },
 });
 

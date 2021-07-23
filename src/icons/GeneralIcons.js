@@ -86,6 +86,16 @@ export class GeneralIcons extends IconsList {
         icon: <Feather name="check" size={iconSize} color={iconColor} />,
         name: "Done",
       },
+      {
+        icon: <Feather name="circle" size={iconSize} color={iconColor} />,
+        name: "Circle",
+      },
+      {
+        icon: (
+          <Ionicons name="checkmark-circle-sharp" size={iconSize} color={iconColor} />
+        ),
+        name: "Checkmark Circle",
+      },
     ];
   }
 }
