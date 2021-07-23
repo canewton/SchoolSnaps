@@ -1,66 +1,87 @@
 import { useNavigation } from "@react-navigation/core";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import BackButton from "../components/BackButton";
+import HeaderIconButton from "../components/HeaderIconButton";
 import FloatingActionButton from "../components/FloatingActionButton";
 import { GeneralIcons } from "../icons/GeneralIcons";
 import NotesList from "../components/NotesList";
 import { Context as NotesContext } from "../context/NotesContext";
 import RBSheet from "react-native-raw-bottom-sheet";
+import { ItemArray } from "../classes/ItemArray";
 
 const NotesScreen = ({ route }) => {
   const navigation = useNavigation();
   const notes = useContext(NotesContext);
   const sheetRef = React.useRef();
+
+  const modes = ["browse", "select"];
+  const [mode, setMode] = useState(modes[0]);
+
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      headerLeft: () => <BackButton color={route.params.primaryColor} />,
-      headerRight: () => (
-        <TouchableOpacity
-          onPress={() => {
-            sheetRef.current.open();
-          }}
-          style={{ paddingRight: 15 }}
-        >
-          {GeneralIcons.findIcon("Three Dots", 24, route.params.primaryColor)}
-        </TouchableOpacity>
+      headerLeft: () => (
+        <View>
+          {mode === modes[0] && (
+            <HeaderIconButton
+              color={route.params.primaryColor}
+              iconName="Back"
+              callback={() => navigation.pop()}
+            />
+          )}
+          {mode === modes[1] && (
+            <HeaderIconButton
+              color={route.params.primaryColor}
+              iconName="Done"
+              callback={() => setMode(modes[0])}
+            />
+          )}
+        </View>
       ),
+      headerRight: () =>
+        mode === modes[0] && (
+          <TouchableOpacity
+            onPress={() => {
+              sheetRef.current.open();
+            }}
+            style={{ paddingRight: 15 }}
+          >
+            {GeneralIcons.findIcon("Three Dots", 24, route.params.primaryColor)}
+          </TouchableOpacity>
+        ),
     });
   });
 
+  const notesFilteredByClass = ItemArray.filter(notes.state, "schoolClass", route.params);
+
   return (
     <View style={{ flex: 1 }}>
-      <NotesList notesFilteredByDate={notes.state} />
+      <NotesList notesFilteredByDate={notesFilteredByClass} mode={mode} />
       <FloatingActionButton schoolClass={route.params} navigation={navigation} />
+      {/* Bottom Sheet Content */}
       <RBSheet ref={sheetRef} closeOnDragDown={false} height={290} openDuration={250}>
-        <BottomSheetContent
-          navigation={navigation}
-          schoolClass={route.params}
-          onPressButton={() => {
-            sheetRef.current.close();
-          }}
-        />
+        <View style={{ backgroundColor: "white" }}>
+          <IconNextToTextButton
+            title="Select notes"
+            iconName="Select"
+            buttonFunction={() => {
+              setMode(modes[1]);
+              sheetRef.current.close();
+            }}
+          />
+          <IconNextToTextButton title="Filter notes" iconName="Filter" />
+          <View style={styles.border} />
+          <IconNextToTextButton
+            title="Edit class"
+            iconName="Edit"
+            buttonFunction={() => {
+              navigation.navigate("Edit Class", route.params);
+              sheetRef.current.close();
+            }}
+          />
+          <IconNextToTextButton title="Archive class" iconName="Archive" />
+          <IconNextToTextButton title="Delete class" iconName="Delete" />
+        </View>
       </RBSheet>
-    </View>
-  );
-};
-
-const BottomSheetContent = ({ navigation, schoolClass, onPressButton }) => {
-  return (
-    <View style={{ backgroundColor: "white" }}>
-      <IconNextToTextButton title="Select notes" iconName="Select" />
-      <IconNextToTextButton title="Filter notes" iconName="Filter" />
-      <View style={styles.border} />
-      <IconNextToTextButton
-        title="Edit class"
-        iconName="Edit"
-        buttonFunction={() => {
-          navigation.navigate("Edit Class", schoolClass);
-          onPressButton();
-        }}
-      />
-      <IconNextToTextButton title="Archive class" iconName="Archive" />
-      <IconNextToTextButton title="Delete class" iconName="Delete" />
     </View>
   );
 };

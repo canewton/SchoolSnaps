@@ -82,6 +82,10 @@ export class GeneralIcons extends IconsList {
         icon: <Entypo name="mouse-pointer" size={iconSize} color={iconColor} />,
         name: "Select",
       },
+      {
+        icon: <Feather name="check" size={iconSize} color={iconColor} />,
+        name: "Done",
+      },
     ];
   }
 }

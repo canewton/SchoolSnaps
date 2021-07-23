@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -6,19 +6,21 @@ import {
   FlatList,
   TouchableOpacity,
   Image,
-  TextInput,
   Dimensions,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { WrittenNote } from "../classes/WrittenNote";
 import { ImageNote } from "../classes/ImageNote";
 
-const NotesList = ({ notesFilteredByDate }) => {
+const NotesList = ({ notesFilteredByDate, mode }) => {
+  console.log(mode);
   const navigation = useNavigation();
   const windowWidth = Dimensions.get("window").width;
   const outerSpacing = 3;
   const imagesPerRow = 2;
   const columnWidth = windowWidth / imagesPerRow - outerSpacing;
+
+  const [itemsSelected, setItemsSelected] = useState([]);
 
   return (
     <View style={{ flex: 1, paddingHorizontal: outerSpacing }}>
