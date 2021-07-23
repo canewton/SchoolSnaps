@@ -24,7 +24,7 @@ const NotesScreen = ({ route }) => {
           }}
           style={{ paddingRight: 15 }}
         >
-          {GeneralIcons.findIcon("Edit", 24, route.params.primaryColor)}
+          {GeneralIcons.findIcon("Three Dots", 24, route.params.primaryColor)}
         </TouchableOpacity>
       ),
     });
@@ -50,39 +50,39 @@ const NotesScreen = ({ route }) => {
 const BottomSheetContent = ({ navigation, schoolClass, onPressButton }) => {
   return (
     <View style={{ backgroundColor: "white" }}>
-      <TouchableOpacity>
-        <Text style={styles.bottomSheetText}>Select notes</Text>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <Text style={styles.bottomSheetText}>Filter notes</Text>
-      </TouchableOpacity>
+      <IconNextToTextButton title="Select notes" iconName="Select" />
+      <IconNextToTextButton title="Filter notes" iconName="Filter" />
       <View style={styles.border} />
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("Edit Note", schoolClass);
+      <IconNextToTextButton
+        title="Edit class"
+        iconName="Edit"
+        buttonFunction={() => {
+          navigation.navigate("Edit Class", schoolClass);
           onPressButton();
         }}
-        style={styles.button}
-      >
-        <Text style={styles.bottomSheetText}>Edit class</Text>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <Text style={styles.bottomSheetText}>Archive class</Text>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <Text style={styles.bottomSheetText}>Delete class</Text>
-      </TouchableOpacity>
+      />
+      <IconNextToTextButton title="Archive class" iconName="Archive" />
+      <IconNextToTextButton title="Delete class" iconName="Delete" />
     </View>
   );
 };
 
-const IconNextToText = (title, iconName) => {
-  <View style={{ alignItems: "center" }}>
-    <View style={{ flexDirection: "row", alignItems: "center", padding: 3 }}>
-      {GeneralIcons.findIcon(iconName, 16, "black")}
-      <Text style={{ marginLeft: 5, fontSize: 14 }}>{title}</Text>
-    </View>
-  </View>;
+const IconNextToTextButton = ({ title, iconName, buttonFunction }) => {
+  return (
+    <TouchableOpacity onPress={() => buttonFunction()}>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          marginLeft: 20,
+          paddingVertical: 15,
+        }}
+      >
+        {GeneralIcons.findIcon(iconName, 20, "black")}
+        <Text style={styles.bottomSheetText}>{title}</Text>
+      </View>
+    </TouchableOpacity>
+  );
 };
 
 const styles = StyleSheet.create({
@@ -91,10 +91,10 @@ const styles = StyleSheet.create({
     borderBottomColor: "#dee2e6",
   },
   bottomSheetText: {
+    marginLeft: 15,
     fontSize: 18,
     fontWeight: "500",
     color: "#343a40",
-    margin: 15,
     alignItems: "flex-start",
   },
 });

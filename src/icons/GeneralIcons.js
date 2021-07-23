@@ -1,11 +1,13 @@
 import React from "react";
-import { Feather } from "@expo/vector-icons";
-import { Entypo } from "@expo/vector-icons";
-import { SimpleLineIcons } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
+import {
+  Feather,
+  Entypo,
+  SimpleLineIcons,
+  MaterialIcons,
+  Ionicons,
+  FontAwesome,
+} from "@expo/vector-icons";
 import { IconsList } from "./IconsList";
-import { MaterialIcons } from "@expo/vector-icons";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export class GeneralIcons extends IconsList {
   static iconList(iconSize, iconColor) {
@@ -15,7 +17,7 @@ export class GeneralIcons extends IconsList {
         name: "Camera",
       },
       {
-        icon: <Ionicons name="trash-outline" size={iconSize} color={iconColor} />,
+        icon: <Ionicons name="trash" size={iconSize} color={iconColor} />,
         name: "Delete",
       },
       {
@@ -61,14 +63,24 @@ export class GeneralIcons extends IconsList {
         name: "Close",
       },
       {
-        icon: (
-          <MaterialCommunityIcons
-            name="circle-edit-outline"
-            size={iconSize}
-            color={iconColor}
-          />
-        ),
+        icon: <MaterialIcons name="edit" size={iconSize} color={iconColor} />,
         name: "Edit",
+      },
+      {
+        icon: <Entypo name="dots-three-horizontal" size={iconSize} color={iconColor} />,
+        name: "Three Dots",
+      },
+      {
+        icon: <MaterialIcons name="filter-alt" size={iconSize} color={iconColor} />,
+        name: "Filter",
+      },
+      {
+        icon: <FontAwesome name="archive" size={iconSize} color={iconColor} />,
+        name: "Archive",
+      },
+      {
+        icon: <Entypo name="mouse-pointer" size={iconSize} color={iconColor} />,
+        name: "Select",
       },
     ];
   }
