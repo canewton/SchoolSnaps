@@ -13,6 +13,7 @@ import { WrittenNote } from "../classes/WrittenNote";
 import { ImageNote } from "../classes/ImageNote";
 import { GeneralIcons } from "../icons/GeneralIcons";
 import { ItemArray } from "../classes/ItemArray";
+import { NoteGroup } from "../classes/NoteGroup";
 
 const NotesList = ({ notesFilteredByDate, mode, itemsSelectedCallback }) => {
   const modes = ["browse", "select"];
@@ -41,7 +42,7 @@ const NotesList = ({ notesFilteredByDate, mode, itemsSelectedCallback }) => {
               <TouchableOpacity
                 disabled={mode === modes[0]}
                 onPress={() => {
-                  ItemArray.find(itemsSelected, "", item.id) === false
+                  ItemArray.find(itemsSelected, "", item.id) !== item.id
                     ? setItemsSelected([...itemsSelected, item.id])
                     : setItemsSelected(ItemArray.remove(itemsSelected, item.id));
                 }}
@@ -67,26 +68,60 @@ const NotesList = ({ notesFilteredByDate, mode, itemsSelectedCallback }) => {
                     disableButton={mode === modes[1]}
                   />
                 )}
-                {mode === modes[1] && !ItemArray.find(itemsSelected, "", item.id) && (
-                  <View style={{ position: "absolute", right: 10, top: 8 }}>
-                    <View style={styles.checkContainter}>
-                      <View style={styles.emptyCircle} />
-                    </View>
-                  </View>
+                {item instanceof NoteGroup && (
+                  <NoteGroupButton
+                    style={{
+                      backgroundColor: item.schoolClass.primaryColor,
+                      borderRadius: 10,
+                      padding: 10,
+                    }}
+                    noteGroup={item}
+                    navigation={navigation}
+                    disableButton={mode === modes[1]}
+                  />
                 )}
-                {mode === modes[1] && ItemArray.find(itemsSelected, "", item.id) && (
-                  <View style={{ position: "absolute", right: 10, top: 8 }}>
-                    <View style={styles.checkContainter}>
-                      {GeneralIcons.findIcon("Checkmark Circle", 24, "#147EFB")}
+
+                {/* when the user is in select mode, 
+                checkmarks appear on the note when the user presses it */}
+                {mode === modes[1] &&
+                  ItemArray.find(itemsSelected, "", item.id) !== item.id && (
+                    <View style={{ position: "absolute", right: 10, top: 8 }}>
+                      <View style={styles.checkContainter}>
+                        <View style={styles.emptyCircle} />
+                      </View>
                     </View>
-                  </View>
-                )}
+                  )}
+                {mode === modes[1] &&
+                  ItemArray.find(itemsSelected, "", item.id) === item.id && (
+                    <View style={{ position: "absolute", right: 10, top: 8 }}>
+                      <View style={styles.checkContainter}>
+                        {GeneralIcons.findIcon("Checkmark Circle", 24, "#147EFB")}
+                      </View>
+                    </View>
+                  )}
               </TouchableOpacity>
             </View>
           );
         }}
       />
     </View>
+  );
+};
+
+const NoteGroupButton = ({ style, noteGroup, navigation, disableButton }) => {
+  var firstPage = noteGroup.notes[0];
+
+  return (
+    <TouchableOpacity
+      style={style}
+      onPress={() => console.log("hi")}
+      disabled={disableButton}
+    >
+      <Text style={styles.title}>
+        {firstPage.title === "" ? "Untitled" : firstPage.title}
+      </Text>
+      <Text style={styles.text}>{firstPage.content === "" ? "" : firstPage.content}</Text>
+    </TouchableOpacity>
   );
 };
 

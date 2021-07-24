@@ -11,7 +11,6 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { Colors } from "../classes/Colors";
 import { ClassIcons } from "../icons/ClassIcons";
-import { SchoolClass } from "../classes/SchoolClass";
 import { ItemArray } from "../classes/ItemArray";
 import { FontAwesome } from "@expo/vector-icons";
 

@@ -9,6 +9,7 @@ import { Context as NotesContext } from "../context/NotesContext";
 import { Context as ClassesContext } from "../context/ClassesContext";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { ItemArray } from "../classes/ItemArray";
+import { NoteGroup } from "../classes/NoteGroup";
 
 const NotesScreen = ({ route }) => {
   const navigation = useNavigation();
@@ -24,6 +25,8 @@ const NotesScreen = ({ route }) => {
   const [mode, setMode] = useState(modes[0]);
   const [itemsSelected, setItemsSelected] = useState([]);
   const notesFilteredByClass = ItemArray.filter(notes.state, "schoolClass", route.params);
+
+  //console.log(notes.state);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -149,7 +152,20 @@ const NotesScreen = ({ route }) => {
         openDuration={250}
       >
         <View style={{ backgroundColor: "white" }}>
-          <IconNextToTextButton title="Group notes" iconName="Group" />
+          <IconNextToTextButton
+            title="Group notes"
+            iconName="Group"
+            buttonFunction={() => {
+              notes.add(
+                new NoteGroup(
+                  route.params,
+                  "",
+                  itemsSelected.map((id) => ItemArray.find(notes.state, "id", id))
+                )
+              );
+              itemsSelected.forEach((id) => notes.delete(id));
+            }}
+          />
           <IconNextToTextButton title="Bookmark notes" iconName="Bookmark" />
           <IconNextToTextButton title="Add to assignment" iconName="Tasks" />
         </View>

@@ -7,8 +7,8 @@ export class ItemArray {
 
   static find(array, property, value) {
     return property !== ""
-      ? array.find((item) => item[property] === value) === value
-      : array.find((item) => item === value) === value;
+      ? array.find((item) => item[property] === value)
+      : array.find((item) => item === value);
   }
 
   static remove(arrayInput, item) {
