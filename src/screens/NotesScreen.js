@@ -12,7 +12,8 @@ import { ItemArray } from "../classes/ItemArray";
 const NotesScreen = ({ route }) => {
   const navigation = useNavigation();
   const notes = useContext(NotesContext);
-  const sheetRef = React.useRef();
+  const optionsSheetRef = React.useRef();
+  const createSheetRef = React.useRef();
 
   const modes = ["browse", "select"];
   const [mode, setMode] = useState(modes[0]);
@@ -37,17 +38,34 @@ const NotesScreen = ({ route }) => {
           )}
         </View>
       ),
-      headerRight: () =>
-        mode === modes[0] && (
-          <TouchableOpacity
-            onPress={() => {
-              sheetRef.current.open();
-            }}
-            style={{ paddingRight: 15 }}
-          >
-            {GeneralIcons.findIcon("Three Dots", 24, route.params.primaryColor)}
-          </TouchableOpacity>
-        ),
+      headerRight: () => (
+        <View>
+          {mode === modes[0] && (
+            <TouchableOpacity
+              onPress={() => {
+                optionsSheetRef.current.open();
+              }}
+              style={{ paddingRight: 15 }}
+            >
+              {GeneralIcons.findIcon("Three Dots", 24, route.params.primaryColor)}
+            </TouchableOpacity>
+          )}
+          {mode === modes[1] && (
+            <View style={{ flexDirection: "row" }}>
+              <HeaderIconButton
+                color={route.params.primaryColor}
+                iconName="Plus"
+                callback={() => createSheetRef.current.open()}
+              />
+              <HeaderIconButton
+                color={route.params.primaryColor}
+                iconName="Delete Outline"
+                callback={() => setMode(modes[0])}
+              />
+            </View>
+          )}
+        </View>
+      ),
     });
   });
 
@@ -56,16 +74,23 @@ const NotesScreen = ({ route }) => {
   return (
     <View style={{ flex: 1 }}>
       <NotesList notesFilteredByDate={notesFilteredByClass} mode={mode} />
-      <FloatingActionButton schoolClass={route.params} navigation={navigation} />
+      {mode === modes[0] && (
+        <FloatingActionButton schoolClass={route.params} navigation={navigation} />
+      )}
       {/* Bottom Sheet Content */}
-      <RBSheet ref={sheetRef} closeOnDragDown={false} height={290} openDuration={250}>
+      <RBSheet
+        ref={optionsSheetRef}
+        closeOnDragDown={false}
+        height={290}
+        openDuration={250}
+      >
         <View style={{ backgroundColor: "white" }}>
           <IconNextToTextButton
             title="Select notes"
             iconName="Select"
             buttonFunction={() => {
               setMode(modes[1]);
-              sheetRef.current.close();
+              optionsSheetRef.current.close();
             }}
           />
           <IconNextToTextButton title="Filter notes" iconName="Filter" />
@@ -75,11 +100,23 @@ const NotesScreen = ({ route }) => {
             iconName="Edit"
             buttonFunction={() => {
               navigation.navigate("Edit Class", route.params);
-              sheetRef.current.close();
+              optionsSheetRef.current.close();
             }}
           />
           <IconNextToTextButton title="Archive class" iconName="Archive" />
           <IconNextToTextButton title="Delete class" iconName="Delete" />
+        </View>
+      </RBSheet>
+      <RBSheet
+        ref={createSheetRef}
+        closeOnDragDown={false}
+        height={190}
+        openDuration={250}
+      >
+        <View style={{ backgroundColor: "white" }}>
+          <IconNextToTextButton title="Group notes" iconName="Group" />
+          <IconNextToTextButton title="Bookmark notes" iconName="Bookmark" />
+          <IconNextToTextButton title="Add to assignment" iconName="Tasks" />
         </View>
       </RBSheet>
     </View>

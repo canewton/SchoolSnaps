@@ -6,6 +6,7 @@ import {
   MaterialIcons,
   Ionicons,
   FontAwesome,
+  FontAwesome5,
 } from "@expo/vector-icons";
 import { IconsList } from "./IconsList";
 
@@ -19,6 +20,10 @@ export class GeneralIcons extends IconsList {
       {
         icon: <Ionicons name="trash" size={iconSize} color={iconColor} />,
         name: "Delete",
+      },
+      {
+        icon: <Ionicons name="trash-outline" size={iconSize} color={iconColor} />,
+        name: "Delete Outline",
       },
       {
         icon: <Ionicons name="school-outline" size={iconSize} color={iconColor} />,
@@ -95,6 +100,18 @@ export class GeneralIcons extends IconsList {
           <Ionicons name="checkmark-circle-sharp" size={iconSize} color={iconColor} />
         ),
         name: "Checkmark Circle",
+      },
+      {
+        icon: <Ionicons name="bookmark" size={iconSize} color={iconColor} />,
+        name: "Bookmark",
+      },
+      {
+        icon: <Ionicons name="document-attach" size={iconSize} color={iconColor} />,
+        name: "Group",
+      },
+      {
+        icon: <FontAwesome5 name="tasks" size={iconSize} color={iconColor} />,
+        name: "Tasks",
       },
     ];
   }
