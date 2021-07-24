@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -14,7 +14,7 @@ import { ImageNote } from "../classes/ImageNote";
 import { GeneralIcons } from "../icons/GeneralIcons";
 import { ItemArray } from "../classes/ItemArray";
 
-const NotesList = ({ notesFilteredByDate, mode }) => {
+const NotesList = ({ notesFilteredByDate, mode, itemsSelectedCallback }) => {
   const modes = ["browse", "select"];
   const navigation = useNavigation();
   const windowWidth = Dimensions.get("window").width;
@@ -23,6 +23,10 @@ const NotesList = ({ notesFilteredByDate, mode }) => {
   const columnWidth = windowWidth / imagesPerRow - outerSpacing;
 
   const [itemsSelected, setItemsSelected] = useState([]);
+
+  useEffect(() => {
+    itemsSelectedCallback(itemsSelected);
+  }, [itemsSelected]);
 
   return (
     <View style={{ flex: 1, paddingHorizontal: outerSpacing }}>

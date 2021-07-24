@@ -17,6 +17,8 @@ const NotesScreen = ({ route }) => {
 
   const modes = ["browse", "select"];
   const [mode, setMode] = useState(modes[0]);
+  const [itemsSelected, setItemsSelected] = useState([]);
+  const notesFilteredByClass = ItemArray.filter(notes.state, "schoolClass", route.params);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -60,7 +62,9 @@ const NotesScreen = ({ route }) => {
               <HeaderIconButton
                 color={route.params.primaryColor}
                 iconName="Delete Outline"
-                callback={() => setMode(modes[0])}
+                callback={() => {
+                  itemsSelected.forEach((id) => notes.delete(id));
+                }}
               />
             </View>
           )}
@@ -69,11 +73,15 @@ const NotesScreen = ({ route }) => {
     });
   });
 
-  const notesFilteredByClass = ItemArray.filter(notes.state, "schoolClass", route.params);
-
   return (
     <View style={{ flex: 1 }}>
-      <NotesList notesFilteredByDate={notesFilteredByClass} mode={mode} />
+      <NotesList
+        notesFilteredByDate={notesFilteredByClass}
+        mode={mode}
+        itemsSelectedCallback={(items) => {
+          setItemsSelected(items);
+        }}
+      />
       {mode === modes[0] && (
         <FloatingActionButton schoolClass={route.params} navigation={navigation} />
       )}

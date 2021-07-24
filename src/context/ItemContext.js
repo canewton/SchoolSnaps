@@ -15,7 +15,7 @@ export class ItemContext {
         });
       case "delete":
         //if the inputted item's id is found, remove that item from the array
-        return state.filter((item) => item.id !== action.payload.id);
+        return state.filter((item) => item.id !== action.payload);
     }
   };
 
@@ -45,9 +45,9 @@ export class ItemContext {
 
   static delete = (dispatch) => {
     //take the folowing parameters when this function is called
-    return (item, callback) => {
+    return (id, callback) => {
       //tell the classes reducer that add class has been called and give it the following props
-      dispatch({ type: "delete", payload: item });
+      dispatch({ type: "delete", payload: id });
       //if a callback exists, call it
       if (callback) {
         callback();
