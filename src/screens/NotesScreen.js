@@ -16,6 +16,9 @@ const NotesScreen = ({ route }) => {
   const classes = useContext(ClassesContext);
   const optionsSheetRef = React.useRef();
   const createSheetRef = React.useRef();
+  const [classIsArchived, setClassIsArchived] = useState(
+    route.params.status !== "Current"
+  );
 
   const modes = ["browse", "select"];
   const [mode, setMode] = useState(modes[0]);
@@ -87,7 +90,8 @@ const NotesScreen = ({ route }) => {
       {mode === modes[0] && (
         <FloatingActionButton schoolClass={route.params} navigation={navigation} />
       )}
-      {/* Bottom Sheet Content */}
+
+      {/* Options Bottom Sheet Content */}
       <RBSheet
         ref={optionsSheetRef}
         closeOnDragDown={false}
@@ -114,11 +118,16 @@ const NotesScreen = ({ route }) => {
             }}
           />
           <IconNextToTextButton
-            title="Archive class"
+            title={classIsArchived ? "Remove from archives" : "Archive class"}
             iconName="Archive"
-            buttonFunction={() =>
-              classes.edit({ id: route.params.id, status: "Completed" })
-            }
+            buttonFunction={() => {
+              classes.edit({
+                id: route.params.id,
+                status: classIsArchived ? "Current" : "Completed",
+              });
+              setClassIsArchived(!classIsArchived);
+              optionsSheetRef.current.close();
+            }}
           />
           <IconNextToTextButton
             title="Delete class"
@@ -131,6 +140,8 @@ const NotesScreen = ({ route }) => {
           />
         </View>
       </RBSheet>
+
+      {/* Create Bottom Sheet Content */}
       <RBSheet
         ref={createSheetRef}
         closeOnDragDown={false}
