@@ -22,7 +22,7 @@ const HomeScreen = () => {
   const tabButtons = [{ name: "All" }, { name: "Current" }, { name: "Completed" }];
 
   return (
-    <View style={{ flex: 1, marginBottom: 140 }}>
+    <View style={{ flex: 1, marginBottom: 85 }}>
       <TopTabs
         tabButtons={tabButtons}
         callback={(tab) => {

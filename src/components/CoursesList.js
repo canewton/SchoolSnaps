@@ -8,7 +8,7 @@ const CoursesList = ({ classes }) => {
   const navigation = useNavigation();
 
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <FlatList
         data={classes}
         keyExtractor={(index) => index.id + ""}

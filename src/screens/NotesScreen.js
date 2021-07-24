@@ -6,12 +6,14 @@ import FloatingActionButton from "../components/FloatingActionButton";
 import { GeneralIcons } from "../icons/GeneralIcons";
 import NotesList from "../components/NotesList";
 import { Context as NotesContext } from "../context/NotesContext";
+import { Context as ClassesContext } from "../context/ClassesContext";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { ItemArray } from "../classes/ItemArray";
 
 const NotesScreen = ({ route }) => {
   const navigation = useNavigation();
   const notes = useContext(NotesContext);
+  const classes = useContext(ClassesContext);
   const optionsSheetRef = React.useRef();
   const createSheetRef = React.useRef();
 
@@ -111,8 +113,22 @@ const NotesScreen = ({ route }) => {
               optionsSheetRef.current.close();
             }}
           />
-          <IconNextToTextButton title="Archive class" iconName="Archive" />
-          <IconNextToTextButton title="Delete class" iconName="Delete" />
+          <IconNextToTextButton
+            title="Archive class"
+            iconName="Archive"
+            buttonFunction={() =>
+              classes.edit({ id: route.params.id, status: "Completed" })
+            }
+          />
+          <IconNextToTextButton
+            title="Delete class"
+            iconName="Delete"
+            buttonFunction={() => {
+              classes.delete(route.params.id);
+              optionsSheetRef.current.close();
+              navigation.pop();
+            }}
+          />
         </View>
       </RBSheet>
       <RBSheet

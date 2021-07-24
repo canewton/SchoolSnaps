@@ -47,9 +47,7 @@ const ClassForm = ({ onSubmit, initialValues }) => {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity
-          onPress={() => onSubmit(new SchoolClass(id, name, primaryColor, iconName))}
-        >
+        <TouchableOpacity onPress={() => onSubmit({ id, name, primaryColor, iconName })}>
           <HeaderButton name="Save" />
         </TouchableOpacity>
       ),
