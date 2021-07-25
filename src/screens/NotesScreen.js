@@ -97,6 +97,7 @@ const NotesScreen = ({ route }) => {
             navigation.navigate("Edit Note", {
               notes: new Array(note),
               schoolClass: note.schoolClass,
+              id: note.id,
             });
           }}
         />

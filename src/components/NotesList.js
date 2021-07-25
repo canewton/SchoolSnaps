@@ -136,6 +136,7 @@ const NoteButton = ({ style, note, navigation, disableButton }) => {
         navigation.navigate("Edit Note", {
           notes: new Array(note),
           schoolClass: note.schoolClass,
+          id: note.id,
         })
       }
       disabled={disableButton}
