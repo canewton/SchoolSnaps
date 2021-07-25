@@ -111,7 +111,7 @@ const NoteGroupButton = ({ style, noteGroup, navigation, disableButton }) => {
   return (
     <TouchableOpacity
       style={style}
-      onPress={() => navigation.navigate("Edit Note", { notes: noteGroup.notes })}
+      onPress={() => navigation.navigate("Edit Note", noteGroup)}
       disabled={disableButton}
     >
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
@@ -132,7 +132,12 @@ const NoteButton = ({ style, note, navigation, disableButton }) => {
   return (
     <TouchableOpacity
       style={style}
-      onPress={() => navigation.navigate("Edit Note", { notes: new Array(note) })}
+      onPress={() =>
+        navigation.navigate("Edit Note", {
+          notes: new Array(note),
+          schoolClass: note.schoolClass,
+        })
+      }
       disabled={disableButton}
     >
       <Text style={styles.title}>{note.title === "" ? "Untitled" : note.title}</Text>

@@ -14,7 +14,12 @@ import { Context as NotesContext } from "../context/NotesContext";
 const circleDiameter = 60;
 const circleRadius = circleDiameter / 2;
 
-const FloatingActionButton = ({ schoolClass, navigation }) => {
+const FloatingActionButton = ({
+  schoolClass,
+  onPressPhoto,
+  onPressNote,
+  onPressTask,
+}) => {
   const notes = useContext(NotesContext);
 
   return (
@@ -30,19 +35,9 @@ const FloatingActionButton = ({ schoolClass, navigation }) => {
             customStyles={triggerStyles}
           />
           <MenuOptions customStyles={optionStyles}>
-            <MenuOption
-              text="Photo"
-              onSelect={() => navigation.navigate("Camera", schoolClass)}
-            />
-            <MenuOption
-              text="Note"
-              onSelect={() => {
-                var note = new WrittenNote(schoolClass, "", "");
-                notes.add(note);
-                navigation.navigate("Edit Note", { notes: new Array(note) });
-              }}
-            />
-            <MenuOption text="Task" />
+            <MenuOption text="Photo" onSelect={() => onPressPhoto()} />
+            <MenuOption text="Note" onSelect={() => onPressNote()} />
+            <MenuOption text="Task" onSelect={() => onPressTask()} />
           </MenuOptions>
         </Menu>
       </View>

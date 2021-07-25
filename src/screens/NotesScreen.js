@@ -11,6 +11,7 @@ import { Context as SelectedNotesContext } from "../context/SelectedNotesContext
 import RBSheet from "react-native-raw-bottom-sheet";
 import { ItemArray } from "../classes/ItemArray";
 import { NoteGroup } from "../classes/NoteGroup";
+import { WrittenNote } from "../classes/WrittenNote";
 
 const NotesScreen = ({ route }) => {
   const navigation = useNavigation();
@@ -87,7 +88,18 @@ const NotesScreen = ({ route }) => {
     <View style={{ flex: 1 }}>
       <NotesList notesFilteredByDate={notesFilteredByClass} mode={mode} />
       {mode === modes[0] && (
-        <FloatingActionButton schoolClass={route.params} navigation={navigation} />
+        <FloatingActionButton
+          schoolClass={route.params}
+          onPressPhoto={() => navigation.navigate("Camera", route.params)}
+          onPressNote={() => {
+            var note = new WrittenNote(route.params, "", "");
+            notes.add(note);
+            navigation.navigate("Edit Note", {
+              notes: new Array(note),
+              schoolClass: note.schoolClass,
+            });
+          }}
+        />
       )}
 
       {/* Options Bottom Sheet Content */}
