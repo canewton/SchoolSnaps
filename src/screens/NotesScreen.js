@@ -15,18 +15,19 @@ import { WrittenNote } from "../classes/WrittenNote";
 
 const NotesScreen = ({ route }) => {
   const navigation = useNavigation();
+  const schoolClass = route.params;
   const notes = useContext(NotesContext);
   const classes = useContext(ClassesContext);
   const selectedNotes = useContext(SelectedNotesContext);
   const optionsSheetRef = React.useRef();
   const createSheetRef = React.useRef();
   const [classIsArchived, setClassIsArchived] = useState(
-    route.params.status !== "Current"
+    schoolClass.status !== "Current"
   );
 
   const modes = ["browse", "select"];
   const [mode, setMode] = useState(modes[0]);
-  const notesFilteredByClass = ItemArray.filter(notes.state, "schoolClass", route.params);
+  const notesFilteredByClass = ItemArray.filter(notes.state, "schoolClass", schoolClass);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -34,14 +35,14 @@ const NotesScreen = ({ route }) => {
         <View>
           {mode === modes[0] && (
             <HeaderIconButton
-              color={route.params.primaryColor}
+              color={schoolClass.primaryColor}
               iconName="Back"
               callback={() => navigation.pop()}
             />
           )}
           {mode === modes[1] && (
             <HeaderIconButton
-              color={route.params.primaryColor}
+              color={schoolClass.primaryColor}
               iconName="Done"
               callback={() => setMode(modes[0])}
             />
@@ -57,18 +58,18 @@ const NotesScreen = ({ route }) => {
               }}
               style={{ paddingRight: 15 }}
             >
-              {GeneralIcons.findIcon("Three Dots", 24, route.params.primaryColor)}
+              {GeneralIcons.findIcon("Three Dots", 24, schoolClass.primaryColor)}
             </TouchableOpacity>
           )}
           {mode === modes[1] && (
             <View style={{ flexDirection: "row" }}>
               <HeaderIconButton
-                color={route.params.primaryColor}
+                color={schoolClass.primaryColor}
                 iconName="Plus"
                 callback={() => createSheetRef.current.open()}
               />
               <HeaderIconButton
-                color={route.params.primaryColor}
+                color={schoolClass.primaryColor}
                 iconName="Delete Outline"
                 callback={() => {
                   selectedNotes.state.forEach((selectedNote) => {
@@ -89,10 +90,10 @@ const NotesScreen = ({ route }) => {
       <NotesList notesFilteredByDate={notesFilteredByClass} mode={mode} />
       {mode === modes[0] && (
         <FloatingActionButton
-          schoolClass={route.params}
-          onPressPhoto={() => navigation.navigate("Camera", route.params)}
+          schoolClass={schoolClass}
+          onPressPhoto={() => navigation.navigate("Camera", schoolClass)}
           onPressNote={() => {
-            var note = new WrittenNote(route.params, "", "");
+            var note = new WrittenNote(schoolClass, "", "");
             notes.add(note);
             navigation.navigate("Edit Note", {
               notes: new Array(note),
@@ -125,7 +126,7 @@ const NotesScreen = ({ route }) => {
             title="Edit class"
             iconName="Edit"
             buttonFunction={() => {
-              navigation.navigate("Edit Class", route.params);
+              navigation.navigate("Edit Class", schoolClass);
               optionsSheetRef.current.close();
             }}
           />
@@ -134,7 +135,7 @@ const NotesScreen = ({ route }) => {
             iconName="Archive"
             buttonFunction={() => {
               classes.edit({
-                id: route.params.id,
+                id: schoolClass.id,
                 status: classIsArchived ? "Current" : "Completed",
               });
               setClassIsArchived(!classIsArchived);
@@ -145,7 +146,7 @@ const NotesScreen = ({ route }) => {
             title="Delete class"
             iconName="Delete"
             buttonFunction={() => {
-              classes.delete(route.params.id);
+              classes.delete(schoolClass.id);
               optionsSheetRef.current.close();
               navigation.pop();
             }}
@@ -179,7 +180,7 @@ const NotesScreen = ({ route }) => {
                   }
                 });
                 notes.add(
-                  new NoteGroup(route.params, "", [
+                  new NoteGroup(schoolClass, [
                     ...noteGroupArray,
                     ...selectedNotesArray.map((selectedNote) =>
                       ItemArray.find(notes.state, "id", selectedNote.id)

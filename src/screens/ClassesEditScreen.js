@@ -5,10 +5,11 @@ import { Context as ClassesContext } from "../context/ClassesContext";
 
 const ClassesEditScreen = ({ navigation, route }) => {
   const classes = useContext(ClassesContext);
+  const schoolClass = route.params;
   return (
     <View>
       <ClassForm
-        initialValues={route.params}
+        initialValues={schoolClass}
         onSubmit={(schoolClass) => {
           classes.edit(schoolClass);
           navigation.navigate("Notes", schoolClass);

@@ -7,6 +7,7 @@ import { GeneralIcons } from "../icons/GeneralIcons";
 
 const CameraSceen = ({ route }) => {
   const navigation = useNavigation();
+  const schoolClass = route.params;
 
   //initialize state that contains whether the user can access the camera or not
   const [hasPermission, setHasPermission] = useState(null);
@@ -95,7 +96,7 @@ const CameraSceen = ({ route }) => {
         </View>
         <View style={styles.cameraWindow} />
         <CameraButtonsContainer
-          schoolClass={route.params}
+          schoolClass={schoolClass}
           capturePhotoCallback={async () => {
             if (cameraRef) {
               let photo = await cameraRef.takePictureAsync();

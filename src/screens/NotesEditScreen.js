@@ -18,7 +18,8 @@ import { NoteGroup } from "../classes/NoteGroup";
 const NotesEditScreen = ({ route }) => {
   const navigation = useNavigation();
   const notes = useContext(NotesContext);
-  const [notesOnScreen, setNotesOnScreen] = useState(route.params.notes);
+  const noteGroup = route.params;
+  const [notesOnScreen, setNotesOnScreen] = useState(noteGroup.notes);
   const [addedNoteGroupID, setAddedNoteGroupID] = useState(null);
   return (
     <View style={{ flex: 1, backgroundColor: "black" }}>
@@ -49,21 +50,21 @@ const NotesEditScreen = ({ route }) => {
         }}
       />
       <FloatingActionButton
-        schoolClass={route.params.schoolClass}
-        onPressPhoto={() => navigation.navigate("Camera", route.params.schoolClass)}
+        schoolClass={noteGroup.schoolClass}
+        onPressPhoto={() => navigation.navigate("Camera", noteGroup.schoolClass)}
         onPressNote={() => {
-          var note = new WrittenNote(route.params.schoolClass, "", "");
-          if (route.params instanceof NoteGroup) {
-            notes.edit({ id: route.params.id, notes: [...notesOnScreen, note] });
+          var note = new WrittenNote(noteGroup.schoolClass, "", "");
+          if (noteGroup instanceof NoteGroup) {
+            notes.edit({ id: noteGroup.id, notes: [...notesOnScreen, note] });
             setNotesOnScreen([...notesOnScreen, note]);
           } else {
             if (addedNoteGroupID === null) {
-              var addedNoteGroup = new NoteGroup(route.params.schoolClass, "", [
+              var addedNoteGroup = new NoteGroup(noteGroup.schoolClass, [
                 ...notesOnScreen,
               ]);
               notes.add(addedNoteGroup);
               notes.edit({ id: addedNoteGroupID, notes: [...notesOnScreen, note] });
-              notes.delete(route.params.id);
+              notes.delete(noteGroup.id);
               setAddedNoteGroupID(addedNoteGroup.id);
               setNotesOnScreen([...notesOnScreen, note]);
             } else {

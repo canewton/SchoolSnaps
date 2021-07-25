@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { GeneralIcons } from "../icons/GeneralIcons";
 import {
@@ -8,8 +8,6 @@ import {
   MenuTrigger,
   renderers,
 } from "react-native-popup-menu";
-import { WrittenNote } from "../classes/WrittenNote";
-import { Context as NotesContext } from "../context/NotesContext";
 
 const circleDiameter = 60;
 const circleRadius = circleDiameter / 2;
@@ -20,8 +18,6 @@ const FloatingActionButton = ({
   onPressNote,
   onPressTask,
 }) => {
-  const notes = useContext(NotesContext);
-
   return (
     <View style={styles.buttonContainer}>
       <View style={styles.buttonPosition}>
