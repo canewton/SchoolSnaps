@@ -85,7 +85,7 @@ const NotesList = ({ notesFilteredByDate, mode, itemsSelectedCallback }) => {
                 checkmarks appear on the note when the user presses it */}
                 {mode === modes[1] &&
                   ItemArray.find(itemsSelected, "", item.id) !== item.id && (
-                    <View style={{ position: "absolute", right: 10, top: 8 }}>
+                    <View style={{ position: "absolute", right: 10, bottom: 0 }}>
                       <View style={styles.checkContainter}>
                         <View style={styles.emptyCircle} />
                       </View>
@@ -93,7 +93,7 @@ const NotesList = ({ notesFilteredByDate, mode, itemsSelectedCallback }) => {
                   )}
                 {mode === modes[1] &&
                   ItemArray.find(itemsSelected, "", item.id) === item.id && (
-                    <View style={{ position: "absolute", right: 10, top: 8 }}>
+                    <View style={{ position: "absolute", right: 10, bottom: 0 }}>
                       <View style={styles.checkContainter}>
                         {GeneralIcons.findIcon("Checkmark Circle", 24, "#147EFB")}
                       </View>
@@ -117,9 +117,15 @@ const NoteGroupButton = ({ style, noteGroup, navigation, disableButton }) => {
       onPress={() => console.log("hi")}
       disabled={disableButton}
     >
-      <Text style={styles.title}>
-        {firstPage.title === "" ? "Untitled" : firstPage.title}
-      </Text>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <Text style={styles.title}>
+          {firstPage.title === "" ? "Untitled" : firstPage.title}
+        </Text>
+        <View style={styles.documentIconContainer}>
+          {GeneralIcons.findIcon("Document", 12, "black")}
+          <Text style={{ fontSize: 10, marginLeft: 1 }}>{noteGroup.notes.length}</Text>
+        </View>
+      </View>
       <Text style={styles.text}>{firstPage.content === "" ? "" : firstPage.content}</Text>
     </TouchableOpacity>
   );
@@ -162,6 +168,8 @@ const ImageButton = (props) => {
   );
 };
 
+const documentIconContainerRadius = 10;
+
 const styles = StyleSheet.create({
   emptyCircle: {
     borderRadius: 10,
@@ -196,6 +204,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: 30,
     width: 30,
+  },
+  documentIconContainer: {
+    height: documentIconContainerRadius * 2,
+    paddingHorizontal: 8,
+    borderRadius: documentIconContainerRadius,
+    backgroundColor: "rgba(0,0,0,.25)",
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
   },
 });
 

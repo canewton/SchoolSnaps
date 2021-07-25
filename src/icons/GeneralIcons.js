@@ -113,6 +113,10 @@ export class GeneralIcons extends IconsList {
         icon: <FontAwesome5 name="tasks" size={iconSize} color={iconColor} />,
         name: "Tasks",
       },
+      {
+        icon: <Ionicons name="document" size={iconSize} color={iconColor} />,
+        name: "Document",
+      },
     ];
   }
 }
