@@ -25,7 +25,6 @@ const NotesList = ({ notesFilteredByDate, mode }) => {
   const columnWidth = windowWidth / imagesPerRow - outerSpacing;
 
   const selectedNotes = useContext(SelectedNotesContext);
-  console.log(selectedNotes.state);
 
   return (
     <View style={{ flex: 1, paddingHorizontal: outerSpacing }}>
@@ -107,7 +106,6 @@ const NotesList = ({ notesFilteredByDate, mode }) => {
 };
 
 const NoteGroupButton = ({ style, noteGroup, navigation, disableButton }) => {
-  console.log(noteGroup.notes);
   var firstPage = noteGroup.notes[0];
 
   return (

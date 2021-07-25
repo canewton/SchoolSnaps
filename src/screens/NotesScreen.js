@@ -152,19 +152,33 @@ const NotesScreen = ({ route }) => {
             title="Group notes"
             iconName="Group"
             buttonFunction={() => {
-              notes.add(
-                new NoteGroup(
-                  route.params,
-                  "",
-                  selectedNotes.state.map((selectedNote) =>
-                    ItemArray.find(notes.state, "id", selectedNote.id)
-                  )
-                )
-              );
-              selectedNotes.state.forEach((selectedNote) => {
-                notes.delete(selectedNote.id);
-                selectedNotes.delete(selectedNote.id);
-              });
+              if (selectedNotes.state.length > 0) {
+                var noteGroupArray = [];
+                var selectedNotesArray = [...selectedNotes.state];
+                selectedNotesArray.forEach((selectedNote) => {
+                  const item = ItemArray.find(notes.state, "id", selectedNote.id);
+                  if (item instanceof NoteGroup) {
+                    noteGroupArray = [...noteGroupArray, ...item.notes];
+                    selectedNotesArray = ItemArray.remove(
+                      selectedNotesArray,
+                      selectedNote
+                    );
+                  }
+                });
+                notes.add(
+                  new NoteGroup(route.params, "", [
+                    ...noteGroupArray,
+                    ...selectedNotesArray.map((selectedNote) =>
+                      ItemArray.find(notes.state, "id", selectedNote.id)
+                    ),
+                  ])
+                );
+                selectedNotes.state.forEach((selectedNote) => {
+                  notes.delete(selectedNote.id);
+                  selectedNotes.delete(selectedNote.id);
+                });
+              }
+              createSheetRef.current.close();
             }}
           />
           <IconNextToTextButton title="Bookmark notes" iconName="Bookmark" />
