@@ -39,7 +39,7 @@ const FloatingActionButton = ({ schoolClass, navigation }) => {
               onSelect={() => {
                 var note = new WrittenNote(schoolClass, "", "");
                 notes.add(note);
-                navigation.navigate("Edit Note", note);
+                navigation.navigate("Edit Note", { notes: new Array(note) });
               }}
             />
             <MenuOption text="Task" />

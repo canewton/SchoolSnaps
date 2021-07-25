@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -14,8 +14,9 @@ import { ImageNote } from "../classes/ImageNote";
 import { GeneralIcons } from "../icons/GeneralIcons";
 import { ItemArray } from "../classes/ItemArray";
 import { NoteGroup } from "../classes/NoteGroup";
+import { Context as SelectedNotesContext } from "../context/SelectedNotesContext";
 
-const NotesList = ({ notesFilteredByDate, mode, itemsSelectedCallback }) => {
+const NotesList = ({ notesFilteredByDate, mode }) => {
   const modes = ["browse", "select"];
   const navigation = useNavigation();
   const windowWidth = Dimensions.get("window").width;
@@ -23,11 +24,8 @@ const NotesList = ({ notesFilteredByDate, mode, itemsSelectedCallback }) => {
   const imagesPerRow = 2;
   const columnWidth = windowWidth / imagesPerRow - outerSpacing;
 
-  const [itemsSelected, setItemsSelected] = useState([]);
-
-  useEffect(() => {
-    itemsSelectedCallback(itemsSelected);
-  }, [itemsSelected]);
+  const selectedNotes = useContext(SelectedNotesContext);
+  console.log(selectedNotes.state);
 
   return (
     <View style={{ flex: 1, paddingHorizontal: outerSpacing }}>
@@ -35,16 +33,16 @@ const NotesList = ({ notesFilteredByDate, mode, itemsSelectedCallback }) => {
         numColumns={imagesPerRow}
         columnWrapperStyle={{ justifyContent: "space-between" }}
         data={notesFilteredByDate}
-        keyExtractor={(image) => image.id + ""}
+        keyExtractor={(item) => item.id + ""}
         renderItem={({ item }) => {
           return (
             <View style={{ width: columnWidth }}>
               <TouchableOpacity
                 disabled={mode === modes[0]}
                 onPress={() => {
-                  ItemArray.find(itemsSelected, "", item.id) !== item.id
-                    ? setItemsSelected([...itemsSelected, item.id])
-                    : setItemsSelected(ItemArray.remove(itemsSelected, item.id));
+                  ItemArray.find(selectedNotes.state, "id", item.id) === undefined
+                    ? selectedNotes.add({ id: item.id })
+                    : selectedNotes.delete(item.id);
                 }}
                 style={styles.note}
               >
@@ -84,7 +82,7 @@ const NotesList = ({ notesFilteredByDate, mode, itemsSelectedCallback }) => {
                 {/* when the user is in select mode, 
                 checkmarks appear on the note when the user presses it */}
                 {mode === modes[1] &&
-                  ItemArray.find(itemsSelected, "", item.id) !== item.id && (
+                  ItemArray.find(selectedNotes.state, "id", item.id) === undefined && (
                     <View style={{ position: "absolute", right: 10, bottom: 0 }}>
                       <View style={styles.checkContainter}>
                         <View style={styles.emptyCircle} />
@@ -92,7 +90,7 @@ const NotesList = ({ notesFilteredByDate, mode, itemsSelectedCallback }) => {
                     </View>
                   )}
                 {mode === modes[1] &&
-                  ItemArray.find(itemsSelected, "", item.id) === item.id && (
+                  ItemArray.find(selectedNotes.state, "id", item.id) !== undefined && (
                     <View style={{ position: "absolute", right: 10, bottom: 0 }}>
                       <View style={styles.checkContainter}>
                         {GeneralIcons.findIcon("Checkmark Circle", 24, "#147EFB")}
@@ -109,12 +107,13 @@ const NotesList = ({ notesFilteredByDate, mode, itemsSelectedCallback }) => {
 };
 
 const NoteGroupButton = ({ style, noteGroup, navigation, disableButton }) => {
+  console.log(noteGroup.notes);
   var firstPage = noteGroup.notes[0];
 
   return (
     <TouchableOpacity
       style={style}
-      onPress={() => console.log("hi")}
+      onPress={() => navigation.navigate("Edit Note", { notes: noteGroup.notes })}
       disabled={disableButton}
     >
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
@@ -135,7 +134,7 @@ const NoteButton = ({ style, note, navigation, disableButton }) => {
   return (
     <TouchableOpacity
       style={style}
-      onPress={() => navigation.navigate("Edit Note", note)}
+      onPress={() => navigation.navigate("Edit Note", { notes: new Array(note) })}
       disabled={disableButton}
     >
       <Text style={styles.title}>{note.title === "" ? "Untitled" : note.title}</Text>
@@ -190,6 +189,7 @@ const styles = StyleSheet.create({
   note: {
     flex: 0.5,
     margin: 3,
+    marginVertical: 9,
     height: 200,
   },
   emptyCircle: {

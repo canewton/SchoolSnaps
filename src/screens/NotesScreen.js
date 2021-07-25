@@ -7,6 +7,7 @@ import { GeneralIcons } from "../icons/GeneralIcons";
 import NotesList from "../components/NotesList";
 import { Context as NotesContext } from "../context/NotesContext";
 import { Context as ClassesContext } from "../context/ClassesContext";
+import { Context as SelectedNotesContext } from "../context/SelectedNotesContext";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { ItemArray } from "../classes/ItemArray";
 import { NoteGroup } from "../classes/NoteGroup";
@@ -15,6 +16,7 @@ const NotesScreen = ({ route }) => {
   const navigation = useNavigation();
   const notes = useContext(NotesContext);
   const classes = useContext(ClassesContext);
+  const selectedNotes = useContext(SelectedNotesContext);
   const optionsSheetRef = React.useRef();
   const createSheetRef = React.useRef();
   const [classIsArchived, setClassIsArchived] = useState(
@@ -23,10 +25,7 @@ const NotesScreen = ({ route }) => {
 
   const modes = ["browse", "select"];
   const [mode, setMode] = useState(modes[0]);
-  const [itemsSelected, setItemsSelected] = useState([]);
   const notesFilteredByClass = ItemArray.filter(notes.state, "schoolClass", route.params);
-
-  //console.log(notes.state);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -71,7 +70,10 @@ const NotesScreen = ({ route }) => {
                 color={route.params.primaryColor}
                 iconName="Delete Outline"
                 callback={() => {
-                  itemsSelected.forEach((id) => notes.delete(id));
+                  selectedNotes.state.forEach((selectedNote) => {
+                    notes.delete(selectedNote.id);
+                    selectedNotes.delete(selectedNote.id);
+                  });
                 }}
               />
             </View>
@@ -83,13 +85,7 @@ const NotesScreen = ({ route }) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <NotesList
-        notesFilteredByDate={notesFilteredByClass}
-        mode={mode}
-        itemsSelectedCallback={(items) => {
-          setItemsSelected(items);
-        }}
-      />
+      <NotesList notesFilteredByDate={notesFilteredByClass} mode={mode} />
       {mode === modes[0] && (
         <FloatingActionButton schoolClass={route.params} navigation={navigation} />
       )}
@@ -160,10 +156,15 @@ const NotesScreen = ({ route }) => {
                 new NoteGroup(
                   route.params,
                   "",
-                  itemsSelected.map((id) => ItemArray.find(notes.state, "id", id))
+                  selectedNotes.state.map((selectedNote) =>
+                    ItemArray.find(notes.state, "id", selectedNote.id)
+                  )
                 )
               );
-              itemsSelected.forEach((id) => notes.delete(id));
+              selectedNotes.state.forEach((selectedNote) => {
+                notes.delete(selectedNote.id);
+                selectedNotes.delete(selectedNote.id);
+              });
             }}
           />
           <IconNextToTextButton title="Bookmark notes" iconName="Bookmark" />

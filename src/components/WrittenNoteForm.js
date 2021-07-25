@@ -1,56 +1,19 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-} from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { Colors } from "../classes/Colors";
+import { View, StyleSheet, TextInput, TouchableWithoutFeedback } from "react-native";
 import { Keyboard } from "react-native";
-import { GeneralIcons } from "../icons/GeneralIcons";
 
-const WrittenNoteForm = ({ onSubmit, initialValues }) => {
+const WrittenNoteForm = ({ onChange, initialValues }) => {
   //set default values
   const [title, setTitle] = useState(initialValues.title);
   const [content, setContent] = useState(initialValues.content);
 
-  const navigation = useNavigation();
-
-  //add a save and cancel button on either side of the header
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => (
-        <TouchableOpacity onPress={() => onSubmit(title, content)}>
-          <HeaderButton name="Close" />
-        </TouchableOpacity>
-      ),
-    });
-  });
-
-  const HeaderButton = ({ name }) => {
-    return (
-      <View style={{ marginHorizontal: 15 }}>
-        <Text style={{ color: Colors.primaryColor, fontSize: 18, fontWeight: "400" }}>
-          {name}
-        </Text>
-      </View>
-    );
-  };
+  useEffect(() => {
+    onChange(title, content);
+  }, [title, content]);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <View style={{ flex: 1, padding: 15, backgroundColor: "black" }}>
-        <View style={styles.cameraButtonsContainer}>
-          <TouchableOpacity
-            onPress={() => onSubmit(title, content)}
-            style={styles.button}
-          >
-            {GeneralIcons.findIcon("Close", 28, "white")}
-          </TouchableOpacity>
-        </View>
+      <View style={{ flex: 1, padding: 15 }}>
         <View
           style={{
             backgroundColor: initialValues.schoolClass.primaryColor,
@@ -88,17 +51,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 4,
     fontWeight: "600",
-  },
-  cameraButtonsContainer: {
-    flexDirection: "row",
-    alignItems: "flex-end",
-    height: 80,
-    backgroundColor: "black",
-    justifyContent: "space-between",
-  },
-  button: {
-    marginBottom: 15,
-    marginHorizontal: 5,
   },
 });
 
