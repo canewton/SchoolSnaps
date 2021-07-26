@@ -1,11 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
-  FlatList,
   TouchableOpacity,
   TouchableWithoutFeedback,
+  Text,
+  LogBox,
 } from "react-native";
 import WrittenNoteForm from "../components/WrittenNoteForm";
 import { Context as NotesContext } from "../context/NotesContext";
@@ -14,13 +15,22 @@ import { Keyboard } from "react-native";
 import { WrittenNote } from "../classes/WrittenNote";
 import FloatingActionButton from "../components/FloatingActionButton";
 import { NoteGroup } from "../classes/NoteGroup";
+import DraggableFlatList, { RenderItemParams } from "react-native-draggable-flatlist";
 
 const NotesEditScreen = ({ route }) => {
+  useEffect(() => {
+    LogBox.ignoreLogs([
+      "ReactNativeFiberHostComponent: Calling getNode() on the ref of an Animated component is no longer necessary.",
+    ]);
+  }, []);
+
   const navigation = useNavigation();
   const notes = useContext(NotesContext);
   const noteGroup = route.params;
   const [notesOnScreen, setNotesOnScreen] = useState(noteGroup.notes);
-  const [addedNoteGroupID, setAddedNoteGroupID] = useState(null);
+  const [noteGroupID, setNoteGroupID] = useState(
+    noteGroup instanceof NoteGroup ? noteGroup.id : null
+  );
   return (
     <View style={{ flex: 1, backgroundColor: "black" }}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -30,22 +40,29 @@ const NotesEditScreen = ({ route }) => {
           </TouchableOpacity>
         </View>
       </TouchableWithoutFeedback>
-      <FlatList
+      <DraggableFlatList
         data={notesOnScreen}
         keyExtractor={(item) => item.id + ""}
         ListFooterComponent={() => <View style={{ height: 160 }} />}
-        renderItem={({ item }) => {
+        onDragEnd={({ data }) => {
+          notes.edit({ id: noteGroupID, notes: data });
+          setNotesOnScreen(data);
+        }}
+        renderItem={({ item, drag, isActive }) => {
           return (
-            <View>
-              {item instanceof WrittenNote && (
-                <WrittenNoteForm
-                  initialValues={item}
-                  onChange={(title, content) => {
-                    notes.edit({ id: item.id, title, content });
-                  }}
-                />
-              )}
-            </View>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+              <TouchableOpacity onLongPress={drag}>
+                {item instanceof WrittenNote && (
+                  <WrittenNoteForm
+                    initialValues={item}
+                    onChange={(title, content) => {
+                      notes.edit({ id: item.id, title, content });
+                    }}
+                    editable={false}
+                  />
+                )}
+              </TouchableOpacity>
+            </TouchableWithoutFeedback>
           );
         }}
       />
@@ -55,20 +72,20 @@ const NotesEditScreen = ({ route }) => {
         onPressNote={() => {
           var note = new WrittenNote(noteGroup.schoolClass, "", "");
           if (noteGroup instanceof NoteGroup) {
-            notes.edit({ id: noteGroup.id, notes: [...notesOnScreen, note] });
+            notes.edit({ id: noteGroupID, notes: [...notesOnScreen, note] });
             setNotesOnScreen([...notesOnScreen, note]);
           } else {
-            if (addedNoteGroupID === null) {
+            if (noteGroupID === null) {
               var addedNoteGroup = new NoteGroup(noteGroup.schoolClass, [
                 ...notesOnScreen,
+                note,
               ]);
               notes.add(addedNoteGroup);
-              notes.edit({ id: addedNoteGroupID, notes: [...notesOnScreen, note] });
               notes.delete(noteGroup.id);
-              setAddedNoteGroupID(addedNoteGroup.id);
+              setNoteGroupID(addedNoteGroup.id);
               setNotesOnScreen([...notesOnScreen, note]);
             } else {
-              notes.edit({ id: addedNoteGroupID, notes: [...notesOnScreen, note] });
+              notes.edit({ id: noteGroupID, notes: [...notesOnScreen, note] });
               setNotesOnScreen([...notesOnScreen, note]);
             }
           }
