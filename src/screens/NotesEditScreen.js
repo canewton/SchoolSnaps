@@ -34,24 +34,49 @@ const NotesEditScreen = ({ route }) => {
   );
   return (
     <View style={{ flex: 1, backgroundColor: "black" }}>
+      {/* Header with buttons */}
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.cameraButtonsContainer}>
-          <CloseButton
+          <IconButton
             onPressCallback={() => {
               if (noteGroupID !== null) {
                 notes.edit({ id: noteGroupID, notes: notesOnScreen });
               }
               navigation.pop();
             }}
+            iconName="Close"
           />
-          {!notesAreEditable && (
-            <EditButton onPressCallback={() => setNotesAreEditable(true)} />
-          )}
-          {notesAreEditable && (
-            <StopEdittingButton onPressCallback={() => setNotesAreEditable(false)} />
-          )}
+          <View style={{ flexDirection: "row" }}>
+            {!notesAreEditable && (
+              <IconButton
+                onPressCallback={() => setNotesAreEditable(true)}
+                iconName="Edit Circle"
+              />
+            )}
+            {notesAreEditable && (
+              <IconButton
+                onPressCallback={() => setNotesAreEditable(false)}
+                iconName="Done"
+              />
+            )}
+            <IconButton
+              onPressCallback={() => console.log("bookmark")}
+              iconName="Bookmark"
+            />
+            <IconButton
+              onPressCallback={() => {
+                noteGroupID !== null
+                  ? notes.delete(noteGroupID)
+                  : notes.delete(noteGroup.id);
+                navigation.pop();
+              }}
+              iconName="Delete"
+            />
+          </View>
         </View>
       </TouchableWithoutFeedback>
+
+      {/* Notes List */}
       <DraggableFlatList
         data={notesOnScreen}
         keyExtractor={(item) => item.id + ""}
@@ -112,26 +137,10 @@ const NotesEditScreen = ({ route }) => {
   );
 };
 
-const CloseButton = ({ onPressCallback }) => {
+const IconButton = ({ iconName, onPressCallback }) => {
   return (
     <TouchableOpacity onPress={() => onPressCallback()} style={styles.button}>
-      {GeneralIcons.findIcon("Close", 28, "white")}
-    </TouchableOpacity>
-  );
-};
-
-const EditButton = ({ onPressCallback }) => {
-  return (
-    <TouchableOpacity onPress={() => onPressCallback()} style={styles.button}>
-      {GeneralIcons.findIcon("Edit Circle", 28, "white")}
-    </TouchableOpacity>
-  );
-};
-
-const StopEdittingButton = ({ onPressCallback }) => {
-  return (
-    <TouchableOpacity onPress={() => onPressCallback()} style={styles.button}>
-      {GeneralIcons.findIcon("Done", 28, "white")}
+      {GeneralIcons.findIcon(iconName, 25, "white")}
     </TouchableOpacity>
   );
 };
@@ -140,12 +149,12 @@ const styles = StyleSheet.create({
   cameraButtonsContainer: {
     flexDirection: "row",
     alignItems: "flex-end",
-    height: 80,
+    height: 100,
     justifyContent: "space-between",
   },
   button: {
     marginBottom: 15,
-    marginHorizontal: 15,
+    marginHorizontal: 20,
   },
 });
 

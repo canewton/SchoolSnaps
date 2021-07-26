@@ -71,7 +71,7 @@ const CameraSceen = ({ route }) => {
           navigation.pop();
         }}
       >
-        {GeneralIcons.findIcon("Close", 28, "white")}
+        {GeneralIcons.findIcon("Close", 25, "white")}
       </TouchableOpacity>
     );
   };

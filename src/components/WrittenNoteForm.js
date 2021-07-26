@@ -11,7 +11,7 @@ const WrittenNoteForm = ({ onChange, initialValues, editable, opacity }) => {
   }, [title, content]);
 
   return (
-    <View style={{ flex: 1, margin: 15 }}>
+    <View style={{ flex: 1, margin: 15, minHeight: 250 }}>
       <View
         style={{
           ...styles.noteContainer,
@@ -59,7 +59,7 @@ const WrittenNoteForm = ({ onChange, initialValues, editable, opacity }) => {
             </Text>
           </View>
         )}
-        <Text>{initialValues.id}</Text>
+        {/* <Text>{initialValues.id}</Text> */}
       </View>
     </View>
   );
@@ -68,7 +68,7 @@ const WrittenNoteForm = ({ onChange, initialValues, editable, opacity }) => {
 const styles = StyleSheet.create({
   input: {
     fontSize: 14,
-    minHeight: 250,
+    minHeight: 220,
   },
   titleInput: {
     fontSize: 16,
