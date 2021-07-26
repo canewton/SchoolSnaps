@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, TextInput, Text } from "react-native";
 
-const WrittenNoteForm = ({ onChange, initialValues, editable }) => {
+const WrittenNoteForm = ({ onChange, initialValues, editable, opacity }) => {
   //set default values
   const [title, setTitle] = useState(initialValues.title);
   const [content, setContent] = useState(initialValues.content);
@@ -14,10 +14,10 @@ const WrittenNoteForm = ({ onChange, initialValues, editable }) => {
     <View style={{ flex: 1, margin: 15 }}>
       <View
         style={{
-          backgroundColor: initialValues.schoolClass.primaryColor,
-          minHeight: 300,
-          padding: 15,
-          borderRadius: 10,
+          ...styles.noteContainer,
+          backgroundColor:
+            initialValues.schoolClass.primaryColor +
+            Math.round(opacity * 255).toString(16),
         }}
       >
         {editable && (
@@ -40,15 +40,26 @@ const WrittenNoteForm = ({ onChange, initialValues, editable }) => {
         )}
         {!editable && (
           <View>
-            <Text style={{ ...styles.titleInput, color: "rgba(0,0,0.0980392,.22)" }}>
+            <Text
+              style={{
+                ...styles.titleInput,
+                color: title === "" ? "rgba(0,0,0.0980392,.22)" : "black",
+              }}
+            >
               {title === "" ? "Untitled" : title}
             </Text>
-            <Text style={{ ...styles.input, color: "rgba(0,0,0.0980392,.22)" }}>
-              {content === "" ? "Start Typing Here..." : content}
+            <Text
+              style={{
+                ...styles.input,
+                color: content === "" ? "rgba(0,0,0.0980392,.22)" : "black",
+                marginTop: 5,
+              }}
+            >
+              {content === "" ? "Press and hold to rearrange notes" : content}
             </Text>
-            <Text>{initialValues.id}</Text>
           </View>
         )}
+        <Text>{initialValues.id}</Text>
       </View>
     </View>
   );
@@ -63,6 +74,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 4,
     fontWeight: "600",
+  },
+  noteContainer: {
+    minHeight: 300,
+    padding: 15,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
   },
 });
 

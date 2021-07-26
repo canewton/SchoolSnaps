@@ -7,6 +7,11 @@ export class WrittenNote extends Note {
     this.content = content;
   }
 
+  changeText(title, content) {
+    this.title = title;
+    this.content = content;
+  }
+
   toString() {
     return (
       '{"id":"' +

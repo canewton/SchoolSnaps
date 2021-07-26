@@ -15,7 +15,7 @@ import { Keyboard } from "react-native";
 import { WrittenNote } from "../classes/WrittenNote";
 import FloatingActionButton from "../components/FloatingActionButton";
 import { NoteGroup } from "../classes/NoteGroup";
-import DraggableFlatList, { RenderItemParams } from "react-native-draggable-flatlist";
+import DraggableFlatList from "react-native-draggable-flatlist";
 
 const NotesEditScreen = ({ route }) => {
   useEffect(() => {
@@ -28,6 +28,7 @@ const NotesEditScreen = ({ route }) => {
   const notes = useContext(NotesContext);
   const noteGroup = route.params;
   const [notesOnScreen, setNotesOnScreen] = useState(noteGroup.notes);
+  const [notesAreEditable, setNotesAreEditable] = useState(false);
   const [noteGroupID, setNoteGroupID] = useState(
     noteGroup instanceof NoteGroup ? noteGroup.id : null
   );
@@ -35,9 +36,20 @@ const NotesEditScreen = ({ route }) => {
     <View style={{ flex: 1, backgroundColor: "black" }}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.cameraButtonsContainer}>
-          <TouchableOpacity onPress={() => navigation.pop()} style={styles.button}>
-            {GeneralIcons.findIcon("Close", 28, "white")}
-          </TouchableOpacity>
+          <CloseButton
+            onPressCallback={() => {
+              if (noteGroupID !== null) {
+                notes.edit({ id: noteGroupID, notes: notesOnScreen });
+              }
+              navigation.pop();
+            }}
+          />
+          {!notesAreEditable && (
+            <EditButton onPressCallback={() => setNotesAreEditable(true)} />
+          )}
+          {notesAreEditable && (
+            <StopEdittingButton onPressCallback={() => setNotesAreEditable(false)} />
+          )}
         </View>
       </TouchableWithoutFeedback>
       <DraggableFlatList
@@ -56,9 +68,14 @@ const NotesEditScreen = ({ route }) => {
                   <WrittenNoteForm
                     initialValues={item}
                     onChange={(title, content) => {
-                      notes.edit({ id: item.id, title, content });
+                      if (noteGroupID === null) {
+                        notes.edit({ id: item.id, title, content });
+                      } else {
+                        item.changeText(title, content);
+                      }
                     }}
-                    editable={false}
+                    editable={notesAreEditable}
+                    opacity={isActive ? 0.6 : 1}
                   />
                 )}
               </TouchableOpacity>
@@ -92,6 +109,30 @@ const NotesEditScreen = ({ route }) => {
         }}
       />
     </View>
+  );
+};
+
+const CloseButton = ({ onPressCallback }) => {
+  return (
+    <TouchableOpacity onPress={() => onPressCallback()} style={styles.button}>
+      {GeneralIcons.findIcon("Close", 28, "white")}
+    </TouchableOpacity>
+  );
+};
+
+const EditButton = ({ onPressCallback }) => {
+  return (
+    <TouchableOpacity onPress={() => onPressCallback()} style={styles.button}>
+      {GeneralIcons.findIcon("Edit Circle", 28, "white")}
+    </TouchableOpacity>
+  );
+};
+
+const StopEdittingButton = ({ onPressCallback }) => {
+  return (
+    <TouchableOpacity onPress={() => onPressCallback()} style={styles.button}>
+      {GeneralIcons.findIcon("Done", 28, "white")}
+    </TouchableOpacity>
   );
 };
 

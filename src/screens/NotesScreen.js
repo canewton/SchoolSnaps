@@ -175,7 +175,7 @@ const NotesScreen = ({ route }) => {
                     noteGroupArray = [...noteGroupArray, ...item.notes];
                     selectedNotesArray = ItemArray.remove(
                       selectedNotesArray,
-                      selectedNote
+                      selectedNote.id
                     );
                   }
                 });

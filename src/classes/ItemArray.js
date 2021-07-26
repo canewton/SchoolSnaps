@@ -11,13 +11,15 @@ export class ItemArray {
       : array.find((item) => item === value);
   }
 
-  static remove(arrayInput, item) {
+  static replace(arrayInput, itemID, item) {
     var array = [...arrayInput];
-    const index = array.indexOf(item);
-    if (index > -1) {
-      array.splice(index, 1);
-    }
+    var index = arrayInput.map((item) => item.id).indexOf(itemID);
+    array[index] = item;
     return array;
+  }
+
+  static remove(arrayInput, itemID) {
+    return arrayInput.filter((item) => item.id !== itemID);
   }
 
   static generateUniqueID() {

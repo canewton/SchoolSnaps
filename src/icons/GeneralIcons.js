@@ -7,6 +7,7 @@ import {
   Ionicons,
   FontAwesome,
   FontAwesome5,
+  MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import { IconsList } from "./IconsList";
 
@@ -70,6 +71,16 @@ export class GeneralIcons extends IconsList {
       {
         icon: <MaterialIcons name="edit" size={iconSize} color={iconColor} />,
         name: "Edit",
+      },
+      {
+        icon: (
+          <MaterialCommunityIcons
+            name="circle-edit-outline"
+            size={iconSize}
+            color={iconColor}
+          />
+        ),
+        name: "Edit Circle",
       },
       {
         icon: <Entypo name="dots-three-horizontal" size={iconSize} color={iconColor} />,
