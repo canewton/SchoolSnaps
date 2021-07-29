@@ -5,7 +5,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  Text,
   LogBox,
 } from "react-native";
 import WrittenNoteForm from "../components/WrittenNoteForm";
@@ -16,6 +15,7 @@ import { WrittenNote } from "../classes/WrittenNote";
 import FloatingActionButton from "../components/FloatingActionButton";
 import { NoteGroup } from "../classes/NoteGroup";
 import DraggableFlatList from "react-native-draggable-flatlist";
+import { ItemArray } from "../classes/ItemArray";
 
 const NotesEditScreen = ({ route }) => {
   useEffect(() => {
@@ -26,11 +26,11 @@ const NotesEditScreen = ({ route }) => {
 
   const navigation = useNavigation();
   const notes = useContext(NotesContext);
-  const noteGroup = route.params;
-  const [notesOnScreen, setNotesOnScreen] = useState(noteGroup.notes);
+  const initialValues = route.params;
+  const [notesOnScreen, setNotesOnScreen] = useState(initialValues.notes);
   const [notesAreEditable, setNotesAreEditable] = useState(false);
   const [noteGroupID, setNoteGroupID] = useState(
-    noteGroup instanceof NoteGroup ? noteGroup.id : null
+    initialValues instanceof NoteGroup ? initialValues.id : null
   );
   return (
     <View style={{ flex: 1, backgroundColor: "black" }}>
@@ -67,7 +67,7 @@ const NotesEditScreen = ({ route }) => {
               onPressCallback={() => {
                 noteGroupID !== null
                   ? notes.delete(noteGroupID)
-                  : notes.delete(noteGroup.id);
+                  : notes.delete(initialValues.id);
                 navigation.pop();
               }}
               iconName="Delete"
@@ -88,42 +88,79 @@ const NotesEditScreen = ({ route }) => {
         renderItem={({ item, drag, isActive }) => {
           return (
             <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-              <TouchableOpacity onLongPress={drag}>
-                {item instanceof WrittenNote && (
-                  <WrittenNoteForm
-                    initialValues={item}
-                    onChange={(title, content) => {
+              <TouchableOpacity onLongPress={drag} activeOpacity={1}>
+                <View style={{ flex: 1, margin: 15 }}>
+                  {item instanceof WrittenNote && (
+                    <WrittenNoteForm
+                      initialValues={item}
+                      onChange={(title, content) => {
+                        if (noteGroupID === null) {
+                          notes.edit({ id: item.id, title, content });
+                        } else {
+                          item.changeText(title, content);
+                        }
+                      }}
+                      editable={notesAreEditable}
+                      opacity={isActive ? 0.6 : 1}
+                    />
+                  )}
+
+                  {/* Make a delete button that either deletes a note from a note group
+                  or deletes a single note and then navigates back to the notes screen */}
+                  <TouchableOpacity
+                    style={{ position: "absolute", right: 10, bottom: 14 }}
+                    onPress={() => {
                       if (noteGroupID === null) {
-                        notes.edit({ id: item.id, title, content });
+                        /* The edit screen is displaying a single note */
+                        notes.delete(item.id);
+                        navigation.pop();
                       } else {
-                        item.changeText(title, content);
+                        /* The edit screen is displaying a note group */
+                        var newNotesList = ItemArray.remove(notesOnScreen, item.id);
+                        if (notesOnScreen.length === 2) {
+                          /* Convert the note group into a single note */
+                          notes.add(newNotesList[0]);
+                          notes.delete(noteGroupID);
+                          setNotesOnScreen(newNotesList);
+                          setNoteGroupID(null);
+                        } else {
+                          /* Remove a note from the note group */
+                          setNotesOnScreen(newNotesList);
+                          notes.edit({ id: noteGroupID, notes: newNotesList });
+                        }
                       }
                     }}
-                    editable={notesAreEditable}
-                    opacity={isActive ? 0.6 : 1}
-                  />
-                )}
+                  >
+                    <View style={styles.deleteButtonContainter}>
+                      {GeneralIcons.findIcon("Delete", 20, "rgba(0,0,0,.5)")}
+                    </View>
+                  </TouchableOpacity>
+                </View>
               </TouchableOpacity>
             </TouchableWithoutFeedback>
           );
         }}
       />
+
+      {/* Floating action button to add notes */}
       <FloatingActionButton
-        schoolClass={noteGroup.schoolClass}
-        onPressPhoto={() => navigation.navigate("Camera", noteGroup.schoolClass)}
+        schoolClass={initialValues.schoolClass}
+        onPressPhoto={() => navigation.navigate("Camera", initialValues.schoolClass)}
+        /* if the user adds a note to a singular note, turn the singular note into a note group
+        if the user adds a note to a note group, edit the notes property of the note group */
         onPressNote={() => {
-          var note = new WrittenNote(noteGroup.schoolClass, "", "");
-          if (noteGroup instanceof NoteGroup) {
+          var note = new WrittenNote(initialValues.schoolClass, "", "");
+          if (initialValues instanceof NoteGroup) {
             notes.edit({ id: noteGroupID, notes: [...notesOnScreen, note] });
             setNotesOnScreen([...notesOnScreen, note]);
           } else {
             if (noteGroupID === null) {
-              var addedNoteGroup = new NoteGroup(noteGroup.schoolClass, [
+              var addedNoteGroup = new NoteGroup(initialValues.schoolClass, [
                 ...notesOnScreen,
                 note,
               ]);
               notes.add(addedNoteGroup);
-              notes.delete(noteGroup.id);
+              notes.delete(initialValues.id);
               setNoteGroupID(addedNoteGroup.id);
               setNotesOnScreen([...notesOnScreen, note]);
             } else {
@@ -155,6 +192,12 @@ const styles = StyleSheet.create({
   button: {
     marginBottom: 15,
     marginHorizontal: 20,
+  },
+  deleteButtonContainter: {
+    justifyContent: "center",
+    alignItems: "center",
+    height: 30,
+    width: 30,
   },
 });
 
