@@ -59,11 +59,11 @@ const MonthToDisplay = (props) => {
 
     const firstDayOfCurrentMonthInWeek = new Date(year, month, 1).getDay();
     const daysLastMonthToDisplay =
-      firstDayOfCurrentMonthInWeek !== 0 ? firstDayOfCurrentMonthInWeek - 1 : 6;
+      firstDayOfCurrentMonthInWeek !== 6 ? firstDayOfCurrentMonthInWeek : 6;
 
     const lastDayOfCurrentMonthInWeek = new Date(year, month, daysThisMonth).getDay();
     const daysNextMonthToDisplay =
-      lastDayOfCurrentMonthInWeek !== 0 ? 7 - lastDayOfCurrentMonthInWeek : 0;
+      lastDayOfCurrentMonthInWeek !== 6 ? 6 - lastDayOfCurrentMonthInWeek : 0;
 
     var dayDataArray = [
       ...getDaysLastMonthToDisplay(daysLastMonthToDisplay, daysLastMonth),
@@ -111,12 +111,12 @@ const MonthToDisplay = (props) => {
       </View>
 
       <View style={styles.daysInWeekContainer}>
+        <DayInWeek day="S" />
         <DayInWeek day="M" />
         <DayInWeek day="T" />
         <DayInWeek day="W" />
         <DayInWeek day="T" />
         <DayInWeek day="F" />
-        <DayInWeek day="S" />
         <DayInWeek day="S" />
       </View>
 

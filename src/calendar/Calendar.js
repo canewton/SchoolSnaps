@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Dimensions, FlatList } from "react-native";
 import MonthToDisplay from "./MonthToDisplay";
 
 const Calendar = () => {
-  const [monthDataArray, setMonthDataArray] = useState([1, 2, 3]);
+  const [monthDataArray, setMonthDataArray] = useState([]);
   const [currentMonthIndex, setCurrentMonthIndex] = useState(0);
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
