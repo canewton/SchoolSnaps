@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import DayInWeek from "./DayInWeek";
 import DaysInMonth from "./DaysInMonth";
 
 const MonthToDisplay = (props) => {
@@ -20,7 +19,6 @@ const MonthToDisplay = (props) => {
   ];
 
   const [rowDaysArray, setRowsDaysArray] = useState([]);
-  const [dayDataArray, setDayDataArray] = useState([]);
 
   const getDaysInMonth = (month, year) => {
     //Month should be incremented by 1 because the 'month' parameter is the month index (1-12 changed to 0-11)
@@ -67,18 +65,16 @@ const MonthToDisplay = (props) => {
     const daysNextMonthToDisplay =
       lastDayOfCurrentMonthInWeek !== 0 ? 7 - lastDayOfCurrentMonthInWeek : 0;
 
-    var dayDataArrayTemp = [
+    var dayDataArray = [
       ...getDaysLastMonthToDisplay(daysLastMonthToDisplay, daysLastMonth),
       ...getDaysThisMonthToDisplay(daysThisMonth),
       ...getDaysNextMonthToDisplay(daysNextMonthToDisplay),
     ];
 
-    setDayDataArray(dayDataArrayTemp);
-
     //After we get all neccessary data from last, current and next months, we need to fill the rest indexes will dummy data
-    if (dayDataArrayTemp.length < 42) {
-      for (let i = dayDataArrayTemp.length; i < 42; i++) {
-        dayDataArrayTemp.push({ day: 0 });
+    if (dayDataArray.length < 42) {
+      for (let i = dayDataArray.length; i < 42; i++) {
+        dayDataArray.push({ day: 0 });
       }
     }
 
@@ -91,82 +87,82 @@ const MonthToDisplay = (props) => {
       new Array(7),
       new Array(7),
     ];
-    var dayDataArrayTempIndex = 0;
+
+    //populate the 2D array with values from dayDataArray
+    var dayDataArrayIndex = 0;
     for (let i = 0; i < dataToBeAdded.length; i++) {
       for (let j = 0; j < 7; j++) {
         dataToBeAdded[i][j] = {
-          dayData: dayDataArrayTemp[dayDataArrayTempIndex],
-          calendarDayIndex: dayDataArrayTempIndex,
+          dayData: dayDataArray[dayDataArrayIndex],
+          calendarDayIndex: dayDataArrayIndex,
         };
-        dayDataArrayTempIndex++;
+        dayDataArrayIndex++;
       }
     }
-
-    //console.log(dataToBeAdded);
 
     setRowsDaysArray([...dataToBeAdded]);
   }, []);
 
   return (
     <View style={props.style}>
-      <View
-        style={{
-          height: 50,
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Text
-          style={{
-            fontSize: 22,
-            fontWeight: "500",
-          }}
-        >
-          {monthNames[props.monthData.month]}
-        </Text>
-        <Text
-          style={{
-            color: "gray",
-            fontSize: 14,
-            marginLeft: 5,
-          }}
-        >
-          {props.monthData.year}
-        </Text>
+      <View style={styles.monthNameContainer}>
+        <Text style={styles.monthNameText}>{monthNames[props.monthData.month]}</Text>
+        <Text style={styles.yearText}>{props.monthData.year}</Text>
       </View>
 
-      <View
-        style={{
-          // flex: 1,
-          marginTop: 10,
-        }}
-      >
-        <View
-          style={{
-            flexDirection: "row",
-          }}
-        >
-          <DayInWeek day="M" />
-          <DayInWeek day="T" />
-          <DayInWeek day="W" />
-          <DayInWeek day="T" />
-          <DayInWeek day="F" />
-          <DayInWeek day="S" />
-          <DayInWeek day="S" />
-        </View>
-
-        <DaysInMonth
-          rowDaysArray={rowDaysArray}
-          monthIndex={props.monthIndex}
-          currentMonthIndex={props.currentMonthIndex}
-          setCurrentMonthIndex={props.setCurrentMonthIndex}
-        />
+      <View style={styles.daysInWeekContainer}>
+        <DayInWeek day="M" />
+        <DayInWeek day="T" />
+        <DayInWeek day="W" />
+        <DayInWeek day="T" />
+        <DayInWeek day="F" />
+        <DayInWeek day="S" />
+        <DayInWeek day="S" />
       </View>
+
+      <DaysInMonth
+        rowDaysArray={rowDaysArray}
+        monthIndex={props.monthIndex}
+        currentMonthIndex={props.currentMonthIndex}
+        setCurrentMonthIndex={props.setCurrentMonthIndex}
+      />
     </View>
   );
 };
 
-const styles = StyleSheet.create({});
+const DayInWeek = ({ day }) => {
+  return (
+    <View style={styles.dayInWeekTextContainer}>
+      <Text style={{ color: "gray" }}>{day}</Text>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  monthNameContainer: {
+    height: 50,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  monthNameText: {
+    fontSize: 22,
+    fontWeight: "500",
+  },
+  yearText: {
+    color: "gray",
+    fontSize: 14,
+    marginLeft: 5,
+  },
+  daysInWeekContainer: {
+    flexDirection: "row",
+    marginTop: 10,
+  },
+  dayInWeekTextContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});
 
 export default MonthToDisplay;
