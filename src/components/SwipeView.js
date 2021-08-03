@@ -1,5 +1,5 @@
-import React, { useRef, useCallback } from "react";
-import { View, Text, StyleSheet, Button, useWindowDimensions } from "react-native";
+import React from "react";
+import { View, Text, StyleSheet, useWindowDimensions } from "react-native";
 import Animated, {
   useAnimatedGestureHandler,
   useSharedValue,
@@ -11,55 +11,48 @@ import { PanGestureHandler } from "react-native-gesture-handler";
 const SwipeView = () => {
   const dimensions = useWindowDimensions();
 
-  const bottom = useSharedValue(dimensions.height);
+  const heights = [150, 350];
+  const height = useSharedValue(heights[0]);
 
   const style = useAnimatedStyle(() => {
-    return { bottom: withSpring(bottom.value, springConfig) };
+    return { height: withSpring(height.value, springConfig) };
   });
 
   const gestureHandler = useAnimatedGestureHandler({
     onStart(_, context) {
-      context.startY = bottom.value;
+      context.startHeight = height.value;
     },
     onActive(event, context) {
-      bottom.value = context.startY - event.translationY;
+      if (height.value <= heights[1] + 10 && height.value >= heights[0] - 10) {
+        height.value = context.startHeight + event.translationY;
+      }
     },
     onEnd() {
-      if (bottom.value > dimensions.height / 2) {
-        bottom.value = dimensions.height - 250;
+      if (height.value > heights[0] + 50) {
+        height.value = heights[1];
       } else {
-        bottom.value = dimensions.height / 2;
+        height.value = heights[0];
       }
     },
   });
 
   const springConfig = {
-    damping: 80,
+    damping: 1000,
     overshootClamping: true,
-    restDisplacementThreshold: 0.1,
-    restSpeedThreshold: 0.1,
-    stiffness: 500,
+    restDisplacementThreshold: 0.01,
+    restSpeedThreshold: 2,
+    stiffness: 10000,
+    mass: 100,
   };
 
   return (
     <>
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Button
-          title="open sheet"
-          onPress={() => {
-            bottom.value = withSpring(dimensions.height / 2, springConfig);
-          }}
-        />
-      </View>
-
       <PanGestureHandler onGestureEvent={gestureHandler}>
         <Animated.View
           style={[
             {
+              width: dimensions.width,
               position: "absolute",
-              left: 0,
-              right: 0,
-              top: 0,
               backgroundColor: "white",
               borderBottomLeftRadius: 20,
               borderBottomRightRadius: 20,
