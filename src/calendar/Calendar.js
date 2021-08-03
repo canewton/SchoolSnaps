@@ -8,6 +8,7 @@ const Calendar = () => {
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
   const numberOfMonths = 12 * 1 + 1;
+  const spaceBetweenMonths = 20;
 
   useEffect(() => {
     getFollowingMonths(currentMonth, currentYear, numberOfMonths, []);
@@ -44,31 +45,22 @@ const Calendar = () => {
         keyExtractor={(index) => index.month + "" + index.year}
         horizontal={true}
         decelerationRate={0}
-        snapToInterval={Dimensions.get("window").width * 2}
+        snapToInterval={Dimensions.get("window").width + spaceBetweenMonths}
         snapToAlignment="start"
         showsHorizontalScrollIndicator={false}
         initialNumToRender={1}
-        removeClippedSubviews={true}
         extraData={currentMonthIndex}
         windowSize={10}
         renderItem={({ item, index }) => {
           return (
             <View>
               <MonthToDisplay
-                style={
-                  index === monthDataArray.length - 1
-                    ? {
-                        //flex: 1,
-                        width: Dimensions.get("window").width,
-                        justifyContent: "center",
-                      }
-                    : {
-                        //flex: 1,
-                        width: Dimensions.get("window").width,
-                        marginRight: Dimensions.get("window").width, //To create snapping effect
-                        justifyContent: "center",
-                      }
-                }
+                style={{
+                  width: Dimensions.get("window").width,
+                  marginRight:
+                    index === monthDataArray.length - 1 ? 0 : spaceBetweenMonths,
+                  justifyContent: "center",
+                }}
                 monthData={item}
                 monthIndex={index}
                 currentMonthIndex={currentMonthIndex}

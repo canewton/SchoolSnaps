@@ -1,10 +1,11 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
+import SwipeView from "../components/SwipeView";
 
 const LibraryScreen = () => {
   return (
-    <View>
-      <Text>Library Screen</Text>
+    <View style={{ flex: 1 }}>
+      <SwipeView />
     </View>
   );
 };

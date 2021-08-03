@@ -105,27 +105,29 @@ const MonthToDisplay = (props) => {
 
   return (
     <View style={props.style}>
-      <View style={styles.monthNameContainer}>
-        <Text style={styles.monthNameText}>{monthNames[props.monthData.month]}</Text>
-        <Text style={styles.yearText}>{props.monthData.year}</Text>
-      </View>
+      <View style={styles.calendarMonthContainer}>
+        <View style={styles.monthNameContainer}>
+          <Text style={styles.monthNameText}>{monthNames[props.monthData.month]}</Text>
+          <Text style={styles.yearText}>{props.monthData.year}</Text>
+        </View>
 
-      <View style={styles.daysInWeekContainer}>
-        <DayInWeek day="S" />
-        <DayInWeek day="M" />
-        <DayInWeek day="T" />
-        <DayInWeek day="W" />
-        <DayInWeek day="T" />
-        <DayInWeek day="F" />
-        <DayInWeek day="S" />
-      </View>
+        <View style={styles.daysInWeekContainer}>
+          <DayInWeek day="S" />
+          <DayInWeek day="M" />
+          <DayInWeek day="T" />
+          <DayInWeek day="W" />
+          <DayInWeek day="T" />
+          <DayInWeek day="F" />
+          <DayInWeek day="S" />
+        </View>
 
-      <DaysInMonth
-        rowDaysArray={rowDaysArray}
-        monthIndex={props.monthIndex}
-        currentMonthIndex={props.currentMonthIndex}
-        setCurrentMonthIndex={props.setCurrentMonthIndex}
-      />
+        <DaysInMonth
+          rowDaysArray={rowDaysArray}
+          monthIndex={props.monthIndex}
+          currentMonthIndex={props.currentMonthIndex}
+          setCurrentMonthIndex={props.setCurrentMonthIndex}
+        />
+      </View>
     </View>
   );
 };
@@ -139,6 +141,13 @@ const DayInWeek = ({ day }) => {
 };
 
 const styles = StyleSheet.create({
+  calendarMonthContainer: {
+    backgroundColor: "white",
+    borderRadius: 15,
+    margin: 10,
+    paddingBottom: 15,
+    paddingHorizontal: 8,
+  },
   monthNameContainer: {
     height: 50,
     flexDirection: "row",
