@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AddButton from "../components/AddButton";
@@ -12,6 +12,7 @@ const CalendarScreen = () => {
   const currentYear = new Date().getFullYear();
   const numberOfMonths = 12 * 1 + 1;
   const [monthDataArray, setMonthDataArray] = useState([]);
+  const spaceBetweenPages = 20;
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -52,8 +53,18 @@ const CalendarScreen = () => {
       <SwipeView
         lowerHeight={150}
         upperHeight={350}
-        lowerComponent={<WeekdayCalendar />}
-        upperComponent={<Calendar monthDataArray={monthDataArray} />}
+        lowerComponent={
+          <WeekdayCalendar
+            monthDataArray={monthDataArray}
+            spaceBetweenPages={spaceBetweenPages}
+          />
+        }
+        upperComponent={
+          <Calendar
+            monthDataArray={monthDataArray}
+            spaceBetweenPages={spaceBetweenPages}
+          />
+        }
       />
     </View>
   );

@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { View, Text, StyleSheet, TouchableHighlight } from "react-native";
+import { Context as CalendarContext } from "../context/CalendarContext";
 
 const DaysInMonth = (props) => {
-  const [currentCalendarDayIndex, setCurrentCalendarDayIndex] = useState(0);
+  const specialDates = useContext(CalendarContext);
+  const currentCalendarDayIndex = specialDates.state[0].calendarDayIndex;
+  const currentMonthIndex = specialDates.state[0].monthIndex;
 
   const chooseDay = (index) => {
-    setCurrentCalendarDayIndex(index);
-    props.setCurrentMonthIndex(props.monthIndex);
+    specialDates.edit({
+      id: "Selected Date",
+      calendarDayIndex: index,
+      monthIndex: props.monthIndex,
+    });
   };
 
   return (
@@ -25,14 +31,16 @@ const DaysInMonth = (props) => {
                 >
                   <View
                     style={
-                      data.calendarDayIndex === currentCalendarDayIndex
+                      data.calendarDayIndex === currentCalendarDayIndex &&
+                      props.monthIndex === currentMonthIndex
                         ? styles.chosenDayHolder
                         : styles.defaultDayHolder
                     }
                   >
                     <Text
                       style={
-                        data.calendarDayIndex === currentCalendarDayIndex
+                        data.calendarDayIndex === currentCalendarDayIndex &&
+                        props.monthIndex === currentMonthIndex
                           ? styles.chosenDayText
                           : styles.defaultDayText
                       }

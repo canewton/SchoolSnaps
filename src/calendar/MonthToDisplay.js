@@ -121,12 +121,7 @@ const MonthToDisplay = (props) => {
           <DayInWeek day="S" />
         </View>
 
-        <DaysInMonth
-          rowDaysArray={rowDaysArray}
-          monthIndex={props.monthIndex}
-          currentMonthIndex={props.currentMonthIndex}
-          setCurrentMonthIndex={props.setCurrentMonthIndex}
-        />
+        <DaysInMonth rowDaysArray={rowDaysArray} monthIndex={props.monthIndex} />
       </View>
     </View>
   );

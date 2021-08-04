@@ -18,6 +18,7 @@ import { Colors } from "./src/classes/Colors";
 import { Provider as ClassesProvider } from "./src/context/ClassesContext";
 import { Provider as NotesProvider } from "./src/context/NotesContext";
 import { Provider as SelectedNotesProvider } from "./src/context/SelectedNotesContext";
+import { Provider as CalendarContext } from "./src/context/CalendarContext";
 
 const RootStack = createStackNavigator();
 const MainStack = createStackNavigator();
@@ -180,29 +181,31 @@ export default function App() {
     <SelectedNotesProvider>
       <NotesProvider>
         <ClassesProvider>
-          <MenuProvider>
-            <NavigationContainer theme={Theme}>
-              <RootStack.Navigator mode="modal">
-                <RootStack.Screen
-                  name="Main"
-                  component={MainStackScreen}
-                  options={{ headerShown: false }}
-                />
-                <RootStack.Screen name="New Class" component={ClassesAddScreen} />
-                <RootStack.Screen name="Edit Class" component={ClassesEditScreen} />
-                <RootStack.Screen
-                  name="Camera"
-                  component={CameraSceen}
-                  options={{ headerShown: false }}
-                />
-                <RootStack.Screen
-                  name="Edit Note"
-                  component={NotesEditScreen}
-                  options={{ headerShown: false }}
-                />
-              </RootStack.Navigator>
-            </NavigationContainer>
-          </MenuProvider>
+          <CalendarContext>
+            <MenuProvider>
+              <NavigationContainer theme={Theme}>
+                <RootStack.Navigator mode="modal">
+                  <RootStack.Screen
+                    name="Main"
+                    component={MainStackScreen}
+                    options={{ headerShown: false }}
+                  />
+                  <RootStack.Screen name="New Class" component={ClassesAddScreen} />
+                  <RootStack.Screen name="Edit Class" component={ClassesEditScreen} />
+                  <RootStack.Screen
+                    name="Camera"
+                    component={CameraSceen}
+                    options={{ headerShown: false }}
+                  />
+                  <RootStack.Screen
+                    name="Edit Note"
+                    component={NotesEditScreen}
+                    options={{ headerShown: false }}
+                  />
+                </RootStack.Navigator>
+              </NavigationContainer>
+            </MenuProvider>
+          </CalendarContext>
         </ClassesProvider>
       </NotesProvider>
     </SelectedNotesProvider>
