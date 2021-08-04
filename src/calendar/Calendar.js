@@ -2,41 +2,9 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Dimensions, FlatList } from "react-native";
 import MonthToDisplay from "./MonthToDisplay";
 
-const Calendar = () => {
-  const [monthDataArray, setMonthDataArray] = useState([]);
+const Calendar = ({ monthDataArray }) => {
   const [currentMonthIndex, setCurrentMonthIndex] = useState(0);
-  const currentMonth = new Date().getMonth();
-  const currentYear = new Date().getFullYear();
-  const numberOfMonths = 12 * 1 + 1;
   const spaceBetweenMonths = 20;
-
-  useEffect(() => {
-    getFollowingMonths(currentMonth, currentYear, numberOfMonths, []);
-  }, []);
-
-  const getFollowingMonths = (
-    currentMonth,
-    currentYear,
-    numberOfMonths,
-    monthDataArrayInput
-  ) => {
-    if (numberOfMonths === 0) {
-      setMonthDataArray(monthDataArrayInput);
-      return;
-    }
-
-    monthDataArrayInput.push({ month: currentMonth, year: currentYear });
-
-    if (currentMonth === 11) {
-      currentMonth = 0;
-      currentYear += 1;
-    } else {
-      currentMonth += 1;
-    }
-
-    numberOfMonths -= 1;
-    getFollowingMonths(currentMonth, currentYear, numberOfMonths, monthDataArrayInput);
-  };
 
   return (
     <View>
@@ -74,13 +42,6 @@ const Calendar = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+const styles = StyleSheet.create({});
 
 export default Calendar;

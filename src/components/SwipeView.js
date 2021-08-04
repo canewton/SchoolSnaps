@@ -1,11 +1,11 @@
 import React from "react";
-import { View, Text, StyleSheet, useWindowDimensions } from "react-native";
+import { StyleSheet, useWindowDimensions } from "react-native";
 import Animated, {
   useAnimatedGestureHandler,
   useSharedValue,
   useAnimatedStyle,
-  withSpring,
   withTiming,
+  useAnimatedProps,
 } from "react-native-reanimated";
 import { PanGestureHandler } from "react-native-gesture-handler";
 
@@ -20,7 +20,18 @@ const SwipeView = ({ lowerHeight, upperHeight, lowerComponent, upperComponent })
   });
 
   const upperComponentStyle = useAnimatedStyle(() => {
-    return { opacity: (height.value - lowerHeight) / (upperHeight - lowerHeight) };
+    return {
+      opacity: (height.value - lowerHeight) / (upperHeight - lowerHeight),
+      height: height.value,
+    };
+  });
+
+  const upperComponentAnimatedProps = useAnimatedProps(() => {
+    return { pointerEvents: height.value !== lowerHeight ? "auto" : "none" };
+  });
+
+  const lowerComponentAnimatedProps = useAnimatedProps(() => {
+    return { pointerEvents: height.value !== upperHeight ? "auto" : "none" };
   });
 
   const lowerComponentStyle = useAnimatedStyle(() => {
@@ -67,10 +78,16 @@ const SwipeView = ({ lowerHeight, upperHeight, lowerComponent, upperComponent })
             },
           ]}
         >
-          <Animated.View style={[lowerComponentStyle, { position: "absolute" }]}>
+          <Animated.View
+            animatedProps={lowerComponentAnimatedProps}
+            style={[lowerComponentStyle, { position: "absolute" }]}
+          >
             {lowerComponent}
           </Animated.View>
-          <Animated.View style={[upperComponentStyle, { position: "absolute" }]}>
+          <Animated.View
+            animatedProps={upperComponentAnimatedProps}
+            style={[upperComponentStyle, { position: "absolute" }]}
+          >
             {upperComponent}
           </Animated.View>
         </Animated.View>
