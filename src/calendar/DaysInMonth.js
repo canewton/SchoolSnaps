@@ -85,8 +85,6 @@ const styles = StyleSheet.create({
     width: 30,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 50,
-    backgroundColor: "white",
   },
   defaultDayText: {
     color: Colors.primaryColor,
@@ -96,7 +94,7 @@ const styles = StyleSheet.create({
     width: 30,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 50,
+    borderRadius: 15,
     backgroundColor: Colors.primaryColor,
   },
   chosenDayText: {

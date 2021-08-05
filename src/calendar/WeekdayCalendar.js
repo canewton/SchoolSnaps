@@ -1,7 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList, Dimensions } from "react-native";
+import React, { useEffect, useState, useContext } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Dimensions,
+  TouchableOpacity,
+  TouchableHighlight,
+} from "react-native";
 import { Calendar } from "../classes/Calendar";
 import { Colors } from "../classes/Colors";
+import { Context as CalendarContext } from "../context/CalendarContext";
 
 const WeekdayCalendar = ({ monthDataArray, spaceBetweenPages }) => {
   const [weeksArray, setWeeksArray] = useState();
@@ -71,13 +80,41 @@ const WeekdayCalendar = ({ monthDataArray, spaceBetweenPages }) => {
                 paddingHorizontal: 10,
               }}
             >
-              <DayInWeekButton date={item[0].dayData.day} weekday="Sun" />
-              <DayInWeekButton date={item[1].dayData.day} weekday="Mon" />
-              <DayInWeekButton date={item[2].dayData.day} weekday="Tue" />
-              <DayInWeekButton date={item[3].dayData.day} weekday="Wed" />
-              <DayInWeekButton date={item[4].dayData.day} weekday="Thu" />
-              <DayInWeekButton date={item[5].dayData.day} weekday="Fri" />
-              <DayInWeekButton date={item[6].dayData.day} weekday="Sat" />
+              <DayInWeekButton
+                date={item[0].dayData.day}
+                weekday="Sun"
+                calendarDayIndex={item[0].calendarDayIndex}
+              />
+              <DayInWeekButton
+                date={item[1].dayData.day}
+                weekday="Mon"
+                calendarDayIndex={item[1].calendarDayIndex}
+              />
+              <DayInWeekButton
+                date={item[2].dayData.day}
+                weekday="Tue"
+                calendarDayIndex={item[2].calendarDayIndex}
+              />
+              <DayInWeekButton
+                date={item[3].dayData.day}
+                weekday="Wed"
+                calendarDayIndex={item[3].calendarDayIndex}
+              />
+              <DayInWeekButton
+                date={item[4].dayData.day}
+                weekday="Thu"
+                calendarDayIndex={item[4].calendarDayIndex}
+              />
+              <DayInWeekButton
+                date={item[5].dayData.day}
+                weekday="Fri"
+                calendarDayIndex={item[5].calendarDayIndex}
+              />
+              <DayInWeekButton
+                date={item[6].dayData.day}
+                weekday="Sat"
+                calendarDayIndex={item[6].calendarDayIndex}
+              />
             </View>
           );
         }}
@@ -86,11 +123,40 @@ const WeekdayCalendar = ({ monthDataArray, spaceBetweenPages }) => {
   );
 };
 
-const DayInWeekButton = ({ date, weekday }) => {
+const DayInWeekButton = ({ date, weekday, calendarDayIndex }) => {
+  const specialDates = useContext(CalendarContext);
+  const currentCalendarDayIndex = specialDates.state[0].calendarDayIndex;
+  const currentMonthIndex = specialDates.state[0].monthIndex;
+
+  const chooseDay = (index) => {
+    specialDates.edit({
+      id: "Selected Date",
+      calendarDayIndex: index,
+    });
+  };
+
   return (
     <View style={styles.dayInWeekButton}>
       <Text style={styles.weekdayText}>{weekday}</Text>
-      <Text style={styles.dateText}>{date}</Text>
+      <TouchableHighlight
+        underlayColor="transparent"
+        style={
+          currentCalendarDayIndex === calendarDayIndex
+            ? styles.chosenDateHolder
+            : styles.defaultDateHolder
+        }
+        onPress={() => chooseDay(calendarDayIndex)}
+      >
+        <Text
+          style={
+            currentCalendarDayIndex === calendarDayIndex
+              ? styles.chosenDateText
+              : styles.dateText
+          }
+        >
+          {date}
+        </Text>
+      </TouchableHighlight>
     </View>
   );
 };
@@ -98,19 +164,34 @@ const DayInWeekButton = ({ date, weekday }) => {
 const styles = StyleSheet.create({
   dayInWeekButton: {
     flex: 1,
-    margin: 3,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 10,
   },
   dateText: {
     color: Colors.primaryColor,
-    marginTop: 12,
-    fontWeight: "500",
+  },
+  chosenDateText: {
+    color: "white",
+  },
+  chosenDateHolder: {
+    height: 30,
+    width: 30,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 15,
+    backgroundColor: Colors.primaryColor,
+  },
+  defaultDateHolder: {
+    height: 30,
+    width: 30,
+    alignItems: "center",
+    justifyContent: "center",
   },
   weekdayText: {
     color: Colors.primaryColor,
     fontWeight: "200",
+    marginBottom: 7,
   },
 });
 
