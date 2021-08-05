@@ -1,12 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList, Dimensions } from "react-native";
 
-const WeekdayCalendar = ({
-  monthDataArray,
-  spaceBetweenMonths,
-  setCurrentMonthIndex,
-  currentMonthIndex,
-}) => {
+const WeekdayCalendar = ({ monthDataArray, spaceBetweenMonths }) => {
+  const [weeksArray, setWeeksArray] = useState();
+
   return (
     <View>
       {/* <FlatList

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import DaysInMonth from "./DaysInMonth";
+import { Calendar } from "../classes/Calendar";
 
 const MonthToDisplay = (props) => {
   const monthNames = [
@@ -20,56 +21,10 @@ const MonthToDisplay = (props) => {
 
   const [rowDaysArray, setRowsDaysArray] = useState([]);
 
-  const getDaysInMonth = (month, year) => {
-    //Month should be incremented by 1 because the 'month' parameter is the month index (1-12 changed to 0-11)
-    //to get total days of the wanted month.
-    return new Date(year, month + 1, 0).getDate();
-  };
-
-  const getDaysLastMonthToDisplay = (daysLastMonthToDisplay, daysLastMonth) => {
-    var daysLastMonthArray = [];
-    for (let i = daysLastMonth - daysLastMonthToDisplay + 1; i <= daysLastMonth; i++) {
-      daysLastMonthArray.push({ day: i });
-    }
-    return daysLastMonthArray;
-  };
-
-  const getDaysThisMonthToDisplay = (daysThisMonth) => {
-    var daysThisMonthArray = [];
-    for (let i = 1; i <= daysThisMonth; i++) {
-      daysThisMonthArray.push({ day: i, main: true });
-    }
-    return daysThisMonthArray;
-  };
-
-  const getDaysNextMonthToDisplay = (daysNextMonthToDisplay) => {
-    var daysNextMonthArray = [];
-    for (let i = 1; i <= daysNextMonthToDisplay; i++) {
-      daysNextMonthArray.push({ day: i });
-    }
-    return daysNextMonthArray;
-  };
-
   useEffect(() => {
     const month = props.monthData.month;
     const year = props.monthData.year;
-    const daysThisMonth = getDaysInMonth(month, year);
-    const daysLastMonth =
-      month !== 0 ? getDaysInMonth(month - 1, year) : getDaysInMonth(11, year - 1);
-
-    const firstDayOfCurrentMonthInWeek = new Date(year, month, 1).getDay();
-    const daysLastMonthToDisplay =
-      firstDayOfCurrentMonthInWeek !== 6 ? firstDayOfCurrentMonthInWeek : 6;
-
-    const lastDayOfCurrentMonthInWeek = new Date(year, month, daysThisMonth).getDay();
-    const daysNextMonthToDisplay =
-      lastDayOfCurrentMonthInWeek !== 6 ? 6 - lastDayOfCurrentMonthInWeek : 0;
-
-    var dayDataArray = [
-      ...getDaysLastMonthToDisplay(daysLastMonthToDisplay, daysLastMonth),
-      ...getDaysThisMonthToDisplay(daysThisMonth),
-      ...getDaysNextMonthToDisplay(daysNextMonthToDisplay),
-    ];
+    var dayDataArray = Calendar.getDayDataArray(month, year);
 
     //After we get all neccessary data from last, current and next months, we need to fill the rest indexes will dummy data
     if (dayDataArray.length < 42) {
@@ -78,29 +33,7 @@ const MonthToDisplay = (props) => {
       }
     }
 
-    //This array will hold data of 7 days in a row for displaying the month calendar (there are 6 rows in total)
-    var dataToBeAdded = [
-      new Array(7),
-      new Array(7),
-      new Array(7),
-      new Array(7),
-      new Array(7),
-      new Array(7),
-    ];
-
-    //populate the 2D array with values from dayDataArray
-    var dayDataArrayIndex = 0;
-    for (let i = 0; i < dataToBeAdded.length; i++) {
-      for (let j = 0; j < 7; j++) {
-        dataToBeAdded[i][j] = {
-          dayData: dayDataArray[dayDataArrayIndex],
-          calendarDayIndex: dayDataArrayIndex,
-        };
-        dayDataArrayIndex++;
-      }
-    }
-
-    setRowsDaysArray([...dataToBeAdded]);
+    setRowsDaysArray(Calendar.breakUpDaysIntoWeeks(dayDataArray));
   }, []);
 
   return (

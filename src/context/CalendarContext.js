@@ -4,7 +4,7 @@ import createDataContext from "./createDataContext";
 class CalendarContext extends ItemContext {
   static dates = [
     {
-      calendarDayIndex: new Date().getDate(),
+      calendarDayIndex: new Date().getDate() - 1,
       monthIndex: 0,
       id: "Selected Date",
     },

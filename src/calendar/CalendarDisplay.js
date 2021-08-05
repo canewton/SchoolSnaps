@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Dimensions, FlatList } from "react-native";
 import MonthToDisplay from "./MonthToDisplay";
 
-const Calendar = ({ monthDataArray, spaceBetweenPages }) => {
+const CalendarDisplay = ({ monthDataArray, spaceBetweenPages }) => {
   return (
     <View>
       <FlatList
@@ -38,4 +38,4 @@ const Calendar = ({ monthDataArray, spaceBetweenPages }) => {
 
 const styles = StyleSheet.create({});
 
-export default Calendar;
+export default CalendarDisplay;

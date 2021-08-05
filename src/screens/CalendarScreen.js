@@ -2,9 +2,10 @@ import React, { useState, useEffect, useContext } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AddButton from "../components/AddButton";
-import Calendar from "../calendar/Calendar";
+import CalendarDisplay from "../calendar/CalendarDisplay";
 import SwipeView from "../components/SwipeView";
 import WeekdayCalendar from "../calendar/WeekdayCalendar";
+import { Calendar } from "../classes/Calendar";
 
 const CalendarScreen = () => {
   const navigation = useNavigation();
@@ -21,32 +22,14 @@ const CalendarScreen = () => {
   });
 
   useEffect(() => {
-    getFollowingMonths(currentMonth, currentYear, numberOfMonths, []);
+    Calendar.getFollowingMonths(
+      currentMonth,
+      currentYear,
+      numberOfMonths,
+      setMonthDataArray,
+      []
+    );
   }, []);
-
-  const getFollowingMonths = (
-    currentMonth,
-    currentYear,
-    numberOfMonths,
-    monthDataArrayInput
-  ) => {
-    if (numberOfMonths === 0) {
-      setMonthDataArray(monthDataArrayInput);
-      return;
-    }
-
-    monthDataArrayInput.push({ month: currentMonth, year: currentYear });
-
-    if (currentMonth === 11) {
-      currentMonth = 0;
-      currentYear += 1;
-    } else {
-      currentMonth += 1;
-    }
-
-    numberOfMonths -= 1;
-    getFollowingMonths(currentMonth, currentYear, numberOfMonths, monthDataArrayInput);
-  };
 
   return (
     <View>
@@ -60,7 +43,7 @@ const CalendarScreen = () => {
           />
         }
         upperComponent={
-          <Calendar
+          <CalendarDisplay
             monthDataArray={monthDataArray}
             spaceBetweenPages={spaceBetweenPages}
           />
