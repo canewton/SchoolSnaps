@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import DaysInMonth from "./DaysInMonth";
 import { Calendar } from "../classes/Calendar";
+import { Colors } from "../classes/Colors";
 
 const MonthToDisplay = (props) => {
   const monthNames = [
@@ -63,18 +64,16 @@ const MonthToDisplay = (props) => {
 const DayInWeek = ({ day }) => {
   return (
     <View style={styles.dayInWeekTextContainer}>
-      <Text style={{ color: "gray" }}>{day}</Text>
+      <Text style={{ color: Colors.primaryColor, fontWeight: "200" }}>{day}</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   calendarMonthContainer: {
-    backgroundColor: "white",
-    borderRadius: 15,
-    margin: 10,
     paddingBottom: 15,
     paddingHorizontal: 8,
+    paddingTop: 8,
   },
   monthNameContainer: {
     height: 50,

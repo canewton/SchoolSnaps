@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { View, Text, StyleSheet, TouchableHighlight } from "react-native";
+import { Colors } from "../classes/Colors";
 import { Context as CalendarContext } from "../context/CalendarContext";
 
 const DaysInMonth = (props) => {
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   defaultDayText: {
-    color: "black",
+    color: Colors.primaryColor,
   },
   chosenDayHolder: {
     height: 30,
@@ -96,13 +97,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 50,
-    backgroundColor: "black",
+    backgroundColor: Colors.primaryColor,
   },
   chosenDayText: {
     color: "white",
   },
   dummyDayText: {
-    color: "gainsboro",
+    color: Colors.primaryColor,
+    opacity: 0.15,
   },
 });
 

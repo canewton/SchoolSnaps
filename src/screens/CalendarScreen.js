@@ -36,7 +36,7 @@ const CalendarScreen = () => {
   return (
     <View>
       <SwipeView
-        lowerHeight={150}
+        lowerHeight={100}
         upperHeight={350}
         lowerComponent={
           <WeekdayCalendar

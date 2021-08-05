@@ -10,7 +10,7 @@ const CalendarDisplay = ({ monthDataArray, spaceBetweenPages }) => {
         keyExtractor={(index) => index.month + "" + index.year}
         horizontal={true}
         decelerationRate={0}
-        snapToInterval={Dimensions.get("window").width + spaceBetweenPages}
+        snapToInterval={Dimensions.get("window").width - 20 + spaceBetweenPages}
         snapToAlignment="start"
         showsHorizontalScrollIndicator={false}
         initialNumToRender={1}
@@ -20,7 +20,7 @@ const CalendarDisplay = ({ monthDataArray, spaceBetweenPages }) => {
             <View>
               <MonthToDisplay
                 style={{
-                  width: Dimensions.get("window").width,
+                  width: Dimensions.get("window").width - 20,
                   marginRight:
                     index === monthDataArray.length - 1 ? 0 : spaceBetweenPages,
                   justifyContent: "center",

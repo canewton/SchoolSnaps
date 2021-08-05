@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList, Dimensions } from "react-native";
 import { Calendar } from "../classes/Calendar";
+import { Colors } from "../classes/Colors";
 
 const WeekdayCalendar = ({ monthDataArray, spaceBetweenPages }) => {
   const [weeksArray, setWeeksArray] = useState();
@@ -49,13 +50,13 @@ const WeekdayCalendar = ({ monthDataArray, spaceBetweenPages }) => {
   }, []);
 
   return (
-    <View>
+    <View style={{ height: 90 }}>
       <FlatList
         data={weeksArray}
         keyExtractor={(index) => index[0].calendarDayIndex + ""}
         horizontal={true}
         decelerationRate={0}
-        snapToInterval={Dimensions.get("window").width + spaceBetweenPages}
+        snapToInterval={Dimensions.get("window").width - 20 + spaceBetweenPages}
         snapToAlignment="start"
         showsHorizontalScrollIndicator={false}
         initialNumToRender={1}
@@ -64,19 +65,19 @@ const WeekdayCalendar = ({ monthDataArray, spaceBetweenPages }) => {
           return (
             <View
               style={{
-                marginRight: 10,
-                width: Dimensions.get("window").width,
+                width: Dimensions.get("window").width - 20,
                 marginRight: index === weeksArray.length - 1 ? 0 : spaceBetweenPages,
-                justifyContent: "center",
+                flexDirection: "row",
+                paddingHorizontal: 10,
               }}
             >
-              <Text>{item[0].dayData.day}</Text>
-              <Text>{item[1].dayData.day}</Text>
-              <Text>{item[2].dayData.day}</Text>
-              <Text>{item[3].dayData.day}</Text>
-              <Text>{item[4].dayData.day}</Text>
-              <Text>{item[5].dayData.day}</Text>
-              <Text>{item[6].dayData.day}</Text>
+              <DayInWeekButton date={item[0].dayData.day} weekday="Sun" />
+              <DayInWeekButton date={item[1].dayData.day} weekday="Mon" />
+              <DayInWeekButton date={item[2].dayData.day} weekday="Tue" />
+              <DayInWeekButton date={item[3].dayData.day} weekday="Wed" />
+              <DayInWeekButton date={item[4].dayData.day} weekday="Thu" />
+              <DayInWeekButton date={item[5].dayData.day} weekday="Fri" />
+              <DayInWeekButton date={item[6].dayData.day} weekday="Sat" />
             </View>
           );
         }}
@@ -85,6 +86,32 @@ const WeekdayCalendar = ({ monthDataArray, spaceBetweenPages }) => {
   );
 };
 
-const styles = StyleSheet.create({});
+const DayInWeekButton = ({ date, weekday }) => {
+  return (
+    <View style={styles.dayInWeekButton}>
+      <Text style={styles.weekdayText}>{weekday}</Text>
+      <Text style={styles.dateText}>{date}</Text>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  dayInWeekButton: {
+    flex: 1,
+    margin: 3,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+  },
+  dateText: {
+    color: Colors.primaryColor,
+    marginTop: 12,
+    fontWeight: "500",
+  },
+  weekdayText: {
+    color: Colors.primaryColor,
+    fontWeight: "200",
+  },
+});
 
 export default WeekdayCalendar;
