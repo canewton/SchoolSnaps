@@ -13,6 +13,7 @@ const CalendarScreen = () => {
   const currentYear = new Date().getFullYear();
   const numberOfMonths = 12 * 1 + 1;
   const [monthDataArray, setMonthDataArray] = useState([]);
+  const [singletonHasRun, setSingletonHasRun] = useState(false);
   const spaceBetweenPages = 20;
 
   React.useLayoutEffect(() => {
@@ -21,7 +22,7 @@ const CalendarScreen = () => {
     });
   });
 
-  useEffect(() => {
+  if (!singletonHasRun) {
     Calendar.getFollowingMonths(
       currentMonth,
       currentYear,
@@ -29,7 +30,8 @@ const CalendarScreen = () => {
       setMonthDataArray,
       []
     );
-  }, []);
+    setSingletonHasRun(true);
+  }
 
   return (
     <View>
