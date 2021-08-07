@@ -8,11 +8,15 @@ const DaysInMonth = (props) => {
   const currentCalendarDayIndex = specialDates.state[0].calendarDayIndex;
   const currentMonthIndex = specialDates.state[0].monthIndex;
 
-  const chooseDay = (index) => {
+  const chooseDay = (calendarDayIndex, weekIndex) => {
     specialDates.edit({
       id: "Selected Date",
-      calendarDayIndex: index,
+      calendarDayIndex: calendarDayIndex,
       monthIndex: props.monthIndex,
+    });
+    props.weekCalendarFlatListRef.current.scrollToIndex({
+      index: weekIndex,
+      animated: false,
     });
   };
 
@@ -28,7 +32,7 @@ const DaysInMonth = (props) => {
                   key={"day holder " + data.calendarDayIndex}
                   style={styles.dayHolderContainer}
                   underlayColor="transparent"
-                  onPress={() => chooseDay(data.calendarDayIndex)}
+                  onPress={() => chooseDay(data.calendarDayIndex, data.weekIndex)}
                 >
                   <View
                     style={

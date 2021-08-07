@@ -1,12 +1,24 @@
 import React from "react";
-import { View, Text, StyleSheet, Dimensions, FlatList } from "react-native";
+import { View, Text, StyleSheet, Dimensions, FlatList, Button } from "react-native";
 import MonthToDisplay from "./MonthToDisplay";
 
-const CalendarDisplay = ({ monthDataArray, spaceBetweenPages }) => {
+const CalendarDisplay = ({
+  monthDataArray,
+  spaceBetweenPages,
+  monthCalendarFlatListRef,
+  weekCalendarFlatListRef,
+}) => {
   return (
     <View>
+      <Button
+        title="scroll"
+        onPress={() =>
+          monthCalendarFlatListRef.current.scrollToIndex({ index: 0, animated: false })
+        }
+      />
       <FlatList
         data={monthDataArray}
+        ref={monthCalendarFlatListRef}
         keyExtractor={(index) => index.month + "" + index.year}
         horizontal={true}
         decelerationRate={0}
@@ -27,6 +39,7 @@ const CalendarDisplay = ({ monthDataArray, spaceBetweenPages }) => {
                 }}
                 monthData={item}
                 monthIndex={index}
+                weekCalendarFlatListRef={weekCalendarFlatListRef}
               />
             </View>
           );

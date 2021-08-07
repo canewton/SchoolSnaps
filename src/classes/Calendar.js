@@ -92,11 +92,17 @@ export class Calendar {
     }
 
     var dayDataArrayIndex = 0;
+    var monthIndex = -1;
     for (let i = 0; i < dataToBeAdded.length; i++) {
       for (let j = 0; j < 7; j++) {
+        if (dayDataArray[dayDataArrayIndex].day === 1) {
+          monthIndex++;
+        }
         dataToBeAdded[i][j] = {
           dayData: dayDataArray[dayDataArrayIndex],
           calendarDayIndex: dayDataArrayIndex,
+          weekIndex: i,
+          monthIndex: monthIndex,
         };
         dayDataArrayIndex++;
       }

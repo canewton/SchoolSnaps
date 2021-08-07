@@ -55,7 +55,11 @@ const MonthToDisplay = (props) => {
           <DayInWeek day="S" />
         </View>
 
-        <DaysInMonth rowDaysArray={rowDaysArray} monthIndex={props.monthIndex} />
+        <DaysInMonth
+          rowDaysArray={rowDaysArray}
+          monthIndex={props.monthIndex}
+          weekCalendarFlatListRef={props.weekCalendarFlatListRef}
+        />
       </View>
     </View>
   );
