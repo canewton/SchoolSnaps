@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   FlatList,
   Dimensions,
   TouchableHighlight,
+  Button,
 } from "react-native";
 import { Colors } from "../classes/Colors";
 import { Context as CalendarContext } from "../context/CalendarContext";
@@ -58,41 +59,64 @@ const WeekdayCalendar = ({
     );
   };
 
+  const renderItem = useCallback(({ item, index }) => (
+    <View
+      style={{
+        width: Dimensions.get("window").width - 20,
+        marginRight: index === weeksArray.length - 1 ? 0 : spaceBetweenPages,
+        flexDirection: "row",
+        paddingHorizontal: 10,
+      }}
+    >
+      <DayInWeekButton dateObject={item[0]} weekday="Sun" />
+      <DayInWeekButton dateObject={item[1]} weekday="Mon" />
+      <DayInWeekButton dateObject={item[2]} weekday="Tue" />
+      <DayInWeekButton dateObject={item[3]} weekday="Wed" />
+      <DayInWeekButton dateObject={item[4]} weekday="Thu" />
+      <DayInWeekButton dateObject={item[5]} weekday="Fri" />
+      <DayInWeekButton dateObject={item[6]} weekday="Sat" />
+    </View>
+  ));
+
+  const keyExtractor = useCallback((item) => item[0].calendarDayIndex + "");
+
+  const onScrollToIndexFailed = useCallback((info) => {
+    const wait = new Promise((resolve) => setTimeout(resolve, 500));
+    wait.then(() => {
+      weekCalendarFlatListRef.current?.scrollToIndex({
+        offset: info.index,
+        animated: false,
+      });
+    });
+  });
+
+  const getItemLayout = useCallback((data, index) => ({
+    length: Dimensions.get("window").width - 20 + spaceBetweenPages,
+    offset: (Dimensions.get("window").width - 20 + spaceBetweenPages) * index,
+    index,
+  }));
+
   return (
     <View style={{ height: 90 }}>
+      {/* <Button
+        title="scroll"
+        onPress={() => weekCalendarFlatListRef.current.scrollToIndex({ index: 3 })}
+      /> */}
       <FlatList
         data={weeksArray}
-        keyExtractor={(index) => index[0].calendarDayIndex + ""}
+        keyExtractor={keyExtractor}
+        getItemLayout={getItemLayout}
+        renderItem={renderItem}
         ref={weekCalendarFlatListRef}
         scrollEnabled={false}
-        //initialScrollIndex={specialDates.state[0].dateObject.weekIndex}
+        initialScrollIndex={specialDates.state[0].dateObject.weekIndex}
         horizontal={true}
         decelerationRate={0}
         snapToInterval={Dimensions.get("window").width - 20 + spaceBetweenPages}
         snapToAlignment="start"
         showsHorizontalScrollIndicator={false}
-        initialNumToRender={1}
+        initialNumToRender={5}
         windowSize={10}
-        renderItem={({ item, index }) => {
-          return (
-            <View
-              style={{
-                width: Dimensions.get("window").width - 20,
-                marginRight: index === weeksArray.length - 1 ? 0 : spaceBetweenPages,
-                flexDirection: "row",
-                paddingHorizontal: 10,
-              }}
-            >
-              <DayInWeekButton dateObject={item[0]} weekday="Sun" />
-              <DayInWeekButton dateObject={item[1]} weekday="Mon" />
-              <DayInWeekButton dateObject={item[2]} weekday="Tue" />
-              <DayInWeekButton dateObject={item[3]} weekday="Wed" />
-              <DayInWeekButton dateObject={item[4]} weekday="Thu" />
-              <DayInWeekButton dateObject={item[5]} weekday="Fri" />
-              <DayInWeekButton dateObject={item[6]} weekday="Sat" />
-            </View>
-          );
-        }}
       />
     </View>
   );

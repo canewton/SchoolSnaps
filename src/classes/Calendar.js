@@ -1,7 +1,7 @@
 export class Calendar {
   static getFollowingMonths(currentMonth, currentYear, numberOfMonths) {
-    if (currentMonth === 11) {
-      currentMonth = 0;
+    if (currentMonth === 12) {
+      currentMonth = 1;
       currentYear += 1;
     } else {
       currentMonth += 1;
