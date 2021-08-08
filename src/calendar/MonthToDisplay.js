@@ -20,23 +20,6 @@ const MonthToDisplay = (props) => {
     "December",
   ];
 
-  const [rowDaysArray, setRowsDaysArray] = useState([]);
-
-  useEffect(() => {
-    const month = props.monthData.month;
-    const year = props.monthData.year;
-    var dayDataArray = Calendar.getDayDataArray(month, year);
-
-    //After we get all neccessary data from last, current and next months, we need to fill the rest indexes will dummy data
-    if (dayDataArray.length < 42) {
-      for (let i = dayDataArray.length; i < 42; i++) {
-        dayDataArray.push({ day: 0 });
-      }
-    }
-
-    setRowsDaysArray(Calendar.breakUpDaysIntoWeeks(dayDataArray));
-  }, []);
-
   return (
     <View style={props.style}>
       <View style={styles.calendarMonthContainer}>
@@ -56,7 +39,7 @@ const MonthToDisplay = (props) => {
         </View>
 
         <DaysInMonth
-          rowDaysArray={rowDaysArray}
+          monthDaysArray={props.monthDaysArray}
           monthIndex={props.monthIndex}
           weekCalendarFlatListRef={props.weekCalendarFlatListRef}
         />

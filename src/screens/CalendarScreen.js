@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AddButton from "../components/AddButton";
@@ -14,6 +14,7 @@ const CalendarScreen = () => {
   const numberOfMonths = 12 * 1 + 1;
   const [monthDataArray, setMonthDataArray] = useState([]);
   const [singletonHasRun, setSingletonHasRun] = useState(false);
+  const [weeksArray, setWeeksArray] = useState();
   const spaceBetweenPages = 20;
 
   const weekCalendarFlatListRef = React.useRef();
@@ -26,13 +27,52 @@ const CalendarScreen = () => {
   });
 
   if (!singletonHasRun) {
-    Calendar.getFollowingMonths(
+    const monthArray = Calendar.getFollowingMonths(
       currentMonth,
       currentYear,
-      numberOfMonths,
-      setMonthDataArray,
-      []
+      numberOfMonths
     );
+    const firstMonth = monthArray[0]?.month;
+    const firstYear = monthArray[0]?.year;
+    const lastMonth = monthArray[monthArray.length - 1]?.month;
+    const lastYear = monthArray[monthArray.length - 1]?.year;
+    const lastMonthDays = Calendar.getDaysInMonth(lastMonth, lastYear);
+
+    const monthAfterLastMonthDays =
+      lastMonth !== 0
+        ? Calendar.getDaysInMonth(lastMonth - 1, lastYear)
+        : Calendar.getDaysInMonth(11, lastYear - 1);
+
+    const firstDateOfFirstMonth = new Date(firstYear, firstMonth, 1).getDay();
+    const numberOfPreviousMonthDaysToDisplay =
+      firstDateOfFirstMonth !== 6 ? firstDateOfFirstMonth : 6;
+
+    const lastDateOfLastMonth = new Date(lastYear, lastMonth, lastMonthDays).getDay();
+    const numberOfNextMonthDaysToDisplay =
+      lastDateOfLastMonth !== 6 ? 6 - lastDateOfLastMonth : 0;
+
+    var mainDays = [];
+    for (let i = 0; i < monthArray.length; i++) {
+      for (
+        let j = 1;
+        j <= Calendar.getDaysInMonth(monthArray[i].month, monthArray[i].year);
+        j++
+      ) {
+        mainDays.push({ day: j });
+      }
+    }
+
+    var dayDataArray = [
+      ...Calendar.getDaysLastMonthToDisplay(
+        numberOfPreviousMonthDaysToDisplay,
+        monthAfterLastMonthDays
+      ),
+      ...mainDays,
+      ...Calendar.getDaysNextMonthToDisplay(numberOfNextMonthDaysToDisplay),
+    ];
+
+    setWeeksArray(Calendar.breakUpDaysIntoWeeks(dayDataArray));
+    setMonthDataArray(monthArray);
     setSingletonHasRun(true);
   }
 
@@ -43,7 +83,7 @@ const CalendarScreen = () => {
         upperHeight={350}
         lowerComponent={
           <WeekdayCalendar
-            monthDataArray={monthDataArray}
+            weeksArray={weeksArray}
             spaceBetweenPages={spaceBetweenPages}
             monthCalendarFlatListRef={monthCalendarFlatListRef}
             weekCalendarFlatListRef={weekCalendarFlatListRef}
@@ -51,6 +91,7 @@ const CalendarScreen = () => {
         }
         upperComponent={
           <CalendarDisplay
+            weeksArray={weeksArray}
             monthDataArray={monthDataArray}
             spaceBetweenPages={spaceBetweenPages}
             monthCalendarFlatListRef={monthCalendarFlatListRef}

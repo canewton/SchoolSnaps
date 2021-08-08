@@ -22,10 +22,10 @@ const DaysInMonth = (props) => {
 
   return (
     <>
-      {props.rowDaysArray.map((rowData, index) => (
+      {props.monthDaysArray?.map((rowData, index) => (
         <View style={{ flexDirection: "row" }} key={"calendar row " + index}>
           {rowData.map((data) => {
-            if (data.dayData.main) {
+            if (true) {
               /* day holder that is of the displayed month */
               return (
                 <TouchableHighlight

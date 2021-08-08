@@ -1,18 +1,5 @@
 export class Calendar {
-  static getFollowingMonths(
-    currentMonth,
-    currentYear,
-    numberOfMonths,
-    setMonthDataArray,
-    monthDataArrayInput
-  ) {
-    if (numberOfMonths === 0) {
-      setMonthDataArray(monthDataArrayInput);
-      return;
-    }
-
-    monthDataArrayInput.push({ month: currentMonth, year: currentYear });
-
+  static getFollowingMonths(currentMonth, currentYear, numberOfMonths) {
     if (currentMonth === 11) {
       currentMonth = 0;
       currentYear += 1;
@@ -20,14 +7,14 @@ export class Calendar {
       currentMonth += 1;
     }
 
-    numberOfMonths -= 1;
-    this.getFollowingMonths(
-      currentMonth,
-      currentYear,
-      numberOfMonths,
-      setMonthDataArray,
-      monthDataArrayInput
-    );
+    if (numberOfMonths === 1) {
+      return [{ month: currentMonth - 1, year: currentYear }];
+    }
+
+    return [
+      { month: currentMonth - 1, year: currentYear },
+      ...this.getFollowingMonths(currentMonth, currentYear, numberOfMonths - 1),
+    ];
   }
 
   static getDaysInMonth(month, year) {

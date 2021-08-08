@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useRef } from "react";
+import React, { useContext } from "react";
 import {
   View,
   Text,
@@ -6,67 +6,19 @@ import {
   FlatList,
   Dimensions,
   TouchableHighlight,
-  Button,
 } from "react-native";
-import { Calendar } from "../classes/Calendar";
 import { Colors } from "../classes/Colors";
 import { Context as CalendarContext } from "../context/CalendarContext";
 
 const WeekdayCalendar = ({
-  monthDataArray,
+  weeksArray,
   spaceBetweenPages,
   weekCalendarFlatListRef,
   monthCalendarFlatListRef,
 }) => {
-  const [weeksArray, setWeeksArray] = useState();
-
-  useEffect(() => {
-    const firstMonth = monthDataArray[0]?.month;
-    const firstYear = monthDataArray[0]?.year;
-    const lastMonth = monthDataArray[monthDataArray.length - 1]?.month;
-    const lastYear = monthDataArray[monthDataArray.length - 1]?.year;
-    const lastMonthDays = Calendar.getDaysInMonth(lastMonth, lastYear);
-
-    const monthAfterLastMonthDays =
-      lastMonth !== 0
-        ? Calendar.getDaysInMonth(lastMonth - 1, lastYear)
-        : Calendar.getDaysInMonth(11, lastYear - 1);
-
-    const firstDateOfFirstMonth = new Date(firstYear, firstMonth, 1).getDay();
-    const numberOfPreviousMonthDaysToDisplay =
-      firstDateOfFirstMonth !== 6 ? firstDateOfFirstMonth : 6;
-
-    const lastDateOfLastMonth = new Date(lastYear, lastMonth, lastMonthDays).getDay();
-    const numberOfNextMonthDaysToDisplay =
-      lastDateOfLastMonth !== 6 ? 6 - lastDateOfLastMonth : 0;
-
-    var mainDays = [];
-    for (let i = 0; i < monthDataArray.length; i++) {
-      for (
-        let j = 1;
-        j <= Calendar.getDaysInMonth(monthDataArray[i].month, monthDataArray[i].year);
-        j++
-      ) {
-        mainDays.push({ day: j });
-      }
-    }
-
-    var dayDataArray = [
-      ...Calendar.getDaysLastMonthToDisplay(
-        numberOfPreviousMonthDaysToDisplay,
-        monthAfterLastMonthDays
-      ),
-      ...mainDays,
-      ...Calendar.getDaysNextMonthToDisplay(numberOfNextMonthDaysToDisplay),
-    ];
-
-    setWeeksArray(Calendar.breakUpDaysIntoWeeks(dayDataArray));
-  }, []);
-
   const DayInWeekButton = ({ date, weekday, calendarDayIndex, monthIndex }) => {
     const specialDates = useContext(CalendarContext);
     const currentCalendarDayIndex = specialDates.state[0].calendarDayIndex;
-    const currentMonthIndex = specialDates.state[0].monthIndex;
 
     const chooseDay = (calendarDayIndex, monthIndex) => {
       specialDates.edit({
@@ -108,12 +60,6 @@ const WeekdayCalendar = ({
 
   return (
     <View style={{ height: 90 }}>
-      <Button
-        title="scroll"
-        onPress={() =>
-          weekCalendarFlatListRef.current.scrollToIndex({ index: 0, animated: false })
-        }
-      />
       <FlatList
         data={weeksArray}
         keyExtractor={(index) => index[0].calendarDayIndex + ""}
