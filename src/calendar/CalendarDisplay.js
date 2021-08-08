@@ -12,8 +12,8 @@ const CalendarDisplay = ({
   const [monthsArray, setMonthsArray] = useState([]);
   const [singletonHasRun, setSingletonHasRun] = useState(false);
 
+  var startingIndex = { value: 0 };
   const getMonthWeeksByMonthIndex = (monthIndex) => {
-    var startingIndex = { value: 0 };
     var monthArray = [];
     for (let i = startingIndex.value; i < weeksArray.length; i++) {
       if (weeksArray[i].findIndex((day) => day.monthIndex === monthIndex) >= 0) {
@@ -60,6 +60,7 @@ const CalendarDisplay = ({
                 monthDaysArray={monthsArray[index]}
                 monthData={item}
                 weekCalendarFlatListRef={weekCalendarFlatListRef}
+                monthIndex={index}
               />
             </View>
           );

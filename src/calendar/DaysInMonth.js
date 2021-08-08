@@ -5,17 +5,15 @@ import { Context as CalendarContext } from "../context/CalendarContext";
 
 const DaysInMonth = (props) => {
   const specialDates = useContext(CalendarContext);
-  const currentCalendarDayIndex = specialDates.state[0].calendarDayIndex;
-  const currentMonthIndex = specialDates.state[0].monthIndex;
+  const currentCalendarDayIndex = specialDates.state[0].dateObject.calendarDayIndex;
 
-  const chooseDay = (calendarDayIndex, weekIndex) => {
+  const chooseDay = (dateObject) => {
     specialDates.edit({
       id: "Selected Date",
-      calendarDayIndex: calendarDayIndex,
-      monthIndex: props.monthIndex,
+      dateObject: dateObject,
     });
     props.weekCalendarFlatListRef.current.scrollToIndex({
-      index: weekIndex,
+      index: dateObject.weekIndex,
       animated: false,
     });
   };
@@ -25,32 +23,30 @@ const DaysInMonth = (props) => {
       {props.monthDaysArray?.map((rowData, index) => (
         <View style={{ flexDirection: "row" }} key={"calendar row " + index}>
           {rowData.map((data) => {
-            if (true) {
+            if (props.monthIndex === data.monthIndex) {
               /* day holder that is of the displayed month */
               return (
                 <TouchableHighlight
                   key={"day holder " + data.calendarDayIndex}
                   style={styles.dayHolderContainer}
                   underlayColor="transparent"
-                  onPress={() => chooseDay(data.calendarDayIndex, data.weekIndex)}
+                  onPress={() => chooseDay(data)}
                 >
                   <View
                     style={
-                      data.calendarDayIndex === currentCalendarDayIndex &&
-                      props.monthIndex === currentMonthIndex
+                      data.calendarDayIndex === currentCalendarDayIndex
                         ? styles.chosenDayHolder
                         : styles.defaultDayHolder
                     }
                   >
                     <Text
                       style={
-                        data.calendarDayIndex === currentCalendarDayIndex &&
-                        props.monthIndex === currentMonthIndex
+                        data.calendarDayIndex === currentCalendarDayIndex
                           ? styles.chosenDayText
                           : styles.defaultDayText
                       }
                     >
-                      {data.dayData.day}
+                      {data.day}
                     </Text>
                   </View>
                 </TouchableHighlight>
@@ -64,7 +60,7 @@ const DaysInMonth = (props) => {
                 >
                   <View style={styles.defaultDayHolder}>
                     <Text style={styles.dummyDayText}>
-                      {data.dayData.day > 0 ? data.dayData.day : ""}
+                      {data.day > 0 ? data.day : ""}
                     </Text>
                   </View>
                 </View>

@@ -86,7 +86,7 @@ export class Calendar {
           monthIndex++;
         }
         dataToBeAdded[i][j] = {
-          dayData: dayDataArray[dayDataArrayIndex],
+          ...dayDataArray[dayDataArrayIndex],
           calendarDayIndex: dayDataArrayIndex,
           weekIndex: i,
           monthIndex: monthIndex,

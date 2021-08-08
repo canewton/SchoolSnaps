@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   View,
   Text,
@@ -16,18 +16,18 @@ const WeekdayCalendar = ({
   weekCalendarFlatListRef,
   monthCalendarFlatListRef,
 }) => {
-  const DayInWeekButton = ({ date, weekday, calendarDayIndex, monthIndex }) => {
-    const specialDates = useContext(CalendarContext);
-    const currentCalendarDayIndex = specialDates.state[0].calendarDayIndex;
+  const specialDates = useContext(CalendarContext);
 
-    const chooseDay = (calendarDayIndex, monthIndex) => {
+  const DayInWeekButton = ({ weekday, dateObject }) => {
+    const currentCalendarDayIndex = specialDates.state[0].dateObject.calendarDayIndex;
+
+    const chooseDay = (dateObject) => {
       specialDates.edit({
         id: "Selected Date",
-        calendarDayIndex: calendarDayIndex,
-        monthIndex: monthIndex,
+        dateObject: dateObject,
       });
       monthCalendarFlatListRef.current.scrollToIndex({
-        index: monthIndex,
+        index: dateObject.monthIndex,
         animated: false,
       });
     };
@@ -38,20 +38,20 @@ const WeekdayCalendar = ({
         <TouchableHighlight
           underlayColor="transparent"
           style={
-            currentCalendarDayIndex === calendarDayIndex
+            currentCalendarDayIndex === dateObject.calendarDayIndex
               ? styles.chosenDateHolder
               : styles.defaultDateHolder
           }
-          onPress={() => chooseDay(calendarDayIndex, monthIndex)}
+          onPress={() => chooseDay(dateObject)}
         >
           <Text
             style={
-              currentCalendarDayIndex === calendarDayIndex
+              currentCalendarDayIndex === dateObject.calendarDayIndex
                 ? styles.chosenDateText
                 : styles.dateText
             }
           >
-            {date}
+            {dateObject.day}
           </Text>
         </TouchableHighlight>
       </View>
@@ -64,6 +64,8 @@ const WeekdayCalendar = ({
         data={weeksArray}
         keyExtractor={(index) => index[0].calendarDayIndex + ""}
         ref={weekCalendarFlatListRef}
+        scrollEnabled={false}
+        //initialScrollIndex={specialDates.state[0].dateObject.weekIndex}
         horizontal={true}
         decelerationRate={0}
         snapToInterval={Dimensions.get("window").width - 20 + spaceBetweenPages}
@@ -81,48 +83,13 @@ const WeekdayCalendar = ({
                 paddingHorizontal: 10,
               }}
             >
-              <DayInWeekButton
-                date={item[0].dayData.day}
-                weekday="Sun"
-                calendarDayIndex={item[0].calendarDayIndex}
-                monthIndex={item[0].monthIndex}
-              />
-              <DayInWeekButton
-                date={item[1].dayData.day}
-                weekday="Mon"
-                calendarDayIndex={item[1].calendarDayIndex}
-                monthIndex={item[1].monthIndex}
-              />
-              <DayInWeekButton
-                date={item[2].dayData.day}
-                weekday="Tue"
-                calendarDayIndex={item[2].calendarDayIndex}
-                monthIndex={item[2].monthIndex}
-              />
-              <DayInWeekButton
-                date={item[3].dayData.day}
-                weekday="Wed"
-                calendarDayIndex={item[3].calendarDayIndex}
-                monthIndex={item[3].monthIndex}
-              />
-              <DayInWeekButton
-                date={item[4].dayData.day}
-                weekday="Thu"
-                calendarDayIndex={item[4].calendarDayIndex}
-                monthIndex={item[4].monthIndex}
-              />
-              <DayInWeekButton
-                date={item[5].dayData.day}
-                weekday="Fri"
-                calendarDayIndex={item[5].calendarDayIndex}
-                monthIndex={item[5].monthIndex}
-              />
-              <DayInWeekButton
-                date={item[6].dayData.day}
-                weekday="Sat"
-                calendarDayIndex={item[6].calendarDayIndex}
-                monthIndex={item[6].monthIndex}
-              />
+              <DayInWeekButton dateObject={item[0]} weekday="Sun" />
+              <DayInWeekButton dateObject={item[1]} weekday="Mon" />
+              <DayInWeekButton dateObject={item[2]} weekday="Tue" />
+              <DayInWeekButton dateObject={item[3]} weekday="Wed" />
+              <DayInWeekButton dateObject={item[4]} weekday="Thu" />
+              <DayInWeekButton dateObject={item[5]} weekday="Fri" />
+              <DayInWeekButton dateObject={item[6]} weekday="Sat" />
             </View>
           );
         }}
