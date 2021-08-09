@@ -12,6 +12,7 @@ import NotesScreen from "./src/screens/NotesScreen";
 import NotesEditScreen from "./src/screens/NotesEditScreen";
 import CameraSceen from "./src/screens/CameraScreen";
 import ClassesEditScreen from "./src/screens/ClassesEditScreen";
+import AssignmentAddScreen from "./src/screens/AssignmentAddScreen";
 
 import { BottomTabIcons } from "./src/icons/BottomTabIcons";
 import { Colors } from "./src/classes/Colors";
@@ -189,6 +190,10 @@ export default function App() {
                   />
                   <RootStack.Screen name="New Class" component={ClassesAddScreen} />
                   <RootStack.Screen name="Edit Class" component={ClassesEditScreen} />
+                  <RootStack.Screen
+                    name="New Assignment"
+                    component={AssignmentAddScreen}
+                  />
                   <RootStack.Screen
                     name="Camera"
                     component={CameraSceen}

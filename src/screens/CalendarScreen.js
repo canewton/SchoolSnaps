@@ -21,7 +21,9 @@ const CalendarScreen = () => {
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => <AddButton navigation={navigation} destination="New Class" />,
+      headerRight: () => (
+        <AddButton navigation={navigation} destination="New Assignment" />
+      ),
     });
   });
 
