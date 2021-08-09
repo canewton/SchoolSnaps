@@ -8,6 +8,7 @@ import Animated, {
   useAnimatedProps,
 } from "react-native-reanimated";
 import { PanGestureHandler } from "react-native-gesture-handler";
+import { Colors } from "../classes/Colors";
 
 const SwipeView = ({ lowerHeight, upperHeight, lowerComponent, upperComponent }) => {
   const dimensions = useWindowDimensions();
@@ -67,25 +68,23 @@ const SwipeView = ({ lowerHeight, upperHeight, lowerComponent, upperComponent })
           style={[
             sheetStyle,
             {
-              margin: 10,
+              //margin: 10,
               backgroundColor: "white",
-              borderRadius: 20,
-              shadowColor: "#000",
-              shadowOffset: { width: 0, height: 0 },
-              shadowRadius: 3.84,
-              elevation: 5,
+              borderBottomLeftRadius: 10,
+              borderBottomRightRadius: 10,
+              ...Colors.shadow,
             },
           ]}
         >
           <Animated.View
             animatedProps={lowerComponentAnimatedProps}
-            style={[lowerComponentStyle, { position: "absolute" }]}
+            style={[lowerComponentStyle, { position: "absolute", top: 0 }]}
           >
             {lowerComponent}
           </Animated.View>
           <Animated.View
             animatedProps={upperComponentAnimatedProps}
-            style={[upperComponentStyle, { position: "absolute" }]}
+            style={[upperComponentStyle, { position: "absolute", top: 0 }]}
           >
             {upperComponent}
           </Animated.View>

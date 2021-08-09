@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, TextInput, Text } from "react-native";
+import { Colors } from "../classes/Colors";
 
 const WrittenNoteForm = ({ onChange, initialValues, editable, opacity }) => {
   //set default values
@@ -77,11 +78,7 @@ const styles = StyleSheet.create({
     padding: 15,
     paddingBottom: 45,
     borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
+    ...Colors.shadow,
     minHeight: 250,
   },
 });

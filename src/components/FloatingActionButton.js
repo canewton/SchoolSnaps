@@ -8,6 +8,7 @@ import {
   MenuTrigger,
   renderers,
 } from "react-native-popup-menu";
+import { Colors } from "../classes/Colors";
 
 const circleDiameter = 60;
 const circleRadius = circleDiameter / 2;
@@ -51,11 +52,7 @@ const Button = ({ color }) => {
         backgroundColor: "white",
         alignItems: "center",
         justifyContent: "center",
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.1,
-        shadowRadius: 2,
-        elevation: 2,
+        ...Colors.shadow,
       }}
     >
       {GeneralIcons.findIcon("Plus", 34, color)}

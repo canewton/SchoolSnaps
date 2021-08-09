@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity } from "react-native
 import { ClassIcons } from "../icons/ClassIcons";
 import { GeneralIcons } from "../icons/GeneralIcons";
 import { useNavigation } from "@react-navigation/native";
+import { Colors } from "../classes/Colors";
 
 const CoursesList = ({ classes }) => {
   const navigation = useNavigation();
@@ -12,6 +13,7 @@ const CoursesList = ({ classes }) => {
       <FlatList
         data={classes}
         keyExtractor={(index) => index.id + ""}
+        ListHeaderComponent={() => <View style={{ height: 10 }} />}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => {
           return (
@@ -21,11 +23,17 @@ const CoursesList = ({ classes }) => {
                   navigation.navigate("Notes", item);
                 }}
               >
-                <View style={{ ...styles.classButton, backgroundColor: "white" }}>
+                <View
+                  style={{
+                    ...styles.classButton,
+                    backgroundColor:
+                      item.primaryColor + Math.round(0.78 * 255).toString(16),
+                  }}
+                >
                   <View
                     style={{
                       ...styles.classIconContainer,
-                      backgroundColor: item.primaryColor,
+                      backgroundColor: "#000000" + Math.round(0.1 * 255).toString(16),
                     }}
                   >
                     {ClassIcons.findIcon(item.iconName, 30, "white")}
@@ -35,7 +43,11 @@ const CoursesList = ({ classes }) => {
                     <Text style={styles.classDetail}>0 notes</Text>
                   </View>
                   <View style={styles.arrowContainer}>
-                    {GeneralIcons.findIcon("Forward", 20, "#bcb8b1")}
+                    {GeneralIcons.findIcon(
+                      "Forward",
+                      20,
+                      "#000000" + Math.round(0.2 * 255).toString(16)
+                    )}
                   </View>
                 </View>
               </TouchableOpacity>
@@ -53,11 +65,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginHorizontal: 10,
     backgroundColor: "white",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
+    ...Colors.shadow,
     flexDirection: "row",
     alignItems: "center",
   },

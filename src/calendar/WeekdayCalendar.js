@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { Colors } from "../classes/Colors";
 import { Context as CalendarContext } from "../context/CalendarContext";
+import { Calendar } from "../classes/Calendar";
 
 const WeekdayCalendar = ({
   weeksArray,
@@ -62,7 +63,7 @@ const WeekdayCalendar = ({
   const renderItem = useCallback(({ item, index }) => (
     <View
       style={{
-        width: Dimensions.get("window").width - 20,
+        width: Calendar.viewWidth,
         marginRight: index === weeksArray.length - 1 ? 0 : spaceBetweenPages,
         flexDirection: "row",
         paddingHorizontal: 10,
@@ -91,8 +92,8 @@ const WeekdayCalendar = ({
   });
 
   const getItemLayout = useCallback((data, index) => ({
-    length: Dimensions.get("window").width - 20 + spaceBetweenPages,
-    offset: (Dimensions.get("window").width - 20 + spaceBetweenPages) * index,
+    length: Calendar.viewWidth + spaceBetweenPages,
+    offset: (Calendar.viewWidth + spaceBetweenPages) * index,
     index,
   }));
 
@@ -112,7 +113,7 @@ const WeekdayCalendar = ({
         initialScrollIndex={specialDates.state[0].dateObject.weekIndex}
         horizontal={true}
         decelerationRate={0}
-        snapToInterval={Dimensions.get("window").width - 20 + spaceBetweenPages}
+        snapToInterval={Calendar.viewWidth + spaceBetweenPages}
         snapToAlignment="start"
         showsHorizontalScrollIndicator={false}
         initialNumToRender={5}

@@ -5,26 +5,13 @@ import { Calendar } from "../classes/Calendar";
 import { Colors } from "../classes/Colors";
 
 const MonthToDisplay = (props) => {
-  const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-
   return (
     <View style={props.style}>
       <View style={styles.calendarMonthContainer}>
         <View style={styles.monthNameContainer}>
-          <Text style={styles.monthNameText}>{monthNames[props.monthData.month]}</Text>
+          <Text style={styles.monthNameText}>
+            {Calendar.monthNames[props.monthData.month]}
+          </Text>
           <Text style={styles.yearText}>{props.monthData.year}</Text>
         </View>
 

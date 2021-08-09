@@ -15,7 +15,6 @@ const CalendarScreen = () => {
   const [monthDataArray, setMonthDataArray] = useState([]);
   const [singletonHasRun, setSingletonHasRun] = useState(false);
   const [weeksArray, setWeeksArray] = useState();
-  const spaceBetweenPages = 20;
 
   const weekCalendarFlatListRef = React.useRef();
   const monthCalendarFlatListRef = React.useRef();
@@ -84,7 +83,7 @@ const CalendarScreen = () => {
         lowerComponent={
           <WeekdayCalendar
             weeksArray={weeksArray}
-            spaceBetweenPages={spaceBetweenPages}
+            spaceBetweenPages={Calendar.spaceBetweenPages}
             monthCalendarFlatListRef={monthCalendarFlatListRef}
             weekCalendarFlatListRef={weekCalendarFlatListRef}
           />
@@ -93,7 +92,7 @@ const CalendarScreen = () => {
           <CalendarDisplay
             weeksArray={weeksArray}
             monthDataArray={monthDataArray}
-            spaceBetweenPages={spaceBetweenPages}
+            spaceBetweenPages={Calendar.spaceBetweenPages}
             monthCalendarFlatListRef={monthCalendarFlatListRef}
             weekCalendarFlatListRef={weekCalendarFlatListRef}
           />

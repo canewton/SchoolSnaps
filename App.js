@@ -52,13 +52,10 @@ const customTabBarStyle = {
     backgroundColor: Colors.tabBackgroundColor,
     height: 90,
     elevation: 4,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
     borderTopWidth: 0,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.15,
-    shadowRadius: 2,
+    ...Colors.shadow,
   },
   tabStyle: {
     marginTop: 15,
@@ -70,7 +67,7 @@ const customTabBarStyle = {
 const invisibleHeaderStyle = {
   headerStyle: {
     height: 110,
-    backgroundColor: Colors.backgroundColor,
+    backgroundColor: Colors.headerBackgroundColor,
     shadowColor: "transparent",
   },
   headerTitleAlign: "left",

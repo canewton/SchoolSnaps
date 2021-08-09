@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Dimensions, FlatList } from "react-native";
 import MonthToDisplay from "./MonthToDisplay";
+import { Calendar } from "../classes/Calendar";
 
 const CalendarDisplay = ({
   weeksArray,
@@ -42,7 +43,7 @@ const CalendarDisplay = ({
         keyExtractor={(index) => index.month + "" + index.year}
         horizontal={true}
         decelerationRate={0}
-        snapToInterval={Dimensions.get("window").width - 20 + spaceBetweenPages}
+        snapToInterval={Calendar.viewWidth + spaceBetweenPages}
         snapToAlignment="start"
         showsHorizontalScrollIndicator={false}
         initialNumToRender={1}
@@ -52,7 +53,7 @@ const CalendarDisplay = ({
             <View>
               <MonthToDisplay
                 style={{
-                  width: Dimensions.get("window").width - 20,
+                  width: Calendar.viewWidth,
                   marginRight:
                     index === monthDataArray.length - 1 ? 0 : spaceBetweenPages,
                   justifyContent: "center",

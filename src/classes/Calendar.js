@@ -1,4 +1,23 @@
+import { Dimensions } from "react-native";
+
 export class Calendar {
+  static spaceBetweenPages = 20;
+  static viewWidth = Dimensions.get("window").width;
+  static monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
   static getFollowingMonths(currentMonth, currentYear, numberOfMonths) {
     if (currentMonth === 12) {
       currentMonth = 1;
