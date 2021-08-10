@@ -6,7 +6,7 @@ import { Context as ClassesContext } from "../context/ClassesContext";
 const AssignmentAddScreen = ({ navigation }) => {
   const classes = useContext(ClassesContext);
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <AssignmentForm
         initialValues={null}
         /* onSubmit={(schoolClass) => {

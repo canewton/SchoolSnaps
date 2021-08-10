@@ -89,9 +89,7 @@ const styles = StyleSheet.create({
   choiceContainer: {
     width: 100,
     height: 120,
-    backgroundColor: "white",
     alignItems: "center",
-    borderRightWidth: StyleSheet.hairlineWidth,
   },
 });
 

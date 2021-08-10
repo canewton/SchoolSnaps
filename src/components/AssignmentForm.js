@@ -1,11 +1,19 @@
 import React, { useContext, useState, useEffect } from "react";
-import { View, Text, StyleSheet, ScrollView, TextInput } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { ClassIcons } from "../icons/ClassIcons";
 import { Colors } from "../classes/Colors";
 import { Context as ClassesContext } from "../context/ClassesContext";
 import HorizontalScrollPicker from "./HorizontalScrollPicker";
 import { AssignmentTypeIcons } from "../icons/AssignmentTypeIcons";
+import { Transition, Transitioning } from "react-native-reanimated";
 
 const AssignmentForm = ({ onEdit, initialValues }) => {
   const classes = useContext(ClassesContext);
@@ -15,6 +23,10 @@ const AssignmentForm = ({ onEdit, initialValues }) => {
   const [schoolClass, setSchoolClass] = useState(classes.state[0]);
   const [iconName, setIconName] = useState(ClassIcons.iconList(30, "white")[0].name);
   const [attachedNotes, setAttachedNotes] = useState([]);
+  const [classIsCollapsed, setClassIsCollapsed] = useState(false);
+  const [typeIsCollapsed, setTypeIsCollapsed] = useState(false);
+
+  const collapsibleRef = React.useRef();
 
   const navigation = useNavigation();
 
@@ -27,30 +39,81 @@ const AssignmentForm = ({ onEdit, initialValues }) => {
     }
   }, []);
 
+  const transition = (
+    <Transition.Together>
+      <Transition.In type="fade" durationMs={200} delayMs={100} />
+      <Transition.Change />
+      <Transition.Out type="fade" durationMs={100} />
+    </Transition.Together>
+  );
+
+  const CollapsibleHeader = ({ name, startAsCollapsed, children }) => {
+    const [collapsed, setCollapsed] = useState(startAsCollapsed);
+
+    return (
+      <View style={{ marginHorizontal: 10, marginTop: 10 }}>
+        <TouchableOpacity
+          onPress={() => {
+            collapsibleRef.current.animateNextTransition();
+            setCollapsed(!collapsed);
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: "white",
+              borderTopLeftRadius: 10,
+              borderTopRightRadius: 10,
+              borderRadius: collapsed ? 10 : 0,
+              padding: 15,
+            }}
+          >
+            <Text style={{ fontSize: 20, fontWeight: "600", letterSpacing: 0.5 }}>
+              {name}
+            </Text>
+          </View>
+        </TouchableOpacity>
+        {!collapsed && (
+          <View
+            style={{
+              backgroundColor: "#bcb8b1",
+              borderBottomLeftRadius: 10,
+              borderBottomRightRadius: 10,
+            }}
+          >
+            <View style={{}} />
+            {children}
+          </View>
+        )}
+      </View>
+    );
+  };
+
   return (
-    <View>
-      <ScrollView>
+    <Transitioning.View ref={collapsibleRef} transition={transition} style={{ flex: 1 }}>
+      <ScrollView style={{ flex: 1 }}>
         <TextInput
           style={[styles.input, { borderColor: schoolClass.primaryColor }]}
           value={title}
           placeholder="Custom Title (Optional)"
           onChangeText={(text) => setTitle(text)}
         />
-        <Text style={styles.subtitle}>Choose Class:</Text>
-        <HorizontalScrollPicker
-          optionsToPick={classes.state}
-          onPressCallback={(pickedItem) => setSchoolClass(pickedItem)}
-          currentPick={schoolClass.id}
-        />
-        <Text style={styles.subtitle}>Choose Type:</Text>
-        <HorizontalScrollPicker
-          optionsToPick={AssignmentTypeIcons.iconList(30, "black")}
-          onPressCallback={(pickedItem) => setIconName(pickedItem.name)}
-          currentPick={iconName}
-          backgroundColor={schoolClass.primaryColor}
-        />
+        <CollapsibleHeader name="Class: " startAsCollapsed={false}>
+          <HorizontalScrollPicker
+            optionsToPick={classes.state}
+            onPressCallback={(pickedItem) => setSchoolClass(pickedItem)}
+            currentPick={schoolClass.id}
+          />
+        </CollapsibleHeader>
+        <CollapsibleHeader name="Type: " startAsCollapsed={false}>
+          <HorizontalScrollPicker
+            optionsToPick={AssignmentTypeIcons.iconList(30, "black")}
+            onPressCallback={(pickedItem) => setIconName(pickedItem.name)}
+            currentPick={iconName}
+            backgroundColor={schoolClass.primaryColor}
+          />
+        </CollapsibleHeader>
       </ScrollView>
-    </View>
+    </Transitioning.View>
   );
 };
 
