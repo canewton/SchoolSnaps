@@ -13,7 +13,7 @@ import { Colors } from "../classes/Colors";
 import { Context as ClassesContext } from "../context/ClassesContext";
 import HorizontalScrollPicker from "./HorizontalScrollPicker";
 import { AssignmentTypeIcons } from "../icons/AssignmentTypeIcons";
-import { Transition, Transitioning } from "react-native-reanimated";
+import AccordionListItem from "./AccordianListItem";
 
 const AssignmentForm = ({ onEdit, initialValues }) => {
   const classes = useContext(ClassesContext);
@@ -25,10 +25,8 @@ const AssignmentForm = ({ onEdit, initialValues }) => {
     AssignmentTypeIcons.iconList(30, "white")[0].name
   );
   const [attachedNotes, setAttachedNotes] = useState([]);
-  const [classIsCollapsed, setClassIsCollapsed] = useState(false);
-  const [typeIsCollapsed, setTypeIsCollapsed] = useState(false);
-
-  const collapsibleRef = React.useRef();
+  const [classIsOpen, setClassIsOpen] = useState(true);
+  const [typeIsOpen, setTypeIsOpen] = useState(true);
 
   const navigation = useNavigation();
 
@@ -41,43 +39,8 @@ const AssignmentForm = ({ onEdit, initialValues }) => {
     }
   }, []);
 
-  const transition = (
-    <Transition.Together>
-      <Transition.In type="fade" durationMs={200} delayMs={100} />
-      <Transition.Change />
-      <Transition.Out type="fade" durationMs={100} />
-    </Transition.Together>
-  );
-
-  const CollapsibleHeader = ({ name, startAsCollapsed, children }) => {
-    const [collapsed, setCollapsed] = useState(startAsCollapsed);
-
-    return (
-      <View style={{ marginHorizontal: 10, marginTop: 10 }}>
-        <TouchableOpacity
-          onPress={() => {
-            collapsibleRef.current.animateNextTransition();
-            setCollapsed(!collapsed);
-          }}
-        >
-          <View style={{ ...styles.collapsibleHeader, borderRadius: collapsed ? 10 : 0 }}>
-            <Text style={{ fontSize: 20, fontWeight: "600", letterSpacing: 0.5 }}>
-              {name}
-            </Text>
-          </View>
-        </TouchableOpacity>
-        {!collapsed && (
-          <View style={styles.collapsibleContent}>
-            <View style={styles.collapsibleDivider} />
-            {children}
-          </View>
-        )}
-      </View>
-    );
-  };
-
   return (
-    <Transitioning.View ref={collapsibleRef} transition={transition} style={{ flex: 1 }}>
+    <View style={{ flex: 1 }}>
       <ScrollView style={{ flex: 1 }}>
         <TextInput
           style={[styles.input, { borderColor: schoolClass.primaryColor }]}
@@ -85,23 +48,39 @@ const AssignmentForm = ({ onEdit, initialValues }) => {
           placeholder="Custom Title (Optional)"
           onChangeText={(text) => setTitle(text)}
         />
-        <CollapsibleHeader name={"Class:  " + schoolClass.name} startAsCollapsed={false}>
+        <AccordionListItem
+          title="Class:  "
+          pickedItem={schoolClass.name}
+          open={classIsOpen}
+          setOpen={(boolean) => setClassIsOpen(boolean)}
+        >
           <HorizontalScrollPicker
             optionsToPick={classes.state}
-            onPressCallback={(pickedItem) => setSchoolClass(pickedItem)}
+            onPressCallback={(pickedItem) => {
+              setClassIsOpen(false);
+              setSchoolClass(pickedItem);
+            }}
             currentPick={schoolClass.id}
           />
-        </CollapsibleHeader>
-        <CollapsibleHeader name={"Type:  " + iconName} startAsCollapsed={false}>
+        </AccordionListItem>
+        <AccordionListItem
+          title="Type:  "
+          pickedItem={iconName}
+          open={typeIsOpen}
+          setOpen={(boolean) => setTypeIsOpen(boolean)}
+        >
           <HorizontalScrollPicker
             optionsToPick={AssignmentTypeIcons.iconList(30, "black")}
-            onPressCallback={(pickedItem) => setIconName(pickedItem.name)}
+            onPressCallback={(pickedItem) => {
+              setIconName(pickedItem.name);
+              setTypeIsOpen(false);
+            }}
             currentPick={iconName}
             backgroundColor={schoolClass.primaryColor}
           />
-        </CollapsibleHeader>
+        </AccordionListItem>
       </ScrollView>
-    </Transitioning.View>
+    </View>
   );
 };
 
@@ -112,59 +91,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     borderBottomWidth: 3,
     marginTop: 20,
-  },
-  classCircle: {
-    height: 60,
-    width: 60,
-    borderRadius: 30,
-    borderWidth: 3,
-    marginTop: 10,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  classLabel: {
-    marginTop: 5,
-    marginHorizontal: 6,
-    fontSize: 10,
-    alignSelf: "center",
-    fontWeight: "300",
-    textAlign: "center",
-  },
-  calendarButton: {
-    height: 40,
-    width: 300,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "white",
-  },
-  choiceContainer: {
-    width: 100,
-    height: 120,
-    backgroundColor: "white",
-    alignItems: "center",
-    borderRightWidth: StyleSheet.hairlineWidth,
-  },
-  button: {
-    backgroundColor: "white",
-    padding: 10,
-    alignItems: "center",
-    marginTop: 10,
-  },
-  collapsibleHeader: {
-    backgroundColor: "white",
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    padding: 15,
-  },
-  collapsibleContent: {
-    backgroundColor: "white",
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
-  },
-  collapsibleDivider: {
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: "#bcb8b1",
-    marginHorizontal: 15,
   },
 });
 
