@@ -79,6 +79,13 @@ const invisibleHeaderStyle = {
   },
 };
 
+const formHeaderStyle = {
+  headerStyle: {
+    backgroundColor: "white",
+    shadowColor: "transparent",
+  },
+};
+
 const visibleHeaderStyle = {
   headerStyle: {
     shadowColor: "transparent",
@@ -188,11 +195,20 @@ export default function App() {
                     component={MainStackScreen}
                     options={{ headerShown: false }}
                   />
-                  <RootStack.Screen name="New Class" component={ClassesAddScreen} />
-                  <RootStack.Screen name="Edit Class" component={ClassesEditScreen} />
+                  <RootStack.Screen
+                    name="New Class"
+                    component={ClassesAddScreen}
+                    options={formHeaderStyle}
+                  />
+                  <RootStack.Screen
+                    name="Edit Class"
+                    component={ClassesEditScreen}
+                    options={formHeaderStyle}
+                  />
                   <RootStack.Screen
                     name="New Assignment"
                     component={AssignmentAddScreen}
+                    options={formHeaderStyle}
                   />
                   <RootStack.Screen
                     name="Camera"

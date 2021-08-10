@@ -13,6 +13,7 @@ import { Colors } from "../classes/Colors";
 import { ClassIcons } from "../icons/ClassIcons";
 import { ItemArray } from "../classes/ItemArray";
 import { FontAwesome } from "@expo/vector-icons";
+import HeaderButton from "./HeaderButton";
 
 //get the width of the window
 const windowWidth = Dimensions.get("window").width;
@@ -46,27 +47,16 @@ const ClassForm = ({ onSubmit, initialValues }) => {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity onPress={() => onSubmit({ id, name, primaryColor, iconName })}>
-          <HeaderButton name="Save" />
-        </TouchableOpacity>
+        <HeaderButton
+          name="Save"
+          onPressCallback={() => onSubmit({ id, name, primaryColor, iconName })}
+        />
       ),
       headerLeft: () => (
-        <TouchableOpacity onPress={() => navigation.pop()}>
-          <HeaderButton name="Cancel" />
-        </TouchableOpacity>
+        <HeaderButton name="Cancel" onPressCallback={() => navigation.pop()} />
       ),
     });
   });
-
-  const HeaderButton = ({ name }) => {
-    return (
-      <View style={{ marginHorizontal: 15 }}>
-        <Text style={{ color: Colors.primaryColor, fontSize: 18, fontWeight: "400" }}>
-          {name}
-        </Text>
-      </View>
-    );
-  };
 
   return (
     <View>

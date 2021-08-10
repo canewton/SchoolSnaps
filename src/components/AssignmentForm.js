@@ -14,8 +14,10 @@ import { Context as ClassesContext } from "../context/ClassesContext";
 import HorizontalScrollPicker from "./HorizontalScrollPicker";
 import { AssignmentTypeIcons } from "../icons/AssignmentTypeIcons";
 import AccordionListItem from "./AccordianListItem";
+import CalendarDisplay from "../calendar/CalendarDisplay";
+import HeaderButton from "./HeaderButton";
 
-const AssignmentForm = ({ onEdit, initialValues }) => {
+const AssignmentForm = ({ onSubmit, initialValues }) => {
   const classes = useContext(ClassesContext);
 
   //set default values
@@ -24,9 +26,11 @@ const AssignmentForm = ({ onEdit, initialValues }) => {
   const [iconName, setIconName] = useState(
     AssignmentTypeIcons.iconList(30, "white")[0].name
   );
+  const [date, setDate] = useState(new Date());
   const [attachedNotes, setAttachedNotes] = useState([]);
   const [classIsOpen, setClassIsOpen] = useState(true);
   const [typeIsOpen, setTypeIsOpen] = useState(true);
+  const [calendarIsOpen, setCalendarIsOpen] = useState(true);
 
   const navigation = useNavigation();
 
@@ -39,15 +43,28 @@ const AssignmentForm = ({ onEdit, initialValues }) => {
     }
   }, []);
 
+  //add a save and cancel button on either side of the header
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => <HeaderButton name="Save" onPressCallback={() => onSubmit()} />,
+      headerLeft: () => (
+        <HeaderButton name="Cancel" onPressCallback={() => navigation.pop()} />
+      ),
+    });
+  });
+
   return (
     <View style={{ flex: 1 }}>
       <ScrollView style={{ flex: 1 }}>
-        <TextInput
-          style={[styles.input, { borderColor: schoolClass.primaryColor }]}
-          value={title}
-          placeholder="Custom Title (Optional)"
-          onChangeText={(text) => setTitle(text)}
-        />
+        <View style={styles.textInputContainer}>
+          <Text style={styles.textInputLabel}>{"Title: "}</Text>
+          <TextInput
+            style={styles.input}
+            value={title}
+            placeholder="(Optional)"
+            onChangeText={(text) => setTitle(text)}
+          />
+        </View>
         <AccordionListItem
           title="Class:  "
           pickedItem={schoolClass.name}
@@ -57,8 +74,8 @@ const AssignmentForm = ({ onEdit, initialValues }) => {
           <HorizontalScrollPicker
             optionsToPick={classes.state}
             onPressCallback={(pickedItem) => {
-              setClassIsOpen(false);
               setSchoolClass(pickedItem);
+              setClassIsOpen(false);
             }}
             currentPick={schoolClass.id}
           />
@@ -79,6 +96,12 @@ const AssignmentForm = ({ onEdit, initialValues }) => {
             backgroundColor={schoolClass.primaryColor}
           />
         </AccordionListItem>
+        <AccordionListItem
+          title="Date:  "
+          pickedItem={date.getMonth()}
+          open={calendarIsOpen}
+          setOpen={setCalendarIsOpen}
+        ></AccordionListItem>
       </ScrollView>
     </View>
   );
@@ -86,11 +109,19 @@ const AssignmentForm = ({ onEdit, initialValues }) => {
 
 const styles = StyleSheet.create({
   input: {
+    marginLeft: 2,
+    fontSize: 20,
+    fontWeight: "600",
+    width: 500,
+  },
+  textInputLabel: { fontSize: 20, fontWeight: "600", letterSpacing: 0.5 },
+  textInputContainer: {
     marginHorizontal: 10,
-    fontSize: 25,
-    marginBottom: 15,
-    borderBottomWidth: 3,
-    marginTop: 20,
+    marginTop: 10,
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 15,
+    flexDirection: "row",
   },
 });
 
