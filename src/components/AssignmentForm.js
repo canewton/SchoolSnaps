@@ -21,7 +21,9 @@ const AssignmentForm = ({ onEdit, initialValues }) => {
   //set default values
   const [title, setTitle] = useState("");
   const [schoolClass, setSchoolClass] = useState(classes.state[0]);
-  const [iconName, setIconName] = useState(ClassIcons.iconList(30, "white")[0].name);
+  const [iconName, setIconName] = useState(
+    AssignmentTypeIcons.iconList(30, "white")[0].name
+  );
   const [attachedNotes, setAttachedNotes] = useState([]);
   const [classIsCollapsed, setClassIsCollapsed] = useState(false);
   const [typeIsCollapsed, setTypeIsCollapsed] = useState(false);
@@ -58,29 +60,15 @@ const AssignmentForm = ({ onEdit, initialValues }) => {
             setCollapsed(!collapsed);
           }}
         >
-          <View
-            style={{
-              backgroundColor: "white",
-              borderTopLeftRadius: 10,
-              borderTopRightRadius: 10,
-              borderRadius: collapsed ? 10 : 0,
-              padding: 15,
-            }}
-          >
+          <View style={{ ...styles.collapsibleHeader, borderRadius: collapsed ? 10 : 0 }}>
             <Text style={{ fontSize: 20, fontWeight: "600", letterSpacing: 0.5 }}>
               {name}
             </Text>
           </View>
         </TouchableOpacity>
         {!collapsed && (
-          <View
-            style={{
-              backgroundColor: "#bcb8b1",
-              borderBottomLeftRadius: 10,
-              borderBottomRightRadius: 10,
-            }}
-          >
-            <View style={{}} />
+          <View style={styles.collapsibleContent}>
+            <View style={styles.collapsibleDivider} />
             {children}
           </View>
         )}
@@ -97,14 +85,14 @@ const AssignmentForm = ({ onEdit, initialValues }) => {
           placeholder="Custom Title (Optional)"
           onChangeText={(text) => setTitle(text)}
         />
-        <CollapsibleHeader name="Class: " startAsCollapsed={false}>
+        <CollapsibleHeader name={"Class:  " + schoolClass.name} startAsCollapsed={false}>
           <HorizontalScrollPicker
             optionsToPick={classes.state}
             onPressCallback={(pickedItem) => setSchoolClass(pickedItem)}
             currentPick={schoolClass.id}
           />
         </CollapsibleHeader>
-        <CollapsibleHeader name="Type: " startAsCollapsed={false}>
+        <CollapsibleHeader name={"Type:  " + iconName} startAsCollapsed={false}>
           <HorizontalScrollPicker
             optionsToPick={AssignmentTypeIcons.iconList(30, "black")}
             onPressCallback={(pickedItem) => setIconName(pickedItem.name)}
@@ -124,13 +112,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     borderBottomWidth: 3,
     marginTop: 20,
-  },
-  subtitle: {
-    fontSize: 15,
-    fontWeight: "300",
-    marginBottom: 10,
-    marginTop: 15,
-    marginLeft: 10,
   },
   classCircle: {
     height: 60,
@@ -168,6 +149,22 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: "center",
     marginTop: 10,
+  },
+  collapsibleHeader: {
+    backgroundColor: "white",
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    padding: 15,
+  },
+  collapsibleContent: {
+    backgroundColor: "white",
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+  },
+  collapsibleDivider: {
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: "#bcb8b1",
+    marginHorizontal: 15,
   },
 });
 
