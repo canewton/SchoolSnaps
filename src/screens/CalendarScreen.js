@@ -6,12 +6,10 @@ import CalendarDisplay from "../calendar/CalendarDisplay";
 import SwipeView from "../components/SwipeView";
 import WeekdayCalendar from "../calendar/WeekdayCalendar";
 import { Calendar } from "../classes/Calendar";
+import { Colors } from "../classes/Colors";
 
 const CalendarScreen = () => {
   const navigation = useNavigation();
-  const currentMonth = new Date().getMonth();
-  const currentYear = new Date().getFullYear();
-  const numberOfMonths = 12 * 1 + 1;
   const [monthDataArray, setMonthDataArray] = useState([]);
   const [singletonHasRun, setSingletonHasRun] = useState(false);
   const [weeksArray, setWeeksArray] = useState();
@@ -19,67 +17,48 @@ const CalendarScreen = () => {
   const weekCalendarFlatListRef = React.useRef();
   const monthCalendarFlatListRef = React.useRef();
 
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <AddButton navigation={navigation} destination="New Assignment" />
-      ),
-    });
-  });
-
   if (!singletonHasRun) {
     const monthArray = Calendar.getFollowingMonths(
-      currentMonth,
-      currentYear,
-      numberOfMonths
+      Calendar.currentMonth,
+      Calendar.currentYear,
+      Calendar.numberOfFutureMonthsToDisplay
     );
-    const firstMonth = monthArray[0]?.month;
-    const firstYear = monthArray[0]?.year;
-    const lastMonth = monthArray[monthArray.length - 1]?.month;
-    const lastYear = monthArray[monthArray.length - 1]?.year;
-    const lastMonthDays = Calendar.getDaysInMonth(lastMonth, lastYear);
 
-    const monthAfterLastMonthDays =
-      lastMonth !== 0
-        ? Calendar.getDaysInMonth(lastMonth - 1, lastYear)
-        : Calendar.getDaysInMonth(11, lastYear - 1);
-
-    const firstDateOfFirstMonth = new Date(firstYear, firstMonth, 1).getDay();
-    const numberOfPreviousMonthDaysToDisplay =
-      firstDateOfFirstMonth !== 6 ? firstDateOfFirstMonth : 6;
-
-    const lastDateOfLastMonth = new Date(lastYear, lastMonth, lastMonthDays).getDay();
-    const numberOfNextMonthDaysToDisplay =
-      lastDateOfLastMonth !== 6 ? 6 - lastDateOfLastMonth : 0;
-
-    var mainDays = [];
-    for (let i = 0; i < monthArray.length; i++) {
-      for (
-        let j = 1;
-        j <= Calendar.getDaysInMonth(monthArray[i].month, monthArray[i].year);
-        j++
-      ) {
-        mainDays.push({ day: j });
-      }
-    }
-
-    var dayDataArray = [
-      ...Calendar.getDaysLastMonthToDisplay(
-        numberOfPreviousMonthDaysToDisplay,
-        monthAfterLastMonthDays
-      ),
-      ...mainDays,
-      ...Calendar.getDaysNextMonthToDisplay(numberOfNextMonthDaysToDisplay),
-    ];
-
+    const dayDataArray = Calendar.getAllDaysOfTheseMonths(monthArray);
     setWeeksArray(Calendar.breakUpDaysIntoWeeks(dayDataArray));
     setMonthDataArray(monthArray);
     setSingletonHasRun(true);
   }
 
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <AddButton
+          navigation={navigation}
+          destination="New Assignment"
+          propsToPass={{
+            weekCalendarFlatListRef: weekCalendarFlatListRef,
+            monthCalendarFlatListRef: monthCalendarFlatListRef,
+            monthDataArray: monthDataArray,
+            weeksArray: weeksArray,
+          }}
+        />
+      ),
+    });
+  });
+
   return (
     <View>
-      <SwipeView
+      <View style={styles.weekdayCalendarContainer}>
+        <WeekdayCalendar
+          weeksArray={weeksArray}
+          spaceBetweenPages={Calendar.spaceBetweenPages}
+          //monthCalendarFlatListRef={monthCalendarFlatListRef}
+          //weekCalendarFlatListRef={weekCalendarFlatListRef}
+          marginHorizontal={10}
+        />
+      </View>
+      {/* <SwipeView
         lowerHeight={100}
         upperHeight={350}
         lowerComponent={
@@ -99,11 +78,18 @@ const CalendarScreen = () => {
             weekCalendarFlatListRef={weekCalendarFlatListRef}
           />
         }
-      />
+      /> */}
     </View>
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  weekdayCalendarContainer: {
+    height: 100,
+    backgroundColor: "white",
+    ...Colors.shadow,
+    borderRadius: 10,
+  },
+});
 
 export default CalendarScreen;

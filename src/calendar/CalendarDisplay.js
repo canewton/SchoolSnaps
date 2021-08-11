@@ -9,9 +9,11 @@ const CalendarDisplay = ({
   spaceBetweenPages,
   monthCalendarFlatListRef,
   weekCalendarFlatListRef,
+  marginHorizontal,
 }) => {
   const [monthsArray, setMonthsArray] = useState([]);
   const [singletonHasRun, setSingletonHasRun] = useState(false);
+  const viewWidth = Dimensions.get("window").width - marginHorizontal * 2;
 
   var startingIndex = { value: 0 };
   const getMonthWeeksByMonthIndex = (monthIndex) => {
@@ -36,24 +38,24 @@ const CalendarDisplay = ({
   }
 
   return (
-    <View>
+    <View style={{ marginHorizontal: marginHorizontal }}>
       <FlatList
         data={monthDataArray}
         ref={monthCalendarFlatListRef}
         keyExtractor={(index) => index.month + "" + index.year}
         horizontal={true}
         decelerationRate={0}
-        snapToInterval={Calendar.viewWidth + spaceBetweenPages}
+        snapToInterval={viewWidth + spaceBetweenPages}
         snapToAlignment="start"
         showsHorizontalScrollIndicator={false}
         initialNumToRender={1}
-        windowSize={10}
+        windowSize={3}
         renderItem={({ item, index }) => {
           return (
             <View>
               <MonthToDisplay
                 style={{
-                  width: Calendar.viewWidth,
+                  width: viewWidth,
                   marginRight:
                     index === monthDataArray.length - 1 ? 0 : spaceBetweenPages,
                   justifyContent: "center",

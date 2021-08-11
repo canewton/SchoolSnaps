@@ -4,9 +4,9 @@ import { Entypo } from "@expo/vector-icons";
 import { Colors } from "../classes/Colors";
 
 //make a button that goes to the right of the header that adds a class
-const AddButton = ({ navigation, destination }) => {
+const AddButton = ({ navigation, destination, propsToPass }) => {
   return (
-    <TouchableOpacity onPress={() => navigation.push(destination)}>
+    <TouchableOpacity onPress={() => navigation.push(destination, propsToPass)}>
       <View
         style={{
           marginRight: 20,

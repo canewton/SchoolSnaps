@@ -8,8 +8,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { ClassIcons } from "../icons/ClassIcons";
 import { Colors } from "../classes/Colors";
+import { Calendar } from "../classes/Calendar";
 import { Context as ClassesContext } from "../context/ClassesContext";
 import HorizontalScrollPicker from "./HorizontalScrollPicker";
 import { AssignmentTypeIcons } from "../icons/AssignmentTypeIcons";
@@ -17,7 +17,7 @@ import AccordionListItem from "./AccordianListItem";
 import CalendarDisplay from "../calendar/CalendarDisplay";
 import HeaderButton from "./HeaderButton";
 
-const AssignmentForm = ({ onSubmit, initialValues }) => {
+const AssignmentForm = ({ onSubmit, initialValues, calendarData }) => {
   const classes = useContext(ClassesContext);
 
   //set default values
@@ -101,7 +101,16 @@ const AssignmentForm = ({ onSubmit, initialValues }) => {
           pickedItem={date.getMonth()}
           open={calendarIsOpen}
           setOpen={setCalendarIsOpen}
-        ></AccordionListItem>
+        >
+          <CalendarDisplay
+            weeksArray={calendarData.weeksArray}
+            monthDataArray={calendarData.monthDataArray}
+            spaceBetweenPages={Calendar.spaceBetweenPages}
+            marginHorizontal={10}
+            //monthCalendarFlatListRef={calendarData.monthCalendarFlatListRef}
+            //weekCalendarFlatListRef={calendarData.weekCalendarFlatListRef}
+          />
+        </AccordionListItem>
       </ScrollView>
     </View>
   );

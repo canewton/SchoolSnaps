@@ -1,6 +1,10 @@
 import { Dimensions } from "react-native";
 
 export class Calendar {
+  static currentDate = new Date().getDate();
+  static currentMonth = new Date().getMonth();
+  static currentYear = new Date().getFullYear();
+  static numberOfFutureMonthsToDisplay = 12;
   static spaceBetweenPages = 20;
   static viewWidth = Dimensions.get("window").width;
   static monthNames = [
@@ -66,26 +70,46 @@ export class Calendar {
     return daysNextMonthArray;
   }
 
-  static getDayDataArray(month, year) {
-    const daysThisMonth = this.getDaysInMonth(month, year);
-    const daysLastMonth =
-      month !== 0
-        ? this.getDaysInMonth(month - 1, year)
-        : this.getDaysInMonth(11, year - 1);
+  static getAllDaysOfTheseMonths(monthArray) {
+    const firstMonth = monthArray[0]?.month;
+    const firstYear = monthArray[0]?.year;
+    const lastMonth = monthArray[monthArray.length - 1]?.month;
+    const lastYear = monthArray[monthArray.length - 1]?.year;
+    const lastMonthDays = this.getDaysInMonth(lastMonth, lastYear);
 
-    const firstDayOfCurrentMonthInWeek = new Date(year, month, 1).getDay();
-    const daysLastMonthToDisplay =
-      firstDayOfCurrentMonthInWeek !== 6 ? firstDayOfCurrentMonthInWeek : 6;
+    const monthAfterLastMonthDays =
+      lastMonth !== 0
+        ? this.getDaysInMonth(lastMonth - 1, lastYear)
+        : this.getDaysInMonth(11, lastYear - 1);
 
-    const lastDayOfCurrentMonthInWeek = new Date(year, month, daysThisMonth).getDay();
-    const daysNextMonthToDisplay =
-      lastDayOfCurrentMonthInWeek !== 6 ? 6 - lastDayOfCurrentMonthInWeek : 0;
+    const firstDateOfFirstMonth = new Date(firstYear, firstMonth, 1).getDay();
+    const numberOfPreviousMonthDaysToDisplay =
+      firstDateOfFirstMonth !== 6 ? firstDateOfFirstMonth : 6;
+
+    const lastDateOfLastMonth = new Date(lastYear, lastMonth, lastMonthDays).getDay();
+    const numberOfNextMonthDaysToDisplay =
+      lastDateOfLastMonth !== 6 ? 6 - lastDateOfLastMonth : 0;
+
+    var mainDays = [];
+    for (let i = 0; i < monthArray.length; i++) {
+      for (
+        let j = 1;
+        j <= this.getDaysInMonth(monthArray[i].month, monthArray[i].year);
+        j++
+      ) {
+        mainDays.push({ day: j });
+      }
+    }
 
     var dayDataArray = [
-      ...this.getDaysLastMonthToDisplay(daysLastMonthToDisplay, daysLastMonth),
-      ...this.getDaysThisMonthToDisplay(daysThisMonth),
-      ...this.getDaysNextMonthToDisplay(daysNextMonthToDisplay),
+      ...this.getDaysLastMonthToDisplay(
+        numberOfPreviousMonthDaysToDisplay,
+        monthAfterLastMonthDays
+      ),
+      ...mainDays,
+      ...this.getDaysNextMonthToDisplay(numberOfNextMonthDaysToDisplay),
     ];
+
     return dayDataArray;
   }
 

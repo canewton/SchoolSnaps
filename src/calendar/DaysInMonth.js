@@ -12,7 +12,7 @@ const DaysInMonth = (props) => {
       id: "Selected Date",
       dateObject: dateObject,
     });
-    props.weekCalendarFlatListRef.current.scrollToIndex({
+    props.weekCalendarFlatListRef?.current.scrollToIndex({
       index: dateObject.weekIndex,
       animated: false,
     });

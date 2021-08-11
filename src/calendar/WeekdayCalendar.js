@@ -17,8 +17,10 @@ const WeekdayCalendar = ({
   spaceBetweenPages,
   weekCalendarFlatListRef,
   monthCalendarFlatListRef,
+  marginHorizontal,
 }) => {
   const specialDates = useContext(CalendarContext);
+  const viewWidth = Dimensions.get("window").width - marginHorizontal * 2;
 
   const DayInWeekButton = ({ weekday, dateObject }) => {
     const currentCalendarDayIndex = specialDates.state[0].dateObject.calendarDayIndex;
@@ -28,7 +30,7 @@ const WeekdayCalendar = ({
         id: "Selected Date",
         dateObject: dateObject,
       });
-      monthCalendarFlatListRef.current.scrollToIndex({
+      monthCalendarFlatListRef?.current.scrollToIndex({
         index: dateObject.monthIndex,
         animated: false,
       });
@@ -63,7 +65,7 @@ const WeekdayCalendar = ({
   const renderItem = useCallback(({ item, index }) => (
     <View
       style={{
-        width: Calendar.viewWidth,
+        width: viewWidth,
         marginRight: index === weeksArray.length - 1 ? 0 : spaceBetweenPages,
         flexDirection: "row",
         paddingHorizontal: 10,
@@ -92,13 +94,13 @@ const WeekdayCalendar = ({
   });
 
   const getItemLayout = useCallback((data, index) => ({
-    length: Calendar.viewWidth + spaceBetweenPages,
-    offset: (Calendar.viewWidth + spaceBetweenPages) * index,
+    length: viewWidth + spaceBetweenPages,
+    offset: (viewWidth + spaceBetweenPages) * index,
     index,
   }));
 
   return (
-    <View style={{ height: 90 }}>
+    <View style={{ height: 90, marginHorizontal: marginHorizontal }}>
       {/* <Button
         title="scroll"
         onPress={() => weekCalendarFlatListRef.current.scrollToIndex({ index: 3 })}
@@ -113,7 +115,7 @@ const WeekdayCalendar = ({
         initialScrollIndex={specialDates.state[0].dateObject.weekIndex}
         horizontal={true}
         decelerationRate={0}
-        snapToInterval={Calendar.viewWidth + spaceBetweenPages}
+        snapToInterval={viewWidth + spaceBetweenPages}
         snapToAlignment="start"
         showsHorizontalScrollIndicator={false}
         initialNumToRender={5}
