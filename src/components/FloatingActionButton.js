@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { GeneralIcons } from "../icons/GeneralIcons";
 import {
   Menu,
@@ -10,8 +10,9 @@ import {
 } from "react-native-popup-menu";
 import { Colors } from "../classes/Colors";
 
-const circleDiameter = 60;
-const circleRadius = circleDiameter / 2;
+const buttonHeight = 56;
+const buttonBorderRadius = buttonHeight / 2;
+const buttonWidth = 220;
 
 const FloatingActionButton = ({
   schoolClass,
@@ -19,43 +20,52 @@ const FloatingActionButton = ({
   onPressNote,
   onPressTask,
 }) => {
+  const Button = ({ color }) => {
+    return (
+      <View
+        style={{
+          height: buttonHeight,
+          width: buttonWidth,
+          borderRadius: buttonBorderRadius,
+          backgroundColor: "white",
+          alignItems: "center",
+          ...Colors.shadow,
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
+        <TouchableOpacity
+          style={{ flexDirection: "row", alignItems: "center", marginLeft: 15 }}
+          onPress={() => onPressPhoto()}
+        >
+          {GeneralIcons.findIcon("Plus", 28, color)}
+          <Text style={{ fontSize: 18, color: color, marginHorizontal: 5 }}>
+            New Photo
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            paddingLeft: 12,
+            backgroundColor: "#fafafa",
+            width: "25%",
+            height: buttonHeight,
+            justifyContent: "center",
+            borderTopRightRadius: buttonBorderRadius,
+            borderBottomRightRadius: buttonBorderRadius,
+          }}
+          onPress={() => onPressNote()}
+        >
+          {GeneralIcons.findIcon("Add Note", 28, color)}
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   return (
     <View style={styles.buttonContainer}>
       <View style={styles.buttonPosition}>
-        <Menu
-          style={{}}
-          renderer={renderers.Popover}
-          rendererProps={{ anchorStyle: styles.anchorStyle, placement: "top" }}
-        >
-          <MenuTrigger
-            children={<Button color={schoolClass.primaryColor} />}
-            customStyles={triggerStyles}
-          />
-          <MenuOptions customStyles={optionStyles}>
-            <MenuOption text="Photo" onSelect={() => onPressPhoto()} />
-            <MenuOption text="Note" onSelect={() => onPressNote()} />
-            <MenuOption text="Task" onSelect={() => onPressTask()} />
-          </MenuOptions>
-        </Menu>
+        <Button color={schoolClass.primaryColor} />
       </View>
-    </View>
-  );
-};
-
-const Button = ({ color }) => {
-  return (
-    <View
-      style={{
-        height: circleDiameter,
-        width: circleDiameter,
-        borderRadius: circleRadius,
-        backgroundColor: "white",
-        alignItems: "center",
-        justifyContent: "center",
-        ...Colors.shadow,
-      }}
-    >
-      {GeneralIcons.findIcon("Plus", 34, color)}
     </View>
   );
 };
@@ -92,7 +102,7 @@ const triggerStyles = {
 };
 
 const styles = StyleSheet.create({
-  buttonContainer: { width: circleDiameter, alignSelf: "center" },
+  buttonContainer: { width: buttonWidth, alignSelf: "center" },
   buttonPosition: { position: "absolute", bottom: 80 },
   anchorStyle: {
     backgroundColor: "white",

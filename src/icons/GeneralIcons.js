@@ -15,7 +15,7 @@ export class GeneralIcons extends IconsList {
   static iconList(iconSize, iconColor) {
     return [
       {
-        icon: <Feather name="camera" size={iconSize} color={iconColor} />,
+        icon: <FontAwesome name="camera" size={iconSize} color={iconColor} />,
         name: "Camera",
       },
       {
@@ -127,6 +127,10 @@ export class GeneralIcons extends IconsList {
       {
         icon: <Ionicons name="document" size={iconSize} color={iconColor} />,
         name: "Document",
+      },
+      {
+        icon: <MaterialIcons name="post-add" size={iconSize} color={iconColor} />,
+        name: "Add Note",
       },
     ];
   }
