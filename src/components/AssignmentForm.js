@@ -55,7 +55,7 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData }) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView style={{ flex: 1 }}>
+      <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
         <View style={styles.textInputContainer}>
           <Text style={styles.textInputLabel}>{"Title: "}</Text>
           <TextInput
@@ -102,15 +102,17 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData }) => {
           open={calendarIsOpen}
           setOpen={setCalendarIsOpen}
         >
-          <CalendarDisplay
-            weeksArray={calendarData.weeksArray}
-            monthDataArray={calendarData.monthDataArray}
-            spaceBetweenPages={Calendar.spaceBetweenPages}
-            marginHorizontal={10}
-            //monthCalendarFlatListRef={calendarData.monthCalendarFlatListRef}
-            //weekCalendarFlatListRef={calendarData.weekCalendarFlatListRef}
-          />
+          <View style={{ marginBottom: 25 }}>
+            <CalendarDisplay
+              weeksArray={calendarData.weeksArray}
+              monthDataArray={calendarData.monthDataArray}
+              spaceBetweenPages={Calendar.spaceBetweenPages}
+              //monthCalendarFlatListRef={calendarData.monthCalendarFlatListRef}
+              //weekCalendarFlatListRef={calendarData.weekCalendarFlatListRef}
+            />
+          </View>
         </AccordionListItem>
+        <View style={{ marginBottom: 50 }} />
       </ScrollView>
     </View>
   );

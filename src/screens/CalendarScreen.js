@@ -58,27 +58,6 @@ const CalendarScreen = () => {
           marginHorizontal={10}
         />
       </View>
-      {/* <SwipeView
-        lowerHeight={100}
-        upperHeight={350}
-        lowerComponent={
-          <WeekdayCalendar
-            weeksArray={weeksArray}
-            spaceBetweenPages={Calendar.spaceBetweenPages}
-            monthCalendarFlatListRef={monthCalendarFlatListRef}
-            weekCalendarFlatListRef={weekCalendarFlatListRef}
-          />
-        }
-        upperComponent={
-          <CalendarDisplay
-            weeksArray={weeksArray}
-            monthDataArray={monthDataArray}
-            spaceBetweenPages={Calendar.spaceBetweenPages}
-            monthCalendarFlatListRef={monthCalendarFlatListRef}
-            weekCalendarFlatListRef={weekCalendarFlatListRef}
-          />
-        }
-      /> */}
     </View>
   );
 };
@@ -88,7 +67,8 @@ const styles = StyleSheet.create({
     height: 100,
     backgroundColor: "white",
     ...Colors.shadow,
-    borderRadius: 10,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
   },
 });
 

@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { View, Text, StyleSheet, Dimensions, FlatList } from "react-native";
 import MonthToDisplay from "./MonthToDisplay";
 import { Calendar } from "../classes/Calendar";
+import { render } from "react-dom";
 
 const CalendarDisplay = ({
   weeksArray,
@@ -9,11 +10,10 @@ const CalendarDisplay = ({
   spaceBetweenPages,
   monthCalendarFlatListRef,
   weekCalendarFlatListRef,
-  marginHorizontal,
 }) => {
   const [monthsArray, setMonthsArray] = useState([]);
   const [singletonHasRun, setSingletonHasRun] = useState(false);
-  const viewWidth = Dimensions.get("window").width - marginHorizontal * 2;
+  const [viewWidth, setViewWidth] = useState(Dimensions.get("window").width);
 
   var startingIndex = { value: 0 };
   const getMonthWeeksByMonthIndex = (monthIndex) => {
@@ -37,12 +37,45 @@ const CalendarDisplay = ({
     setSingletonHasRun(true);
   }
 
+  const renderItem = useCallback(({ item, index }) => {
+    return (
+      <View>
+        <MonthToDisplay
+          style={{
+            width: viewWidth,
+            marginRight: index === monthDataArray.length - 1 ? 0 : spaceBetweenPages,
+            justifyContent: "center",
+          }}
+          monthDaysArray={monthsArray[index]}
+          monthData={item}
+          weekCalendarFlatListRef={weekCalendarFlatListRef}
+          monthIndex={index}
+        />
+      </View>
+    );
+  });
+
+  const keyExtractor = useCallback((index) => index.month + "" + index.year);
+
+  const getItemLayout = useCallback((data, index) => ({
+    length: viewWidth + spaceBetweenPages,
+    offset: (viewWidth + spaceBetweenPages) * index,
+    index,
+  }));
+
   return (
-    <View style={{ marginHorizontal: marginHorizontal }}>
+    <View
+      style={{ height: 350 }}
+      onLayout={(event) => {
+        setViewWidth(event.nativeEvent.layout.width);
+      }}
+    >
       <FlatList
         data={monthDataArray}
         ref={monthCalendarFlatListRef}
-        keyExtractor={(index) => index.month + "" + index.year}
+        keyExtractor={keyExtractor}
+        renderItem={renderItem}
+        getItemLayout={getItemLayout}
         horizontal={true}
         decelerationRate={0}
         snapToInterval={viewWidth + spaceBetweenPages}
@@ -50,24 +83,6 @@ const CalendarDisplay = ({
         showsHorizontalScrollIndicator={false}
         initialNumToRender={1}
         windowSize={3}
-        renderItem={({ item, index }) => {
-          return (
-            <View>
-              <MonthToDisplay
-                style={{
-                  width: viewWidth,
-                  marginRight:
-                    index === monthDataArray.length - 1 ? 0 : spaceBetweenPages,
-                  justifyContent: "center",
-                }}
-                monthDaysArray={monthsArray[index]}
-                monthData={item}
-                weekCalendarFlatListRef={weekCalendarFlatListRef}
-                monthIndex={index}
-              />
-            </View>
-          );
-        }}
       />
     </View>
   );

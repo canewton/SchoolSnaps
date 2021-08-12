@@ -111,7 +111,6 @@ const WeekdayCalendar = ({
         getItemLayout={getItemLayout}
         renderItem={renderItem}
         ref={weekCalendarFlatListRef}
-        scrollEnabled={false}
         initialScrollIndex={specialDates.state[0].dateObject.weekIndex}
         horizontal={true}
         decelerationRate={0}

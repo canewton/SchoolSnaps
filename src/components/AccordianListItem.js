@@ -8,9 +8,9 @@ import {
   Easing,
 } from "react-native";
 
-const AccordionListItem = ({ title, children, pickedItem, open, setOpen }) => {
+const AccordionListItem = ({ title, children, pickedItem, open, setOpen, height }) => {
   const animatedController = useRef(new Animated.Value(1)).current;
-  const [bodySectionHeight, setBodySectionHeight] = useState();
+  const [bodySectionHeight, setBodySectionHeight] = useState(height);
 
   const bodyHeight = animatedController.interpolate({
     inputRange: [0, 1],
@@ -63,7 +63,11 @@ const AccordionListItem = ({ title, children, pickedItem, open, setOpen }) => {
       <Animated.View style={[styles.bodyBackground, { height: bodyHeight }]}>
         <View
           style={styles.bodyContainer}
-          onLayout={(event) => setBodySectionHeight(event.nativeEvent.layout.height)}
+          onLayout={(event) => {
+            if (height === undefined || height === null) {
+              setBodySectionHeight(event.nativeEvent.layout.height);
+            }
+          }}
         >
           {children}
         </View>
