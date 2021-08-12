@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableHighlight } from "react-native";
 import { Colors } from "../classes/Colors";
 import { Context as CalendarContext } from "../context/CalendarContext";
 
-const DaysInMonth = (props) => {
+const DaysInMonth = ({ onPressCallback, monthIndex, monthDaysArray }) => {
   const specialDates = useContext(CalendarContext);
   const currentCalendarDayIndex = specialDates.state[0].dateObject.calendarDayIndex;
 
@@ -12,18 +12,15 @@ const DaysInMonth = (props) => {
       id: "Selected Date",
       dateObject: dateObject,
     });
-    props.weekCalendarFlatListRef?.current.scrollToIndex({
-      index: dateObject.weekIndex,
-      animated: false,
-    });
+    onPressCallback(dateObject);
   };
 
   return (
     <>
-      {props.monthDaysArray?.map((rowData, index) => (
+      {monthDaysArray?.map((rowData, index) => (
         <View style={{ flexDirection: "row" }} key={"calendar row " + index}>
           {rowData.map((data) => {
-            if (props.monthIndex === data.monthIndex) {
+            if (monthIndex === data.monthIndex) {
               /* day holder that is of the displayed month */
               return (
                 <TouchableHighlight

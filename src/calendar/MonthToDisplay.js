@@ -4,15 +4,19 @@ import DaysInMonth from "./DaysInMonth";
 import { Calendar } from "../classes/Calendar";
 import { Colors } from "../classes/Colors";
 
-const MonthToDisplay = (props) => {
+const MonthToDisplay = ({
+  style,
+  monthDaysArray,
+  monthIndex,
+  onPressCallback,
+  monthData,
+}) => {
   return (
-    <View style={props.style}>
+    <View style={style}>
       <View style={styles.calendarMonthContainer}>
         <View style={styles.monthNameContainer}>
-          <Text style={styles.monthNameText}>
-            {Calendar.monthNames[props.monthData.month]}
-          </Text>
-          <Text style={styles.yearText}>{props.monthData.year}</Text>
+          <Text style={styles.monthNameText}>{Calendar.monthNames[monthData.month]}</Text>
+          <Text style={styles.yearText}>{monthData.year}</Text>
         </View>
 
         <View style={styles.daysInWeekContainer}>
@@ -26,9 +30,9 @@ const MonthToDisplay = (props) => {
         </View>
 
         <DaysInMonth
-          monthDaysArray={props.monthDaysArray}
-          monthIndex={props.monthIndex}
-          weekCalendarFlatListRef={props.weekCalendarFlatListRef}
+          monthDaysArray={monthDaysArray}
+          monthIndex={monthIndex}
+          onPressCallback={onPressCallback}
         />
       </View>
     </View>

@@ -28,7 +28,7 @@ const AccordionListItem = ({ title, children, pickedItem, open, setOpen, height 
 
   const closeListItem = () => {
     Animated.timing(animatedController, {
-      duration: 300,
+      duration: 600,
       toValue: 0,
       useNativeDriver: false,
       easing: Easing.bezier(0.4, 0.0, 0.2, 1),
@@ -37,7 +37,7 @@ const AccordionListItem = ({ title, children, pickedItem, open, setOpen, height 
 
   const openListItem = () => {
     Animated.timing(animatedController, {
-      duration: 300,
+      duration: 600,
       toValue: 1,
       useNativeDriver: false,
       easing: Easing.bezier(0.4, 0.0, 0.2, 1),

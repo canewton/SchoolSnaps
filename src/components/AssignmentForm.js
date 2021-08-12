@@ -1,14 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, StyleSheet, ScrollView, TextInput } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Colors } from "../classes/Colors";
 import { Calendar } from "../classes/Calendar";
 import { Context as ClassesContext } from "../context/ClassesContext";
 import HorizontalScrollPicker from "./HorizontalScrollPicker";
@@ -98,7 +90,13 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData }) => {
         </AccordionListItem>
         <AccordionListItem
           title="Date:  "
-          pickedItem={date.getMonth()}
+          pickedItem={
+            Calendar.monthNames[date.getMonth()] +
+            " " +
+            date.getDate() +
+            ", " +
+            date.getFullYear()
+          }
           open={calendarIsOpen}
           setOpen={setCalendarIsOpen}
         >
@@ -107,8 +105,20 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData }) => {
               weeksArray={calendarData.weeksArray}
               monthDataArray={calendarData.monthDataArray}
               spaceBetweenPages={Calendar.spaceBetweenPages}
-              //monthCalendarFlatListRef={calendarData.monthCalendarFlatListRef}
-              //weekCalendarFlatListRef={calendarData.weekCalendarFlatListRef}
+              onPressCallback={(pickedItem) => {
+                const monthIndexOfSelectedDate = pickedItem.monthIndex;
+                const selectedDate = pickedItem.day;
+                const monthOfSelectedDate =
+                  calendarData.monthDataArray[monthIndexOfSelectedDate].month + 1;
+                const yearOfSelectedDate =
+                  calendarData.monthDataArray[monthIndexOfSelectedDate].year;
+                setDate(
+                  new Date(
+                    monthOfSelectedDate + "/" + selectedDate + "/" + yearOfSelectedDate
+                  )
+                );
+                setCalendarIsOpen(false);
+              }}
             />
           </View>
         </AccordionListItem>

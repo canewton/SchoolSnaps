@@ -12,8 +12,6 @@ const AssignmentAddScreen = ({ navigation, route }) => {
         calendarData={{
           weeksArray: route.params.weeksArray,
           monthDataArray: route.params.monthDataArray,
-          monthCalendarFlatListRef: route.params.monthCalendarFlatListRef,
-          weekCalendarFlatListRef: route.params.weekCalendarFlatListRef,
         }}
         /* onSubmit={(schoolClass) => {
           classes.add(schoolClass);

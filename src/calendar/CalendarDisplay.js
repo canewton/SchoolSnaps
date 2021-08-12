@@ -8,8 +8,7 @@ const CalendarDisplay = ({
   weeksArray,
   monthDataArray,
   spaceBetweenPages,
-  monthCalendarFlatListRef,
-  weekCalendarFlatListRef,
+  onPressCallback,
 }) => {
   const [monthsArray, setMonthsArray] = useState([]);
   const [singletonHasRun, setSingletonHasRun] = useState(false);
@@ -48,8 +47,8 @@ const CalendarDisplay = ({
           }}
           monthDaysArray={monthsArray[index]}
           monthData={item}
-          weekCalendarFlatListRef={weekCalendarFlatListRef}
           monthIndex={index}
+          onPressCallback={onPressCallback}
         />
       </View>
     );
@@ -72,7 +71,6 @@ const CalendarDisplay = ({
     >
       <FlatList
         data={monthDataArray}
-        ref={monthCalendarFlatListRef}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
         getItemLayout={getItemLayout}

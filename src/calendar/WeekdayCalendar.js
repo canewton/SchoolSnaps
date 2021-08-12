@@ -16,7 +16,6 @@ const WeekdayCalendar = ({
   weeksArray,
   spaceBetweenPages,
   weekCalendarFlatListRef,
-  monthCalendarFlatListRef,
   marginHorizontal,
 }) => {
   const specialDates = useContext(CalendarContext);
@@ -29,10 +28,6 @@ const WeekdayCalendar = ({
       specialDates.edit({
         id: "Selected Date",
         dateObject: dateObject,
-      });
-      monthCalendarFlatListRef?.current.scrollToIndex({
-        index: dateObject.monthIndex,
-        animated: false,
       });
     };
 

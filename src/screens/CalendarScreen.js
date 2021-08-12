@@ -37,8 +37,6 @@ const CalendarScreen = () => {
           navigation={navigation}
           destination="New Assignment"
           propsToPass={{
-            weekCalendarFlatListRef: weekCalendarFlatListRef,
-            monthCalendarFlatListRef: monthCalendarFlatListRef,
             monthDataArray: monthDataArray,
             weeksArray: weeksArray,
           }}
@@ -53,8 +51,7 @@ const CalendarScreen = () => {
         <WeekdayCalendar
           weeksArray={weeksArray}
           spaceBetweenPages={Calendar.spaceBetweenPages}
-          //monthCalendarFlatListRef={monthCalendarFlatListRef}
-          //weekCalendarFlatListRef={weekCalendarFlatListRef}
+          weekCalendarFlatListRef={weekCalendarFlatListRef}
           marginHorizontal={10}
         />
       </View>
