@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 import { View, StyleSheet } from "react-native";
 import AssignmentForm from "../components/AssignmentForm";
-import { Context as ClassesContext } from "../context/ClassesContext";
+import { Context as AssignmentsContext } from "../context/AssignmentsContext";
 
 const AssignmentAddScreen = ({ navigation, route }) => {
-  const classes = useContext(ClassesContext);
+  const assignments = useContext(AssignmentsContext);
   return (
     <View style={{ flex: 1 }}>
       <AssignmentForm
@@ -13,10 +13,10 @@ const AssignmentAddScreen = ({ navigation, route }) => {
           weeksArray: route.params.weeksArray,
           monthDataArray: route.params.monthDataArray,
         }}
-        /* onSubmit={(schoolClass) => {
-          classes.add(schoolClass);
+        onSubmit={(assignment) => {
+          assignments.add(assignment);
           navigation.pop();
-        }} */
+        }}
       />
     </View>
   );

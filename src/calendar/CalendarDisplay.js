@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { View, Text, StyleSheet, Dimensions, FlatList } from "react-native";
 import MonthToDisplay from "./MonthToDisplay";
-import { Calendar } from "../classes/Calendar";
-import { render } from "react-dom";
 
 const CalendarDisplay = ({
   weeksArray,

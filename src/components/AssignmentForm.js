@@ -8,6 +8,7 @@ import { AssignmentTypeIcons } from "../icons/AssignmentTypeIcons";
 import AccordionListItem from "./AccordianListItem";
 import CalendarDisplay from "../calendar/CalendarDisplay";
 import HeaderButton from "./HeaderButton";
+import { Assignment } from "../classes/Assignment";
 
 const AssignmentForm = ({ onSubmit, initialValues, calendarData }) => {
   const classes = useContext(ClassesContext);
@@ -31,6 +32,7 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData }) => {
       setTitle(initialValues.title);
       setSchoolClass(initialValues.schoolClass);
       setIconName(initialValues.iconName);
+      setDate(initialValues.date);
       setAttachedNotes(initialValues.attachedNotes);
     }
   }, []);
@@ -38,7 +40,14 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData }) => {
   //add a save and cancel button on either side of the header
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => <HeaderButton name="Save" onPressCallback={() => onSubmit()} />,
+      headerRight: () => (
+        <HeaderButton
+          name="Save"
+          onPressCallback={() =>
+            onSubmit(new Assignment(schoolClass, title, iconName, date, attachedNotes))
+          }
+        />
+      ),
       headerLeft: () => (
         <HeaderButton name="Cancel" onPressCallback={() => navigation.pop()} />
       ),

@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AddButton from "../components/AddButton";
-import CalendarDisplay from "../calendar/CalendarDisplay";
-import SwipeView from "../components/SwipeView";
 import WeekdayCalendar from "../calendar/WeekdayCalendar";
 import { Calendar } from "../classes/Calendar";
 import { Colors } from "../classes/Colors";
