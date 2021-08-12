@@ -1,8 +1,7 @@
-import { Note } from "./Note";
-
-export class Assignment extends Note {
-  constructor(schoolClass, title, iconName, date, attachedNotes) {
-    super(schoolClass);
+export class Assignment {
+  constructor(id, schoolClass, title, iconName, date, attachedNotes) {
+    this.id = id;
+    this.schoolClass = schoolClass;
     this.date = date;
     this.title = title;
     this.iconName = iconName;

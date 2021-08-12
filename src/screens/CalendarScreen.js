@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AddButton from "../components/AddButton";
 import WeekdayCalendar from "../calendar/WeekdayCalendar";
 import { Calendar } from "../classes/Calendar";
 import { Colors } from "../classes/Colors";
+import AssignmentsList from "../components/AssignmentsList";
+import { Context as AssignmentContext } from "../context/AssignmentsContext";
 
 const CalendarScreen = () => {
   const navigation = useNavigation();
@@ -14,6 +16,8 @@ const CalendarScreen = () => {
 
   const weekCalendarFlatListRef = React.useRef();
   const monthCalendarFlatListRef = React.useRef();
+
+  const assignments = useContext(AssignmentContext);
 
   if (!singletonHasRun) {
     const monthArray = Calendar.getFollowingMonths(
@@ -44,7 +48,7 @@ const CalendarScreen = () => {
   });
 
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <View style={styles.weekdayCalendarContainer}>
         <WeekdayCalendar
           weeksArray={weeksArray}
@@ -53,6 +57,11 @@ const CalendarScreen = () => {
           marginHorizontal={10}
         />
       </View>
+      <AssignmentsList
+        assignments={assignments.state}
+        monthDataArray={monthDataArray}
+        weeksArray={weeksArray}
+      />
     </View>
   );
 };

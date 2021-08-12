@@ -14,6 +14,7 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData }) => {
   const classes = useContext(ClassesContext);
 
   //set default values
+  const [id, setId] = useState(Date.now());
   const [title, setTitle] = useState("");
   const [schoolClass, setSchoolClass] = useState(classes.state[0]);
   const [iconName, setIconName] = useState(
@@ -29,10 +30,11 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData }) => {
 
   useEffect(() => {
     if (initialValues !== null) {
+      setId(initialValues.id);
       setTitle(initialValues.title);
       setSchoolClass(initialValues.schoolClass);
       setIconName(initialValues.iconName);
-      setDate(initialValues.date);
+      setDate(new Date(initialValues.date));
       setAttachedNotes(initialValues.attachedNotes);
     }
   }, []);
@@ -44,7 +46,16 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData }) => {
         <HeaderButton
           name="Save"
           onPressCallback={() =>
-            onSubmit(new Assignment(schoolClass, title, iconName, date, attachedNotes))
+            onSubmit(
+              new Assignment(
+                id,
+                schoolClass,
+                title,
+                iconName,
+                date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear(),
+                attachedNotes
+              )
+            )
           }
         />
       ),

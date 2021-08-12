@@ -13,6 +13,7 @@ import NotesEditScreen from "./src/screens/NotesEditScreen";
 import CameraSceen from "./src/screens/CameraScreen";
 import ClassesEditScreen from "./src/screens/ClassesEditScreen";
 import AssignmentAddScreen from "./src/screens/AssignmentAddScreen";
+import AssignmentEditScreen from "./src/screens/AssignmentEditScreen";
 
 import { BottomTabIcons } from "./src/icons/BottomTabIcons";
 import { Colors } from "./src/classes/Colors";
@@ -210,6 +211,11 @@ export default function App() {
                     <RootStack.Screen
                       name="New Assignment"
                       component={AssignmentAddScreen}
+                      options={formHeaderStyle}
+                    />
+                    <RootStack.Screen
+                      name="Edit Assignment"
+                      component={AssignmentEditScreen}
                       options={formHeaderStyle}
                     />
                     <RootStack.Screen
