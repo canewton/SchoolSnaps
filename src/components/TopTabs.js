@@ -12,6 +12,7 @@ const TopTabs = ({ tabButtons, callback }) => {
         backgroundColor: "white",
         borderBottomRightRadius: 10,
         borderBottomLeftRadius: 10,
+        height: 50,
         ...Colors.shadow,
       }}
     >

@@ -29,6 +29,10 @@ export class BottomTabIcons extends IconsList {
         icon: <SimpleLineIcons name="note" size={iconSize} color={iconColor} />,
         name: "Notes",
       },
+      {
+        icon: <Ionicons name="ios-settings-sharp" size={iconSize} color={iconColor} />,
+        name: "Settings",
+      },
     ];
   }
 }

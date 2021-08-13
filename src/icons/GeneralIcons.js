@@ -132,6 +132,16 @@ export class GeneralIcons extends IconsList {
         icon: <MaterialIcons name="post-add" size={iconSize} color={iconColor} />,
         name: "Add Note",
       },
+      {
+        icon: (
+          <MaterialCommunityIcons
+            name="account-circle"
+            size={iconSize}
+            color={iconColor}
+          />
+        ),
+        name: "Profile",
+      },
     ];
   }
 }

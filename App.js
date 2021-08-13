@@ -6,7 +6,7 @@ import { MenuProvider } from "react-native-popup-menu";
 
 import HomeScreen from "./src/screens/HomeScreen";
 import CalendarScreen from "./src/screens/CalendarScreen";
-import LibraryScreen from "./src/screens/LibraryScreen";
+import SettingsScreen from "./src/screens/SettingsScreen";
 import ClassesAddScreen from "./src/screens/ClassesAddScreen";
 import NotesScreen from "./src/screens/NotesScreen";
 import NotesEditScreen from "./src/screens/NotesEditScreen";
@@ -14,6 +14,8 @@ import CameraSceen from "./src/screens/CameraScreen";
 import ClassesEditScreen from "./src/screens/ClassesEditScreen";
 import AssignmentAddScreen from "./src/screens/AssignmentAddScreen";
 import AssignmentEditScreen from "./src/screens/AssignmentEditScreen";
+
+import ProfileHeader from "./src/components/ProfileHeader";
 
 import { BottomTabIcons } from "./src/icons/BottomTabIcons";
 import { Colors } from "./src/classes/Colors";
@@ -27,7 +29,7 @@ const RootStack = createStackNavigator();
 const MainStack = createStackNavigator();
 const HomeStack = createStackNavigator();
 const CalendarStack = createStackNavigator();
-const LibraryStack = createStackNavigator();
+const SettingsStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 //edit the default theme to customize the background color and header color
@@ -88,6 +90,18 @@ const formHeaderStyle = {
   },
 };
 
+const profileHeaderStyle = {
+  headerStyle: {
+    backgroundColor: "white",
+    ...Colors.shadow,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+    height: 160,
+  },
+  headerTitleAlign: "left",
+  headerTitle: () => <ProfileHeader textColor={Colors.primaryColor} />,
+};
+
 const HomeStackScreen = () => {
   return (
     <HomeStack.Navigator>
@@ -112,15 +126,15 @@ const CalendarStackScreen = () => {
   );
 };
 
-const LibraryStackScreen = () => {
+const SettingsStackScreen = () => {
   return (
-    <LibraryStack.Navigator>
-      <LibraryStack.Screen
+    <SettingsStack.Navigator>
+      <SettingsStack.Screen
         name="Library"
-        component={LibraryScreen}
-        options={{ ...invisibleHeaderStyle, title: "Sorted Notes" }}
+        component={SettingsScreen}
+        options={profileHeaderStyle}
       />
-    </LibraryStack.Navigator>
+    </SettingsStack.Navigator>
   );
 };
 
@@ -143,11 +157,11 @@ const TabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="Library"
-        component={LibraryStackScreen}
+        name="Settings"
+        component={SettingsStackScreen}
         options={{
           tabBarIcon: ({ color, size }) =>
-            BottomTabIcons.findIcon("Folders", size, color),
+            BottomTabIcons.findIcon("Settings", size, color),
         }}
       />
     </Tab.Navigator>
