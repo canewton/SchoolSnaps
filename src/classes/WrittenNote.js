@@ -1,8 +1,8 @@
 import { Note } from "./Note";
 
 export class WrittenNote extends Note {
-  constructor(schoolClass, title, content) {
-    super(schoolClass);
+  constructor(id, schoolClass, title, content) {
+    super(id, schoolClass);
     this.title = title;
     this.content = content;
   }

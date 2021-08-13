@@ -14,6 +14,7 @@ import { ClassIcons } from "../icons/ClassIcons";
 import { ItemArray } from "../classes/ItemArray";
 import { FontAwesome } from "@expo/vector-icons";
 import HeaderButton from "./HeaderButton";
+import { SchoolClass } from "../classes/SchoolClass";
 
 //get the width of the window
 const windowWidth = Dimensions.get("window").width;
@@ -31,6 +32,7 @@ const ClassForm = ({ onSubmit, initialValues }) => {
   const [name, setName] = useState("");
   const [primaryColor, setPrimaryColor] = useState(Colors.classColors[0].primaryColor);
   const [iconName, setIconName] = useState(ClassIcons.iconList(30, "white")[0].name);
+  const [status, setStatus] = useState("Current");
 
   const navigation = useNavigation();
 
@@ -40,6 +42,7 @@ const ClassForm = ({ onSubmit, initialValues }) => {
       setName(initialValues.name);
       setPrimaryColor(initialValues.primaryColor);
       setIconName(initialValues.iconName);
+      setStatus(initialValues.status);
     }
   }, []);
 
@@ -49,7 +52,9 @@ const ClassForm = ({ onSubmit, initialValues }) => {
       headerRight: () => (
         <HeaderButton
           name="Save"
-          onPressCallback={() => onSubmit({ id, name, primaryColor, iconName })}
+          onPressCallback={() =>
+            onSubmit(new SchoolClass(id, name, primaryColor, iconName, status))
+          }
         />
       ),
       headerLeft: () => (

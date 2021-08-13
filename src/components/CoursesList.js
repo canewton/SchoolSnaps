@@ -45,7 +45,7 @@ const CoursesList = ({ classes }) => {
                     {GeneralIcons.findIcon(
                       "Forward",
                       20,
-                      Colors.changeOpacity("#000000", 0.1)
+                      Colors.changeOpacity("#000000", 0.15)
                     )}
                   </View>
                 </View>

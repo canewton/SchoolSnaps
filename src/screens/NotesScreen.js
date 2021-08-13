@@ -93,7 +93,7 @@ const NotesScreen = ({ route }) => {
           schoolClass={schoolClass}
           onPressPhoto={() => navigation.navigate("Camera", schoolClass)}
           onPressNote={() => {
-            var note = new WrittenNote(schoolClass, "", "");
+            var note = new WrittenNote(Date.now(), schoolClass, "", "");
             notes.add(note);
             navigation.navigate("Edit Note", {
               notes: new Array(note),
@@ -180,7 +180,7 @@ const NotesScreen = ({ route }) => {
                   }
                 });
                 notes.add(
-                  new NoteGroup(schoolClass, [
+                  new NoteGroup(Date.now(), schoolClass, [
                     ...noteGroupArray,
                     ...selectedNotesArray.map((selectedNote) =>
                       ItemArray.find(notes.state, "id", selectedNote.id)

@@ -22,6 +22,8 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData }) => {
   );
   const [date, setDate] = useState(new Date());
   const [attachedNotes, setAttachedNotes] = useState([]);
+  const [completed, setCompleted] = useState(false);
+
   const [classIsOpen, setClassIsOpen] = useState(true);
   const [typeIsOpen, setTypeIsOpen] = useState(true);
   const [calendarIsOpen, setCalendarIsOpen] = useState(true);
@@ -35,6 +37,7 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData }) => {
       setSchoolClass(initialValues.schoolClass);
       setIconName(initialValues.iconName);
       setDate(new Date(initialValues.date));
+      setCompleted(initialValues.completed);
       setAttachedNotes(initialValues.attachedNotes);
     }
   }, []);
@@ -53,6 +56,7 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData }) => {
                 title,
                 iconName,
                 date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear(),
+                completed,
                 attachedNotes
               )
             )

@@ -1,8 +1,8 @@
 import { Note } from "./Note";
 
 export class NoteGroup extends Note {
-  constructor(schoolClass, notes) {
-    super(schoolClass);
+  constructor(id, schoolClass, notes) {
+    super(id, schoolClass);
     this.notes = notes;
   }
 

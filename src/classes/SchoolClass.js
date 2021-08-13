@@ -1,10 +1,10 @@
 export class SchoolClass {
-  constructor(id, name, primaryColor, iconName) {
+  constructor(id, name, primaryColor, iconName, status) {
     this.id = id;
     this.name = name;
     this.primaryColor = primaryColor;
     this.iconName = iconName;
-    this.status = "Current"; //status can equal "current" or "completed"
+    this.status = status; //status can equal "current" or "completed"
   }
 
   toString() {

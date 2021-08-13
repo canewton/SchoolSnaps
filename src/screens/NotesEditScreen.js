@@ -149,13 +149,13 @@ const NotesEditScreen = ({ route }) => {
         /* if the user adds a note to a singular note, turn the singular note into a note group
         if the user adds a note to a note group, edit the notes property of the note group */
         onPressNote={() => {
-          var note = new WrittenNote(initialValues.schoolClass, "", "");
+          var note = new WrittenNote(Date.now(), initialValues.schoolClass, "", "");
           if (initialValues instanceof NoteGroup) {
             notes.edit({ id: noteGroupID, notes: [...notesOnScreen, note] });
             setNotesOnScreen([...notesOnScreen, note]);
           } else {
             if (noteGroupID === null) {
-              var addedNoteGroup = new NoteGroup(initialValues.schoolClass, [
+              var addedNoteGroup = new NoteGroup(Date.now(), initialValues.schoolClass, [
                 ...notesOnScreen,
                 note,
               ]);

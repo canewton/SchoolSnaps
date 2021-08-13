@@ -1,8 +1,8 @@
 import { Note } from "./Note";
 
 export class ImageNote extends Note {
-  constructor(schoolClass, uri) {
-    super(schoolClass);
+  constructor(id, schoolClass, uri) {
+    super(id, schoolClass);
     this.uri = uri;
   }
 
