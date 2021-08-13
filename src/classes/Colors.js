@@ -15,104 +15,108 @@ export class Colors {
     elevation: 1,
   };
 
+  static changeOpacity(color, opacity) {
+    return color + Math.round(opacity * 255).toString(16);
+  }
+
   static classColors = [
     {
       //dark red
-      primaryColor: "#9d0208",
-      secondaryColor: "#9d0208",
+      //primaryColor: "#9d0208",
+      primaryColor: "#b13439",
     },
     {
       //default 1
       //red
-      primaryColor: "#E63946",
-      secondaryColor: "#E63946",
+      //primaryColor: "#E63946",
+      primaryColor: "#eb606b",
     },
     {
       //pink
-      primaryColor: "#ff7096",
-      secondaryColor: "#ff7096",
+      //primaryColor: "#ff7096",
+      primaryColor: "#ff8cab",
     },
     {
       //salmon
-      primaryColor: "#ffb5a7",
-      secondaryColor: "#ffb5a7",
+      //primaryColor: "#ffb5a7",
+      primaryColor: "#ffc4b9",
     },
     {
       //dark orange
-      primaryColor: "#cc5803",
-      secondaryColor: "#cc5803",
+      //primaryColor: "#cc5803",
+      primaryColor: "#d77935",
     },
     {
       //default 5
       //orange
-      primaryColor: "#F8961E",
-      secondaryColor: "#F8961E",
+      //primaryColor: "#F8961E",
+      primaryColor: "#faab4b",
     },
     {
       //default 6
       //yellow
-      primaryColor: "#ffd933",
-      secondaryColor: "#ffd933",
+      //primaryColor: "#ffd933",
+      primaryColor: "#ffe15c",
     },
     {
       //default 7
       //green
-      primaryColor: "#80b918",
-      secondaryColor: "#80b918",
+      //primaryColor: "#80b918",
+      primaryColor: "#9ac746",
     },
     {
       //dark green
-      primaryColor: "#606c38",
-      secondaryColor: "#606c38",
+      //primaryColor: "#606c38",
+      primaryColor: "#7f8940",
     },
     {
       //default 9
       //turquoise
-      primaryColor: "#43AA8B",
-      secondaryColor: "#43AA8B",
+      //primaryColor: "#43AA8B",
+      primaryColor: "#68bba2",
     },
     {
       //default 10
       //blue
-      primaryColor: "#277DA1",
-      secondaryColor: "#277DA1",
+      //primaryColor: "#277DA1",
+      primaryColor: "#5297b4",
     },
     {
       //dark blue
-      primaryColor: "#004e98",
-      secondaryColor: "#004e98",
+      //primaryColor: "#004e98",
+      primaryColor: "#3271ad",
     },
     {
       //default 12
       //purple
-      primaryColor: "#9673A6",
-      secondaryColor: "#9673A6",
+      //primaryColor: "#9673A6",
+      primaryColor: "#aa8fb8",
     },
     {
       //dark purple
-      primaryColor: "#6a4c93",
-      secondaryColor: "#6a4c93",
+      //primaryColor: "#6a4c93",
+      primaryColor: "#8870a9",
     },
     {
       //brown
-      primaryColor: "#cb997e",
-      secondaryColor: "#cb997e",
+      //primaryColor: "#cb997e",
+      primaryColor: "#d5ae98",
     },
     {
       //dark brown
-      primaryColor: "#734500",
-      secondaryColor: "#734500",
+      //primaryColor: "#734500",
+      primaryColor: "#8f6a33",
     },
     {
       //gray
-      primaryColor: "#b1a7a6",
-      secondaryColor: "#b1a7a6",
+      //primaryColor: "#b1a7a6",
+      primaryColor: "#c0b9b8",
     },
     {
       //default 17
       //black
-      primaryColor: "#23445D",
-      secondaryColor: "#23445D",
+      //primaryColor: "#23445D",
+      primaryColor: "#4f697d",
     },
   ];
 

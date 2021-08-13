@@ -15,8 +15,10 @@ const WrittenNoteForm = ({ onChange, initialValues, editable, opacity }) => {
     <View
       style={{
         ...styles.noteContainer,
-        backgroundColor:
-          initialValues.schoolClass.primaryColor + Math.round(opacity * 255).toString(16),
+        backgroundColor: Colors.changeOpacity(
+          initialValues.schoolClass.primaryColor,
+          opacity
+        ),
       }}
     >
       {editable && (

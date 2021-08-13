@@ -38,14 +38,13 @@ const AssignmentsList = ({ assignments, weeksArray, monthDataArray }) => {
                 }
                 style={{
                   ...styles.button,
-                  backgroundColor:
-                    item.schoolClass.primaryColor + Math.round(0.78 * 255).toString(16),
+                  backgroundColor: item.schoolClass.primaryColor,
                 }}
               >
                 <View
                   style={{
                     ...styles.classIconContainer,
-                    backgroundColor: "#000000" + Math.round(0.1 * 255).toString(16),
+                    backgroundColor: Colors.changeOpacity("#000000", 0.1),
                   }}
                 >
                   {AssignmentTypeIcons.findIcon(item.iconName, 30, "white")}

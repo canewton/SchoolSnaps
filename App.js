@@ -84,13 +84,7 @@ const invisibleHeaderStyle = {
 const formHeaderStyle = {
   headerStyle: {
     backgroundColor: "white",
-    shadowColor: "transparent",
-  },
-};
-
-const visibleHeaderStyle = {
-  headerStyle: {
-    shadowColor: "transparent",
+    ...Colors.shadow,
   },
 };
 
@@ -172,7 +166,10 @@ const MainStackScreen = () => {
         name="Notes"
         component={NotesScreen}
         options={({ route }) => ({
-          ...visibleHeaderStyle,
+          headerStyle: {
+            backgroundColor: "white",
+            ...Colors.shadow,
+          },
           title: route.params.name,
           headerTitleStyle: {
             color: route.params.primaryColor,

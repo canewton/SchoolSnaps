@@ -26,14 +26,13 @@ const CoursesList = ({ classes }) => {
                 <View
                   style={{
                     ...styles.classButton,
-                    backgroundColor:
-                      item.primaryColor + Math.round(0.78 * 255).toString(16),
+                    backgroundColor: item.primaryColor,
                   }}
                 >
                   <View
                     style={{
                       ...styles.classIconContainer,
-                      backgroundColor: "#000000" + Math.round(0.1 * 255).toString(16),
+                      backgroundColor: Colors.changeOpacity("#000000", 0.1),
                     }}
                   >
                     {ClassIcons.findIcon(item.iconName, 30, "white")}
@@ -46,7 +45,7 @@ const CoursesList = ({ classes }) => {
                     {GeneralIcons.findIcon(
                       "Forward",
                       20,
-                      "#000000" + Math.round(0.2 * 255).toString(16)
+                      Colors.changeOpacity("#000000", 0.1)
                     )}
                   </View>
                 </View>

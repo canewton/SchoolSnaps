@@ -83,7 +83,12 @@ const ClassForm = ({ onSubmit, initialValues }) => {
                   setPrimaryColor(item.primaryColor);
                 }}
               >
-                <View style={{ ...styles.color, backgroundColor: item.primaryColor }}>
+                <View
+                  style={{
+                    ...styles.color,
+                    backgroundColor: item.primaryColor,
+                  }}
+                >
                   {/* if this is the color that the user selects, put a checkmark on it */}
                   {primaryColor === item.primaryColor && (
                     <FontAwesome name="check" size={28} color="white" />
