@@ -142,6 +142,10 @@ export class GeneralIcons extends IconsList {
         ),
         name: "Profile",
       },
+      {
+        icon: <Entypo name="check" size={iconSize} color={iconColor} />,
+        name: "Check",
+      },
     ];
   }
 }
