@@ -6,6 +6,7 @@ export class Colors {
   static tabBackgroundColor = "white";
   static tabInactiveColor = "gray";
   static tabActiveColor = this.primaryColor;
+  static classesColorBrightness = 10;
 
   static shadow = {
     shadowColor: "#000",
@@ -19,104 +20,108 @@ export class Colors {
     return color + Math.round(opacity * 255).toString(16);
   }
 
+  static increaseBrightness(hex, percent) {
+    // strip the leading # if it's there
+    hex = hex.replace(/^\s*#|\s*$/g, "");
+
+    // convert 3 char codes --> 6, e.g. `E0F` --> `EE00FF`
+    if (hex.length == 3) {
+      hex = hex.replace(/(.)/g, "$1$1");
+    }
+
+    var r = parseInt(hex.substr(0, 2), 16);
+    var g = parseInt(hex.substr(2, 2), 16);
+    var b = parseInt(hex.substr(4, 2), 16);
+
+    return (
+      "#" +
+      (0 | ((1 << 8) + r + ((256 - r) * percent) / 100)).toString(16).substr(1) +
+      (0 | ((1 << 8) + g + ((256 - g) * percent) / 100)).toString(16).substr(1) +
+      (0 | ((1 << 8) + b + ((256 - b) * percent) / 100)).toString(16).substr(1)
+    );
+  }
+
   static classColors = [
     {
       //dark red
-      //primaryColor: "#9d0208",
-      primaryColor: "#b13439",
+      primaryColor: this.increaseBrightness("#9d0208", this.classesColorBrightness),
+      //primaryColor: "#b13439",
     },
     {
       //default 1
       //red
-      //primaryColor: "#E63946",
-      primaryColor: "#eb606b",
+      primaryColor: this.increaseBrightness("#E63946", this.classesColorBrightness),
     },
     {
       //pink
-      //primaryColor: "#ff7096",
-      primaryColor: "#ff8cab",
+      primaryColor: this.increaseBrightness("#ff7096", this.classesColorBrightness),
     },
     {
       //salmon
-      //primaryColor: "#ffb5a7",
-      primaryColor: "#ffc4b9",
+      primaryColor: this.increaseBrightness("#ffb5a7", this.classesColorBrightness),
     },
     {
       //dark orange
-      //primaryColor: "#cc5803",
-      primaryColor: "#d77935",
+      primaryColor: this.increaseBrightness("#cc5803", this.classesColorBrightness),
     },
     {
       //default 5
       //orange
-      //primaryColor: "#F8961E",
-      primaryColor: "#faab4b",
+      primaryColor: this.increaseBrightness("#F8961E", this.classesColorBrightness),
     },
     {
       //default 6
       //yellow
-      //primaryColor: "#ffd933",
-      primaryColor: "#ffe15c",
+      primaryColor: this.increaseBrightness("#ffd933", this.classesColorBrightness),
     },
     {
       //default 7
       //green
-      //primaryColor: "#80b918",
-      primaryColor: "#9ac746",
+      primaryColor: this.increaseBrightness("#80b918", this.classesColorBrightness),
     },
     {
       //dark green
-      //primaryColor: "#606c38",
-      primaryColor: "#7f8940",
+      primaryColor: this.increaseBrightness("#606c38", this.classesColorBrightness),
     },
     {
       //default 9
       //turquoise
-      //primaryColor: "#43AA8B",
-      primaryColor: "#68bba2",
+      primaryColor: this.increaseBrightness("#43AA8B", this.classesColorBrightness),
     },
     {
       //default 10
       //blue
-      //primaryColor: "#277DA1",
-      primaryColor: "#5297b4",
+      primaryColor: this.increaseBrightness("#277DA1", this.classesColorBrightness),
     },
     {
       //dark blue
-      //primaryColor: "#004e98",
-      primaryColor: "#3271ad",
+      primaryColor: this.increaseBrightness("#004e98", this.classesColorBrightness),
     },
     {
       //default 12
       //purple
-      //primaryColor: "#9673A6",
-      primaryColor: "#aa8fb8",
+      primaryColor: this.increaseBrightness("#9673A6", this.classesColorBrightness),
     },
     {
       //dark purple
-      //primaryColor: "#6a4c93",
-      primaryColor: "#8870a9",
+      primaryColor: this.increaseBrightness("#6a4c93", this.classesColorBrightness),
     },
     {
       //brown
-      //primaryColor: "#cb997e",
-      primaryColor: "#d5ae98",
+      primaryColor: this.increaseBrightness("#cb997e", this.classesColorBrightness),
     },
     {
       //dark brown
-      //primaryColor: "#734500",
-      primaryColor: "#8f6a33",
+      primaryColor: this.increaseBrightness("#734500", this.classesColorBrightness),
     },
     {
       //gray
-      //primaryColor: "#b1a7a6",
-      primaryColor: "#c0b9b8",
+      primaryColor: this.increaseBrightness("#b1a7a6", this.classesColorBrightness),
     },
     {
       //default 17
       //black
-      //primaryColor: "#23445D",
-      primaryColor: "#4f697d",
+      primaryColor: this.increaseBrightness("#23445D", this.classesColorBrightness),
     },
   ];
 
