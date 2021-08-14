@@ -6,25 +6,52 @@ import { Transition, Transitioning } from "react-native-reanimated";
 import { ItemArray } from "../classes/ItemArray";
 import AssignmentListItem from "./AssignmentListItem";
 
+const hiddenViewHeight = 300;
+
 const AssignmentsList = ({ assignments }) => {
   const navigation = useNavigation();
   const transitionRef = React.useRef();
 
   const [incompletedAssignments, setIncompletedAssignments] = useState();
   const [completedAssignments, setCompletedAssignments] = useState();
+  const [pulledFarEnough, setPulledFarEnough] = useState(false);
+  const [isSwithchingToAnotherList, setIsSwitchingToAnotherList] = useState(false);
 
+  const minPullDownDistance = -60;
   const scrollY = useRef(new Animated.Value(0)).current;
 
   const hiddenViewTranslation = scrollY.interpolate({
-    inputRange: [-300, 0],
-    outputRange: [300, 0],
+    inputRange: [hiddenViewHeight * -1, 0],
+    outputRange: [hiddenViewHeight, 0],
     extrapolate: "clamp",
   });
+
+  const handleScroll = (pullDownDistance, isSwithchingToAnotherList) => {
+    if (!isSwithchingToAnotherList) {
+      if (pullDownDistance.value <= minPullDownDistance) {
+        setPulledFarEnough(true);
+      } else if (pullDownDistance.value > minPullDownDistance) {
+        setPulledFarEnough(false);
+      }
+    } else if (pullDownDistance.value >= -5) {
+      setIsSwitchingToAnotherList(false);
+    }
+  };
+
+  const handleRelease = (event) => {
+    if (pulledFarEnough && !isSwithchingToAnotherList) {
+      setIsSwitchingToAnotherList(true);
+    }
+  };
 
   useEffect(() => {
     setIncompletedAssignments(ItemArray.filter(assignments, "completed", false));
     setCompletedAssignments(ItemArray.filter(assignments, "completed", true));
   }, [assignments.length]);
+
+  useEffect(() => {
+    scrollY.addListener((value) => handleScroll(value, isSwithchingToAnotherList));
+  }, [isSwithchingToAnotherList]);
 
   const transition = <Transition.Change interpolation="easeInOut" durationMs={400} />;
 
@@ -32,19 +59,26 @@ const AssignmentsList = ({ assignments }) => {
     <Transitioning.View style={{ flex: 1 }} transition={transition} ref={transitionRef}>
       <Animated.View
         style={{
-          position: "absolute",
-          top: -300,
-          left: 0,
-          right: 0,
-          height: 300,
-          backgroundColor: "red",
+          ...styles.hiddenViewContainer,
           transform: [{ translateY: hiddenViewTranslation }],
         }}
-      ></Animated.View>
+      >
+        {!pulledFarEnough && !isSwithchingToAnotherList && (
+          <Text style={{ fontSize: 14, fontWeight: "600", color: Colors.primaryColor }}>
+            Pull to view completed and late assignments
+          </Text>
+        )}
+        {(pulledFarEnough || isSwithchingToAnotherList) && (
+          <Text style={{ fontSize: 14, fontWeight: "800", color: Colors.primaryColor }}>
+            Release to view completed and late assignments
+          </Text>
+        )}
+      </Animated.View>
       <Animated.FlatList
         data={incompletedAssignments}
         keyExtractor={(index) => index.id + ""}
         showsVerticalScrollIndicator={false}
+        onResponderRelease={(event) => handleRelease(event)}
         onScroll={Animated.event(
           [
             {
@@ -77,6 +111,17 @@ const AssignmentsList = ({ assignments }) => {
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  hiddenViewContainer: {
+    position: "absolute",
+    top: hiddenViewHeight * -1,
+    left: 0,
+    right: 0,
+    height: hiddenViewHeight,
+    alignItems: "center",
+    justifyContent: "flex-end",
+    paddingBottom: 20,
+  },
+});
 
 export default AssignmentsList;
