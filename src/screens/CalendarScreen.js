@@ -34,29 +34,48 @@ const CalendarScreen = () => {
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => (
-        <AddButton
-          navigation={navigation}
-          destination="New Assignment"
-          propsToPass={{
-            monthDataArray: monthDataArray,
-            weeksArray: weeksArray,
-          }}
-        />
+      headerTitle: () => (
+        <View>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 8,
+            }}
+          >
+            <Text
+              style={{
+                color: Colors.primaryColor,
+                fontWeight: "bold",
+                fontSize: 26,
+                marginLeft: 30,
+              }}
+            >
+              Assignments
+            </Text>
+            <AddButton
+              navigation={navigation}
+              destination="New Assignment"
+              propsToPass={{
+                monthDataArray: monthDataArray,
+                weeksArray: weeksArray,
+              }}
+            />
+          </View>
+          <WeekdayCalendar
+            weeksArray={weeksArray}
+            spaceBetweenPages={Calendar.spaceBetweenPages}
+            weekCalendarFlatListRef={weekCalendarFlatListRef}
+            marginHorizontal={10}
+          />
+        </View>
       ),
     });
   });
 
   return (
     <View style={{ flex: 1 }}>
-      <View style={styles.weekdayCalendarContainer}>
-        <WeekdayCalendar
-          weeksArray={weeksArray}
-          spaceBetweenPages={Calendar.spaceBetweenPages}
-          weekCalendarFlatListRef={weekCalendarFlatListRef}
-          marginHorizontal={10}
-        />
-      </View>
       <AssignmentsList
         assignments={assignments.state}
         monthDataArray={monthDataArray}
@@ -66,14 +85,6 @@ const CalendarScreen = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  weekdayCalendarContainer: {
-    height: 100,
-    backgroundColor: "white",
-    ...Colors.shadow,
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
-  },
-});
+const styles = StyleSheet.create({});
 
 export default CalendarScreen;

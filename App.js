@@ -102,6 +102,21 @@ const profileHeaderStyle = {
   headerTitle: () => <ProfileHeader textColor={Colors.primaryColor} />,
 };
 
+const assignmentsHeaderStyle = {
+  headerStyle: {
+    backgroundColor: "white",
+    ...Colors.shadow,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+    height: 210,
+  },
+  headerTitleAlign: "left",
+  headerTitleContainerStyle: {
+    left: 0,
+    right: 0,
+  },
+};
+
 const HomeStackScreen = () => {
   return (
     <HomeStack.Navigator>
@@ -120,7 +135,7 @@ const CalendarStackScreen = () => {
       <CalendarStack.Screen
         name="Calendar"
         component={CalendarScreen}
-        options={{ ...invisibleHeaderStyle, title: "Assignments" }}
+        options={{ ...assignmentsHeaderStyle, title: "Assignments" }}
       />
     </CalendarStack.Navigator>
   );
