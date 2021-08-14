@@ -36,24 +36,8 @@ const CalendarScreen = () => {
     navigation.setOptions({
       headerTitle: () => (
         <View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: 8,
-            }}
-          >
-            <Text
-              style={{
-                color: Colors.primaryColor,
-                fontWeight: "bold",
-                fontSize: 26,
-                marginLeft: 30,
-              }}
-            >
-              Assignments
-            </Text>
+          <View style={styles.headerContainer}>
+            <Text style={styles.headerText}>Assignments</Text>
             <AddButton
               navigation={navigation}
               destination="New Assignment"
@@ -85,6 +69,19 @@ const CalendarScreen = () => {
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  headerText: {
+    color: Colors.primaryColor,
+    fontWeight: "bold",
+    fontSize: 26,
+    marginLeft: 25,
+  },
+});
 
 export default CalendarScreen;

@@ -9,7 +9,7 @@ const AddButton = ({ navigation, destination, propsToPass }) => {
     <TouchableOpacity onPress={() => navigation.push(destination, propsToPass)}>
       <View
         style={{
-          marginRight: 20,
+          marginRight: 25,
           backgroundColor: Colors.primaryColor,
           borderRadius: 5,
           padding: 0.5,

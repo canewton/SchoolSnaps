@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from "react-native";
 import { Colors } from "../classes/Colors";
 import { GeneralIcons } from "../icons/GeneralIcons";
+import ProfileHeader from "../components/ProfileHeader";
 
 const SettingsScreen = ({ navigation }) => {
   const profileOptions = [
@@ -22,6 +23,12 @@ const SettingsScreen = ({ navigation }) => {
   ];
 
   const OptionsList = ({ options }) => {
+    React.useLayoutEffect(() => {
+      navigation.setOptions({
+        headerTitle: () => <ProfileHeader textColor={Colors.primaryColor} />,
+      });
+    });
+
     return (
       <View style={styles.listContainer}>
         <FlatList

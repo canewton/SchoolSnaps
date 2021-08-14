@@ -4,7 +4,7 @@ import { GeneralIcons } from "../icons/GeneralIcons";
 
 const ProfileHeader = ({ textColor }) => {
   return (
-    <View style={{ flexDirection: "row", marginLeft: 15, alignItems: "center" }}>
+    <View style={{ flexDirection: "row", marginLeft: 25, alignItems: "center" }}>
       {GeneralIcons.findIcon("Profile", 80, textColor)}
       <View style={{ marginLeft: 10 }}>
         <Text

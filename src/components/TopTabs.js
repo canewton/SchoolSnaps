@@ -6,16 +6,7 @@ const TopTabs = ({ tabButtons, callback }) => {
   const [activeTab, setActiveTab] = useState("Current");
 
   return (
-    <View
-      style={{
-        paddingLeft: 25,
-        backgroundColor: "white",
-        borderBottomRightRadius: 10,
-        borderBottomLeftRadius: 10,
-        height: 50,
-        ...Colors.shadow,
-      }}
-    >
+    <View style={{ paddingLeft: 25 }}>
       <FlatList
         data={tabButtons}
         keyExtractor={(index) => index.name}
@@ -56,7 +47,6 @@ const TopTabs = ({ tabButtons, callback }) => {
 
 const styles = StyleSheet.create({
   tabButton: {
-    marginBottom: 15,
     backgroundColor: Colors.primaryColor,
     marginRight: 12,
     borderRadius: 10,

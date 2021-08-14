@@ -15,8 +15,6 @@ import ClassesEditScreen from "./src/screens/ClassesEditScreen";
 import AssignmentAddScreen from "./src/screens/AssignmentAddScreen";
 import AssignmentEditScreen from "./src/screens/AssignmentEditScreen";
 
-import ProfileHeader from "./src/components/ProfileHeader";
-
 import { BottomTabIcons } from "./src/icons/BottomTabIcons";
 import { Colors } from "./src/classes/Colors";
 import { Provider as ClassesProvider } from "./src/context/ClassesContext";
@@ -68,21 +66,6 @@ const customTabBarStyle = {
   showLabel: false,
 };
 
-//style the header
-const invisibleHeaderStyle = {
-  headerStyle: {
-    height: 110,
-    backgroundColor: Colors.headerBackgroundColor,
-    shadowColor: "transparent",
-  },
-  headerTitleAlign: "left",
-  headerTitleStyle: {
-    fontWeight: "bold",
-    fontSize: 26,
-    marginLeft: 10,
-  },
-};
-
 const formHeaderStyle = {
   headerStyle: {
     backgroundColor: "white",
@@ -90,31 +73,21 @@ const formHeaderStyle = {
   },
 };
 
-const profileHeaderStyle = {
-  headerStyle: {
-    backgroundColor: "white",
-    ...Colors.shadow,
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
-    height: 160,
-  },
-  headerTitleAlign: "left",
-  headerTitle: () => <ProfileHeader textColor={Colors.primaryColor} />,
-};
-
-const assignmentsHeaderStyle = {
-  headerStyle: {
-    backgroundColor: "white",
-    ...Colors.shadow,
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
-    height: 210,
-  },
-  headerTitleAlign: "left",
-  headerTitleContainerStyle: {
-    left: 0,
-    right: 0,
-  },
+const bigHeaderStyle = (headerHeight) => {
+  return {
+    headerStyle: {
+      backgroundColor: "white",
+      ...Colors.shadow,
+      borderBottomLeftRadius: 10,
+      borderBottomRightRadius: 10,
+      height: headerHeight,
+    },
+    headerTitleAlign: "left",
+    headerTitleContainerStyle: {
+      left: 0,
+      right: 0,
+    },
+  };
 };
 
 const HomeStackScreen = () => {
@@ -123,7 +96,7 @@ const HomeStackScreen = () => {
       <HomeStack.Screen
         name="Home"
         component={HomeScreen}
-        options={{ ...invisibleHeaderStyle, title: "My Courses" }}
+        options={bigHeaderStyle(160)}
       />
     </HomeStack.Navigator>
   );
@@ -135,7 +108,7 @@ const CalendarStackScreen = () => {
       <CalendarStack.Screen
         name="Calendar"
         component={CalendarScreen}
-        options={{ ...assignmentsHeaderStyle, title: "Assignments" }}
+        options={bigHeaderStyle(210)}
       />
     </CalendarStack.Navigator>
   );
@@ -147,7 +120,7 @@ const SettingsStackScreen = () => {
       <SettingsStack.Screen
         name="Library"
         component={SettingsScreen}
-        options={profileHeaderStyle}
+        options={bigHeaderStyle(160)}
       />
     </SettingsStack.Navigator>
   );
