@@ -5,6 +5,7 @@ import { Colors } from "../classes/Colors";
 import { Transition, Transitioning } from "react-native-reanimated";
 import { ItemArray } from "../classes/ItemArray";
 import AssignmentListItem from "./AssignmentListItem";
+import { Calendar } from "../classes/Calendar";
 
 const hiddenViewHeight = 300;
 
@@ -18,6 +19,7 @@ const AssignmentsList = ({ assignments }) => {
   const [isSwithchingToAnotherList, setIsSwitchingToAnotherList] = useState(false);
   const [assignmentsDisplayed, setAssignmentsDisplayed] = useState("Incomplete");
 
+  /* Hidden View Functions and Constants */
   const minPullDownDistance = -60;
   const scrollY = useRef(new Animated.Value(0)).current;
 
@@ -49,14 +51,47 @@ const AssignmentsList = ({ assignments }) => {
   };
 
   useEffect(() => {
-    setIncompletedAssignments(ItemArray.filter(assignments, "completed", false));
-    setCompletedAssignments(ItemArray.filter(assignments, "completed", true));
-  }, [assignments.length]);
-
-  useEffect(() => {
     scrollY.addListener((value) => handleScroll(value, isSwithchingToAnotherList));
   }, [isSwithchingToAnotherList]);
 
+  /* Filter the assignments array by its completeness and sort it by date */
+  const filterAssignmentsByDate = (assignmentsInput, date) => {
+    return assignmentsInput.filter((assignment) => assignment.date === date);
+  };
+
+  const groupAssignmentsByDate = (assignmentsInput) => {
+    const remainingAssignments = [...assignmentsInput];
+    const newAssignmentsArray = [];
+    while (remainingAssignments.length > 0) {
+      newAssignmentsArray.push(
+        filterAssignmentsByDate(assignmentsInput, remainingAssignments[0].date)
+      );
+      remainingAssignments.splice(
+        0,
+        newAssignmentsArray[newAssignmentsArray.length - 1].length
+      );
+    }
+    return newAssignmentsArray;
+  };
+
+  const sortAssignmentsByDate = (assignmentsInput) => {
+    return assignmentsInput.sort((a, b) => new Date(a.date) - new Date(b.date));
+  };
+
+  useEffect(() => {
+    setIncompletedAssignments(
+      groupAssignmentsByDate(
+        sortAssignmentsByDate(ItemArray.filter(assignments, "completed", false))
+      )
+    );
+    setCompletedAssignments(
+      groupAssignmentsByDate(
+        sortAssignmentsByDate(ItemArray.filter(assignments, "completed", true))
+      )
+    );
+  }, [assignments.length]);
+
+  /* Define the animation that happens when an assignment is deleted */
   const transition = <Transition.Change interpolation="easeInOut" durationMs={400} />;
 
   return (
@@ -87,7 +122,7 @@ const AssignmentsList = ({ assignments }) => {
             ? incompletedAssignments
             : completedAssignments
         }
-        keyExtractor={(index) => index.id + ""}
+        keyExtractor={(index) => index[0].date}
         extraData={assignmentsDisplayed}
         showsVerticalScrollIndicator={false}
         onResponderRelease={(event) => handleRelease(event)}
@@ -95,18 +130,35 @@ const AssignmentsList = ({ assignments }) => {
           useNativeDriver: true,
         })}
         renderItem={({ item, index }) => {
+          const itemDate = new Date(item[0].date);
           return (
-            <AssignmentListItem
-              item={item}
-              index={index}
-              onPressCheckmark={() => {
-                transitionRef.current.animateNextTransition();
-                const newIncompletedAssignmentsArray = [...incompletedAssignments];
-                newIncompletedAssignmentsArray.splice(index, 1);
-                setIncompletedAssignments(newIncompletedAssignmentsArray);
-                setCompletedAssignments([...completedAssignments, item]);
-              }}
-            />
+            <View>
+              <Text style={styles.dateText}>
+                {Calendar.monthNames[itemDate.getMonth()] +
+                  " " +
+                  itemDate.getDate() +
+                  ", " +
+                  itemDate.getFullYear()}
+              </Text>
+              {item.map((listItemData, listItemIndex) => {
+                return (
+                  <AssignmentListItem
+                    key={listItemData.id}
+                    item={listItemData}
+                    index={listItemIndex}
+                    onPressCheckmark={() => {
+                      transitionRef.current.animateNextTransition();
+                      const newIncompletedAssignmentsArray = [...incompletedAssignments];
+                      newIncompletedAssignmentsArray[index].splice(listItemIndex, 1);
+                      if (newIncompletedAssignmentsArray[index].length === 0) {
+                        newIncompletedAssignmentsArray.splice(index, 1);
+                      }
+                      setIncompletedAssignments(newIncompletedAssignmentsArray);
+                    }}
+                  />
+                );
+              })}
+            </View>
           );
         }}
       />
@@ -124,6 +176,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-end",
     paddingBottom: 20,
+  },
+  dateText: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#b1a7a6",
+    marginTop: 15,
+    marginLeft: 15,
+    marginBottom: 5,
   },
 });
 
