@@ -16,6 +16,7 @@ const AssignmentsList = ({ assignments }) => {
   const [completedAssignments, setCompletedAssignments] = useState();
   const [pulledFarEnough, setPulledFarEnough] = useState(false);
   const [isSwithchingToAnotherList, setIsSwitchingToAnotherList] = useState(false);
+  const [assignmentsDisplayed, setAssignmentsDisplayed] = useState("Incomplete");
 
   const minPullDownDistance = -60;
   const scrollY = useRef(new Animated.Value(0)).current;
@@ -42,6 +43,9 @@ const AssignmentsList = ({ assignments }) => {
     if (pulledFarEnough && !isSwithchingToAnotherList) {
       setIsSwitchingToAnotherList(true);
     }
+    setAssignmentsDisplayed(
+      assignmentsDisplayed === "Incomplete" ? "Complete" : "Incomplete"
+    );
   };
 
   useEffect(() => {
@@ -57,6 +61,7 @@ const AssignmentsList = ({ assignments }) => {
 
   return (
     <Transitioning.View style={{ flex: 1 }} transition={transition} ref={transitionRef}>
+      {/* Hidden View */}
       <Animated.View
         style={{
           ...styles.hiddenViewContainer,
@@ -74,23 +79,21 @@ const AssignmentsList = ({ assignments }) => {
           </Text>
         )}
       </Animated.View>
+
+      {/* List of Assignments */}
       <Animated.FlatList
-        data={incompletedAssignments}
+        data={
+          assignmentsDisplayed === "Incomplete"
+            ? incompletedAssignments
+            : completedAssignments
+        }
         keyExtractor={(index) => index.id + ""}
+        extraData={assignmentsDisplayed}
         showsVerticalScrollIndicator={false}
         onResponderRelease={(event) => handleRelease(event)}
-        onScroll={Animated.event(
-          [
-            {
-              nativeEvent: {
-                contentOffset: {
-                  y: scrollY,
-                },
-              },
-            },
-          ],
-          { useNativeDriver: true }
-        )}
+        onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
+          useNativeDriver: true,
+        })}
         renderItem={({ item, index }) => {
           return (
             <AssignmentListItem
