@@ -17,7 +17,8 @@ const AssignmentsList = ({
   weekCalendarFlatListRef,
 }) => {
   const navigation = useNavigation();
-  const transitionRef = React.useRef();
+  const transitionRef = useRef();
+  const assignmentFlatlistRef = useRef();
   const specialDates = useContext(CalendarContext);
 
   const [incompletedAssignments, setIncompletedAssignments] = useState();
@@ -73,6 +74,7 @@ const AssignmentsList = ({
       specialDates.edit({
         id: "Selected Date",
         dateObject: firstViewableItemDayData,
+        //methodSelected: "Scrolled",
       });
       weekCalendarFlatListRef.current.scrollToIndex({
         index: firstViewableItemDayData.weekIndex,
@@ -104,7 +106,7 @@ const AssignmentsList = ({
     return assignmentsInput.sort((a, b) => new Date(a.date) - new Date(b.date));
   };
 
-  useEffect(() => {
+  const refreshAssignmentLists = () => {
     setIncompletedAssignments(
       groupAssignmentsByDate(
         sortAssignmentsByDate(ItemArray.filter(assignments, "completed", false))
@@ -115,6 +117,10 @@ const AssignmentsList = ({
         sortAssignmentsByDate(ItemArray.filter(assignments, "completed", true))
       )
     );
+  };
+
+  useEffect(() => {
+    refreshAssignmentLists();
   }, [assignments.length]);
 
   /* Define the animation that happens when an assignment is deleted */
@@ -129,16 +135,30 @@ const AssignmentsList = ({
           transform: [{ translateY: hiddenViewTranslation }],
         }}
       >
-        {!pulledFarEnough && !isSwithchingToAnotherList && (
-          <Text style={{ fontSize: 14, fontWeight: "600", color: Colors.primaryColor }}>
-            Pull to view completed and late assignments
-          </Text>
-        )}
-        {(pulledFarEnough || isSwithchingToAnotherList) && (
-          <Text style={{ fontSize: 14, fontWeight: "800", color: Colors.primaryColor }}>
-            Release to view completed and late assignments
-          </Text>
-        )}
+        {assignmentsDisplayed === "Incomplete" &&
+          !pulledFarEnough &&
+          !isSwithchingToAnotherList && (
+            <Text style={styles.hiddenTextPull}>
+              Pull to view completed and late assignments
+            </Text>
+          )}
+        {assignmentsDisplayed === "Incomplete" &&
+          (pulledFarEnough || isSwithchingToAnotherList) && (
+            <Text style={styles.hiddenTextRelease}>
+              Release to view completed and late assignments
+            </Text>
+          )}
+        {assignmentsDisplayed === "Complete" &&
+          !pulledFarEnough &&
+          !isSwithchingToAnotherList && (
+            <Text style={styles.hiddenTextPull}>Pull to view current assignments</Text>
+          )}
+        {assignmentsDisplayed === "Complete" &&
+          (pulledFarEnough || isSwithchingToAnotherList) && (
+            <Text style={styles.hiddenTextRelease}>
+              Release to view current assignments
+            </Text>
+          )}
       </Animated.View>
 
       {/* List of Assignments */}
@@ -149,6 +169,7 @@ const AssignmentsList = ({
             : completedAssignments
         }
         keyExtractor={(index) => index[0].date}
+        ref={assignmentFlatlistRef}
         extraData={assignmentsDisplayed}
         showsVerticalScrollIndicator={false}
         ListFooterComponent={() => <View style={{ height: 560 }} />}
@@ -176,12 +197,7 @@ const AssignmentsList = ({
                     index={listItemIndex}
                     onPressCheckmark={() => {
                       transitionRef.current.animateNextTransition();
-                      const newIncompletedAssignmentsArray = [...incompletedAssignments];
-                      newIncompletedAssignmentsArray[index].splice(listItemIndex, 1);
-                      if (newIncompletedAssignmentsArray[index].length === 0) {
-                        newIncompletedAssignmentsArray.splice(index, 1);
-                      }
-                      setIncompletedAssignments(newIncompletedAssignmentsArray);
+                      refreshAssignmentLists();
                     }}
                   />
                 );
@@ -213,6 +229,8 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginBottom: 5,
   },
+  hiddenTextPull: { fontSize: 14, fontWeight: "600", color: Colors.primaryColor },
+  hiddenTextRelease: { fontSize: 14, fontWeight: "800", color: Colors.primaryColor },
 });
 
 export default AssignmentsList;

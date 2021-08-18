@@ -21,18 +21,13 @@ const WeekdayCalendar = ({
   const specialDates = useContext(CalendarContext);
   const viewWidth = Dimensions.get("window").width - marginHorizontal * 2;
 
-  useEffect(() => {
-    /* weekCalendarFlatListRef.current.scrollToIndex({
-      index: specialDates.state[0].dateObject.weekIndex,
-    }); */
-  }, [specialDates.state[0]]);
-
   const DayInWeekButton = ({ weekday, dateObject }) => {
     const currentCalendarDayIndex = specialDates.state[0].dateObject.calendarDayIndex;
 
     const chooseDay = (dateObject) => {
       specialDates.edit({
         id: "Selected Date",
+        //methodSelected: "Pressed",
         dateObject: dateObject,
       });
     };
