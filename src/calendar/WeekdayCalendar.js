@@ -27,7 +27,7 @@ const WeekdayCalendar = ({
     const chooseDay = (dateObject) => {
       specialDates.edit({
         id: "Selected Date",
-        //methodSelected: "Pressed",
+        methodSelected: "Pressed",
         dateObject: dateObject,
       });
     };

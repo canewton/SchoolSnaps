@@ -11,7 +11,7 @@ class CalendarContext extends ItemContext {
         weekIndex: Math.round(new Date().getDate() / 7),
       },
       id: "Selected Date",
-      //methodSelected: "Pressed", //can be either "Pressed" or "Scrolled"
+      methodSelected: "Pressed", //can be either "Pressed" or "Scrolled"
     },
   ];
 }

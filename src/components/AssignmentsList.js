@@ -74,7 +74,7 @@ const AssignmentsList = ({
       specialDates.edit({
         id: "Selected Date",
         dateObject: firstViewableItemDayData,
-        //methodSelected: "Scrolled",
+        methodSelected: "Scrolled",
       });
       weekCalendarFlatListRef.current.scrollToIndex({
         index: firstViewableItemDayData.weekIndex,
@@ -122,6 +122,45 @@ const AssignmentsList = ({
   useEffect(() => {
     refreshAssignmentLists();
   }, [assignments.length]);
+
+  /* When the selected date changes, scroll to the respective date on the assignment flatlist */
+  const getAssignmentListIndexFromDate = (date, assignmentsInput) => {
+    if (assignmentsInput.length > 0) {
+      for (let i = 0; i < assignmentsInput.length; i++) {
+        var dateOfAssignmentsIndex = new Date(assignmentsInput[i][0].date);
+        if (
+          date.getDate() === dateOfAssignmentsIndex.getDate() &&
+          date.getMonth() === dateOfAssignmentsIndex.getMonth() &&
+          date.getFullYear() === dateOfAssignmentsIndex.getFullYear()
+        ) {
+          return i;
+        }
+      }
+    }
+    return 0;
+  };
+
+  useEffect(() => {
+    if (specialDates.state[0].methodSelected === "Pressed") {
+      const selectedMonth =
+        monthDataArray[specialDates.state[0].dateObject.monthIndex].month + 1;
+      const selectedYear =
+        monthDataArray[specialDates.state[0].dateObject.monthIndex].year;
+      const selectedDate = specialDates.state[0].dateObject.day;
+      const assignmentList =
+        assignmentsDisplayed === "Incomplete"
+          ? incompletedAssignments
+          : completedAssignments;
+      if (assignmentList !== undefined && assignmentList.length > 0) {
+        assignmentFlatlistRef.current.scrollToIndex({
+          index: getAssignmentListIndexFromDate(
+            new Date(selectedMonth + "/" + selectedDate + "/" + selectedYear),
+            assignmentList
+          ),
+        });
+      }
+    }
+  }, [specialDates.state[0].dateObject.calendarDayIndex]);
 
   /* Define the animation that happens when an assignment is deleted */
   const transition = <Transition.Change interpolation="easeInOut" durationMs={400} />;
