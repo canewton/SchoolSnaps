@@ -74,7 +74,6 @@ const AssignmentsList = ({
       specialDates.edit({
         id: "Selected Date",
         dateObject: firstViewableItemDayData,
-        //methodSelected: "Scrolled",
       });
       weekCalendarFlatListRef.current.scrollToIndex({
         index: firstViewableItemDayData.weekIndex,

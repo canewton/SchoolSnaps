@@ -54,6 +54,13 @@ export class Calendar {
     return weeksArray[weekIndex][dayIndex];
   }
 
+  static getDateFromDayData(dateObject, monthDataArray) {
+    const currentMonth = monthDataArray[dateObject.monthIndex].month + 1;
+    const currentYear = monthDataArray[dateObject.monthIndex].year;
+    const currentDate = dateObject.day;
+    return new Date(currentMonth + "/" + currentDate + "/" + currentYear);
+  }
+
   static getDaysInMonth(month, year) {
     //Month should be incremented by 1 because the 'month' parameter is the month index (1-12 changed to 0-11)
     //to get total days of the wanted month.

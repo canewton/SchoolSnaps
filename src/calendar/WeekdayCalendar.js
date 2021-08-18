@@ -17,6 +17,7 @@ const WeekdayCalendar = ({
   spaceBetweenPages,
   weekCalendarFlatListRef,
   marginHorizontal,
+  todaysCalendarDayIndex,
 }) => {
   const specialDates = useContext(CalendarContext);
   const viewWidth = Dimensions.get("window").width - marginHorizontal * 2;
@@ -27,7 +28,6 @@ const WeekdayCalendar = ({
     const chooseDay = (dateObject) => {
       specialDates.edit({
         id: "Selected Date",
-        //methodSelected: "Pressed",
         dateObject: dateObject,
       });
     };
@@ -48,6 +48,8 @@ const WeekdayCalendar = ({
             style={
               currentCalendarDayIndex === dateObject.calendarDayIndex
                 ? styles.chosenDateText
+                : dateObject.calendarDayIndex === todaysCalendarDayIndex
+                ? styles.todaysDateText
                 : styles.dateText
             }
           >
@@ -129,6 +131,10 @@ const styles = StyleSheet.create({
   },
   dateText: {
     color: Colors.primaryColor,
+  },
+  todaysDateText: {
+    color: Colors.primaryColor,
+    fontWeight: "800",
   },
   chosenDateText: {
     color: "white",

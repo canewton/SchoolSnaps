@@ -7,6 +7,7 @@ import { Calendar } from "../classes/Calendar";
 import { Colors } from "../classes/Colors";
 import AssignmentsList from "../components/AssignmentsList";
 import { Context as AssignmentContext } from "../context/AssignmentsContext";
+import { Context as CalendarContext } from "../context/CalendarContext";
 
 const CalendarScreen = () => {
   const navigation = useNavigation();
@@ -18,6 +19,7 @@ const CalendarScreen = () => {
   const monthCalendarFlatListRef = React.useRef();
 
   const assignments = useContext(AssignmentContext);
+  const specialDates = useContext(CalendarContext);
 
   if (!singletonHasRun) {
     const monthArray = Calendar.getFollowingMonths(
@@ -29,8 +31,16 @@ const CalendarScreen = () => {
     const dayDataArray = Calendar.getAllDaysOfTheseMonths(monthArray);
     setWeeksArray(Calendar.breakUpDaysIntoWeeks(dayDataArray));
     setMonthDataArray(monthArray);
+
     setSingletonHasRun(true);
   }
+
+  useEffect(() => {
+    specialDates.edit({
+      id: "Selected Date",
+      dateObject: Calendar.getDayDataFromDate(new Date(), weeksArray, monthDataArray),
+    });
+  }, []);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -52,6 +62,10 @@ const CalendarScreen = () => {
             spaceBetweenPages={Calendar.spaceBetweenPages}
             weekCalendarFlatListRef={weekCalendarFlatListRef}
             marginHorizontal={10}
+            todaysCalendarDayIndex={
+              Calendar.getDayDataFromDate(new Date(), weeksArray, monthDataArray)
+                .calendarDayIndex
+            }
           />
         </View>
       ),

@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView, TextInput } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Calendar } from "../classes/Calendar";
 import { Context as ClassesContext } from "../context/ClassesContext";
+import { Context as CalendarContext } from "../context/CalendarContext";
 import HorizontalScrollPicker from "./HorizontalScrollPicker";
 import { AssignmentTypeIcons } from "../icons/AssignmentTypeIcons";
 import AccordionListItem from "./AccordianListItem";
@@ -12,6 +13,7 @@ import { Assignment } from "../classes/Assignment";
 
 const AssignmentForm = ({ onSubmit, initialValues, calendarData }) => {
   const classes = useContext(ClassesContext);
+  const specialDates = useContext(CalendarContext);
 
   //set default values
   const [id, setId] = useState(Date.now());
@@ -20,7 +22,12 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData }) => {
   const [iconName, setIconName] = useState(
     AssignmentTypeIcons.iconList(30, "white")[0].name
   );
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(
+    Calendar.getDateFromDayData(
+      specialDates.state[0].dateObject,
+      calendarData.monthDataArray
+    )
+  );
   const [attachedNotes, setAttachedNotes] = useState([]);
   const [completed, setCompleted] = useState(false);
 
