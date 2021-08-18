@@ -8,7 +8,7 @@ const AssignmentListItem = ({ item, onPressCheckmark }) => {
   const [completed, setCompleted] = useState(item.completed);
   const opacityAnimationRef = useRef(new Animated.Value(1)).current;
   const fadeAnimation = {
-    duration: 300,
+    duration: 800,
     toValue: 0,
     useNativeDriver: false,
   };
@@ -26,9 +26,7 @@ const AssignmentListItem = ({ item, onPressCheckmark }) => {
           onPress={() => {
             item.toggleCompleted();
             setCompleted(item.completed);
-            Animated.timing(opacityAnimationRef, fadeAnimation).start(() => {
-              onPressCheckmark();
-            });
+            onPressCheckmark(Animated.timing(opacityAnimationRef, fadeAnimation));
           }}
         >
           {!completed && (

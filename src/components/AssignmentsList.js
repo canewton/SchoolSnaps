@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, FlatList, Animated } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Colors } from "../classes/Colors";
 import { Transition, Transitioning } from "react-native-reanimated";
-import { ItemArray } from "../classes/ItemArray";
 import AssignmentListItem from "./AssignmentListItem";
 import { Calendar } from "../classes/Calendar";
 import { Context as CalendarContext } from "../context/CalendarContext";
@@ -22,7 +21,7 @@ const AssignmentsList = ({
   const specialDates = useContext(CalendarContext);
 
   const [incompletedAssignments, setIncompletedAssignments] = useState();
-  const [completedAssignments, setCompletedAssignments] = useState();
+  const [completedOrLateAssignments, setCompletedOrLateAssignments] = useState();
   const [pulledFarEnough, setPulledFarEnough] = useState(false);
   const [isSwithchingToAnotherList, setIsSwitchingToAnotherList] = useState(false);
   const [assignmentsDisplayed, setAssignmentsDisplayed] = useState("Incomplete");
@@ -101,19 +100,48 @@ const AssignmentsList = ({
     return newAssignmentsArray;
   };
 
-  const sortAssignmentsByDate = (assignmentsInput) => {
-    return assignmentsInput.sort((a, b) => new Date(a.date) - new Date(b.date));
+  const sortAssignmentsByDate = (assignmentsInput, isDescending) => {
+    const booleanExpression = (a, b) => {
+      if (isDescending === true) {
+        return new Date(a.date) - new Date(b.date);
+      }
+      return new Date(b.date) - new Date(a.date);
+    };
+    return assignmentsInput.sort((a, b) => booleanExpression(a, b));
+  };
+
+  /* Filter assignments based on their lateness and completeness */
+  const getIncompletedAssignments = (assignmentsInput) => {
+    return assignmentsInput.filter((assignment) => {
+      return !isAssignmentLate(assignment.date) && assignment.completed === false;
+    });
+  };
+
+  const getCompletedOrLateAssignments = (assignmentsInput) => {
+    return assignmentsInput.filter((assignment) => {
+      return isAssignmentLate(assignment.date) || assignment.completed === true;
+    });
+  };
+
+  const isAssignmentLate = (assignmentDateString) => {
+    const today = new Date();
+    return (
+      new Date(assignmentDateString).getTime() <
+      new Date(
+        today.getMonth() + 1 + "/" + today.getDate() + "/" + today.getFullYear()
+      ).getTime()
+    );
   };
 
   const refreshAssignmentLists = () => {
     setIncompletedAssignments(
       groupAssignmentsByDate(
-        sortAssignmentsByDate(ItemArray.filter(assignments, "completed", false))
+        sortAssignmentsByDate(getIncompletedAssignments(assignments), true)
       )
     );
-    setCompletedAssignments(
+    setCompletedOrLateAssignments(
       groupAssignmentsByDate(
-        sortAssignmentsByDate(ItemArray.filter(assignments, "completed", true))
+        sortAssignmentsByDate(getCompletedOrLateAssignments(assignments), false)
       )
     );
   };
@@ -165,7 +193,7 @@ const AssignmentsList = ({
         data={
           assignmentsDisplayed === "Incomplete"
             ? incompletedAssignments
-            : completedAssignments
+            : completedOrLateAssignments
         }
         keyExtractor={(index) => index[0].date}
         ref={assignmentFlatlistRef}
@@ -182,11 +210,15 @@ const AssignmentsList = ({
           return (
             <View>
               <Text style={styles.dateText}>
-                {Calendar.monthNames[itemDate.getMonth()] +
-                  " " +
-                  itemDate.getDate() +
-                  ", " +
-                  itemDate.getFullYear()}
+                {itemDate.getDate() === new Date().getDate() &&
+                itemDate.getMonth() === new Date().getMonth() &&
+                itemDate.getFullYear() === new Date().getFullYear()
+                  ? "Today"
+                  : Calendar.monthNames[itemDate.getMonth()] +
+                    " " +
+                    itemDate.getDate() +
+                    ", " +
+                    itemDate.getFullYear()}
               </Text>
               {item.map((listItemData, listItemIndex) => {
                 return (
@@ -194,9 +226,13 @@ const AssignmentsList = ({
                     key={listItemData.id}
                     item={listItemData}
                     index={listItemIndex}
-                    onPressCheckmark={() => {
-                      transitionRef.current.animateNextTransition();
-                      refreshAssignmentLists();
+                    onPressCheckmark={(fadeAnimation) => {
+                      if (!isAssignmentLate(listItemData.date)) {
+                        fadeAnimation.start(() => {
+                          transitionRef.current.animateNextTransition();
+                          refreshAssignmentLists();
+                        });
+                      }
                     }}
                   />
                 );
