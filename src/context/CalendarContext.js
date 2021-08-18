@@ -8,7 +8,7 @@ class CalendarContext extends ItemContext {
         calendarDayIndex: new Date().getDate() - 1,
         day: new Date().getDate(),
         monthIndex: new Date().getMonth(),
-        weekIndex: Math.round(new Date().getDate() / 7) - 1,
+        weekIndex: Math.round(new Date().getDate() / 7),
       },
       id: "Selected Date",
     },

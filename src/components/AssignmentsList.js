@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback, useContext } from "react";
 import { View, Text, StyleSheet, FlatList, Animated } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Colors } from "../classes/Colors";
@@ -6,12 +6,19 @@ import { Transition, Transitioning } from "react-native-reanimated";
 import { ItemArray } from "../classes/ItemArray";
 import AssignmentListItem from "./AssignmentListItem";
 import { Calendar } from "../classes/Calendar";
+import { Context as CalendarContext } from "../context/CalendarContext";
 
 const hiddenViewHeight = 300;
 
-const AssignmentsList = ({ assignments }) => {
+const AssignmentsList = ({
+  assignments,
+  weeksArray,
+  monthDataArray,
+  weekCalendarFlatListRef,
+}) => {
   const navigation = useNavigation();
   const transitionRef = React.useRef();
+  const specialDates = useContext(CalendarContext);
 
   const [incompletedAssignments, setIncompletedAssignments] = useState();
   const [completedAssignments, setCompletedAssignments] = useState();
@@ -41,18 +48,37 @@ const AssignmentsList = ({ assignments }) => {
     }
   };
 
-  const handleRelease = (event) => {
+  const handleRelease = useCallback(() => {
     if (pulledFarEnough && !isSwithchingToAnotherList) {
       setIsSwitchingToAnotherList(true);
+      setAssignmentsDisplayed(
+        assignmentsDisplayed === "Incomplete" ? "Complete" : "Incomplete"
+      );
     }
-    setAssignmentsDisplayed(
-      assignmentsDisplayed === "Incomplete" ? "Complete" : "Incomplete"
-    );
-  };
+  });
 
   useEffect(() => {
     scrollY.addListener((value) => handleScroll(value, isSwithchingToAnotherList));
   }, [isSwithchingToAnotherList]);
+
+  /* Change the date selected on the week calendar as the user scrolls through assignments */
+  const onViewRef = React.useRef(({ viewableItems }) => {
+    if (viewableItems.length > 0) {
+      const firstViewableItemDate = new Date(viewableItems[0].item[0].date);
+      const firstViewableItemDayData = Calendar.getDayDataFromDate(
+        firstViewableItemDate,
+        weeksArray,
+        monthDataArray
+      );
+      specialDates.edit({
+        id: "Selected Date",
+        dateObject: firstViewableItemDayData,
+      });
+      weekCalendarFlatListRef.current.scrollToIndex({
+        index: firstViewableItemDayData.weekIndex,
+      });
+    }
+  });
 
   /* Filter the assignments array by its completeness and sort it by date */
   const filterAssignmentsByDate = (assignmentsInput, date) => {
@@ -125,7 +151,9 @@ const AssignmentsList = ({ assignments }) => {
         keyExtractor={(index) => index[0].date}
         extraData={assignmentsDisplayed}
         showsVerticalScrollIndicator={false}
-        onResponderRelease={(event) => handleRelease(event)}
+        ListFooterComponent={() => <View style={{ height: 560 }} />}
+        onResponderRelease={handleRelease}
+        onViewableItemsChanged={onViewRef.current}
         onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
           useNativeDriver: true,
         })}

@@ -40,6 +40,20 @@ export class Calendar {
     ];
   }
 
+  static getDayDataFromDate(date, weeksArray, monthDataArray) {
+    const firstMonthInWeeksArray = monthDataArray[weeksArray[0][0].monthIndex].month;
+    const monthIndexOfDate = firstMonthInWeeksArray - date.getMonth();
+    var dayIndex = date.getDay();
+    var weekIndex = monthIndexOfDate * 4;
+    while (
+      date.getDate() !== weeksArray[weekIndex][dayIndex].day ||
+      monthIndexOfDate !== weeksArray[weekIndex][dayIndex].monthIndex
+    ) {
+      weekIndex++;
+    }
+    return weeksArray[weekIndex][dayIndex];
+  }
+
   static getDaysInMonth(month, year) {
     //Month should be incremented by 1 because the 'month' parameter is the month index (1-12 changed to 0-11)
     //to get total days of the wanted month.

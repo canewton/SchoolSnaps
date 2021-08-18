@@ -64,6 +64,7 @@ const CalendarScreen = () => {
         assignments={assignments.state}
         monthDataArray={monthDataArray}
         weeksArray={weeksArray}
+        weekCalendarFlatListRef={weekCalendarFlatListRef}
       />
     </View>
   );
