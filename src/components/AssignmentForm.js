@@ -10,6 +10,7 @@ import AccordionListItem from "./AccordianListItem";
 import CalendarDisplay from "../calendar/CalendarDisplay";
 import HeaderButton from "./HeaderButton";
 import { Assignment } from "../classes/Assignment";
+import { Colors } from "../classes/Colors";
 
 const AssignmentForm = ({ onSubmit, initialValues, calendarData }) => {
   const classes = useContext(ClassesContext);
@@ -90,7 +91,7 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData }) => {
         </View>
         <AccordionListItem
           title="Class:  "
-          pickedItem={schoolClass.name}
+          pickedItem={() => <Text style={styles.headerText}>{schoolClass.name}</Text>}
           open={classIsOpen}
           setOpen={(boolean) => setClassIsOpen(boolean)}
         >
@@ -105,7 +106,7 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData }) => {
         </AccordionListItem>
         <AccordionListItem
           title="Type:  "
-          pickedItem={iconName}
+          pickedItem={() => <Text style={styles.headerText}>{iconName}</Text>}
           open={typeIsOpen}
           setOpen={(boolean) => setTypeIsOpen(boolean)}
         >
@@ -121,13 +122,15 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData }) => {
         </AccordionListItem>
         <AccordionListItem
           title="Date:  "
-          pickedItem={
-            Calendar.monthNames[date.getMonth()] +
-            " " +
-            date.getDate() +
-            ", " +
-            date.getFullYear()
-          }
+          pickedItem={() => (
+            <Text style={styles.headerText}>
+              {Calendar.monthNames[date.getMonth()] +
+                " " +
+                date.getDate() +
+                ", " +
+                date.getFullYear()}
+            </Text>
+          )}
           open={calendarIsOpen}
           setOpen={setCalendarIsOpen}
         >
@@ -162,19 +165,21 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData }) => {
 const styles = StyleSheet.create({
   input: {
     marginLeft: 2,
-    fontSize: 20,
-    fontWeight: "600",
+    fontSize: 16,
+    fontWeight: "400",
     width: 500,
   },
-  textInputLabel: { fontSize: 20, fontWeight: "600", letterSpacing: 0.5 },
+  textInputLabel: { fontSize: 16, fontWeight: "400", letterSpacing: 0.5 },
   textInputContainer: {
-    marginHorizontal: 10,
     marginTop: 10,
     backgroundColor: "white",
-    borderRadius: 10,
     padding: 15,
     flexDirection: "row",
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderColor: Colors.changeOpacity("#000000", 0.14),
   },
+  headerText: { fontSize: 16, fontWeight: "400", letterSpacing: 0.5 },
 });
 
 export default AssignmentForm;

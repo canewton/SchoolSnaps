@@ -16,6 +16,7 @@ const HorizontalScrollPicker = ({
         keyExtractor={(index) => {
           return index.id === undefined ? index.name : index.id + "";
         }}
+        ListFooterComponent={<View style={{ width: 15 }} />}
         showsHorizontalScrollIndicator={false}
         horizontal
         renderItem={({ item }) => {
@@ -54,12 +55,8 @@ const HorizontalScrollPicker = ({
                         ]
                   }
                 >
-                  {/* render the icon */}
-                  {item.iconName === undefined
-                    ? item.icon
-                    : ClassIcons.findIcon(item.iconName, 30, "black")}
+                  <Text style={styles.classLabel}>{item.name}</Text>
                 </View>
-                <Text style={styles.classLabel}>{item.name}</Text>
               </View>
             </TouchableOpacity>
           );
@@ -71,24 +68,21 @@ const HorizontalScrollPicker = ({
 
 const styles = StyleSheet.create({
   classCircle: {
-    height: 60,
-    width: 60,
-    borderRadius: 30,
-    marginTop: 10,
+    height: 30,
+    borderRadius: 10,
+    marginVertical: 15,
     alignItems: "center",
     justifyContent: "center",
+    marginLeft: 15,
   },
   classLabel: {
-    marginTop: 5,
-    marginHorizontal: 6,
-    fontSize: 10,
-    alignSelf: "center",
-    fontWeight: "300",
-    textAlign: "center",
+    marginVertical: 5,
+    marginHorizontal: 10,
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "white",
   },
   choiceContainer: {
-    width: 100,
-    height: 120,
     alignItems: "center",
   },
 });

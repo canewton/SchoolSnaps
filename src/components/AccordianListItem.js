@@ -7,6 +7,7 @@ import {
   Animated,
   Easing,
 } from "react-native";
+import { Colors } from "../classes/Colors";
 
 const AccordionListItem = ({ title, children, pickedItem, open, setOpen, height }) => {
   const animatedController = useRef(new Animated.Value(1)).current;
@@ -50,15 +51,18 @@ const AccordionListItem = ({ title, children, pickedItem, open, setOpen, height 
     } else if (!open && bodyHeight !== 0) {
       closeListItem();
     }
-  }, [pickedItem]);
+  }, [open]);
 
   return (
     <View style={styles.collapsibleContainer}>
       <TouchableWithoutFeedback onPress={() => toggleListItem()}>
-        <View style={{ ...styles.collapsibleHeader, borderRadius: !open ? 10 : 10 }}>
-          <Text style={styles.headerText}>{title + pickedItem}</Text>
+        <View style={styles.collapsibleHeader}>
+          <Text style={styles.headerText}>{title}</Text>
+          {pickedItem()}
         </View>
       </TouchableWithoutFeedback>
+
+      {open && <View style={styles.collapsibleDivider} />}
 
       <Animated.View style={[styles.bodyBackground, { height: bodyHeight }]}>
         <View
@@ -87,17 +91,20 @@ const styles = StyleSheet.create({
   },
   collapsibleHeader: {
     padding: 15,
+    flexDirection: "row",
+    alignItems: "center",
   },
   collapsibleDivider: {
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: "#bcb8b1",
-    marginHorizontal: 15,
+    borderBottomColor: Colors.changeOpacity("#000000", 0.14),
+    marginLeft: 15,
   },
-  headerText: { fontSize: 20, fontWeight: "600", letterSpacing: 0.5 },
+  headerText: { fontSize: 16, fontWeight: "400", letterSpacing: 0.5 },
   collapsibleContainer: {
-    marginHorizontal: 10,
     marginTop: 10,
     backgroundColor: "white",
-    borderRadius: 10,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderColor: Colors.changeOpacity("#000000", 0.14),
   },
 });

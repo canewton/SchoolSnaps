@@ -43,85 +43,68 @@ export class Colors {
 
   static classColors = [
     {
-      //dark red
-      primaryColor: this.increaseBrightness("#9d0208", this.classesColorBrightness),
-      //primaryColor: "#b13439",
-    },
-    {
-      //default 1
       //red
       primaryColor: this.increaseBrightness("#E63946", this.classesColorBrightness),
     },
     {
-      //pink
-      primaryColor: this.increaseBrightness("#ff7096", this.classesColorBrightness),
+      //dark orange
+      primaryColor: this.increaseBrightness("#ff8e0f", this.classesColorBrightness),
+    },
+    {
+      //yellow
+      primaryColor: this.increaseBrightness("#e7d809", this.classesColorBrightness),
+    },
+    {
+      //green
+      primaryColor: this.increaseBrightness("#88d01a", this.classesColorBrightness),
+    },
+    {
+      //dark green
+      primaryColor: this.increaseBrightness("#2fc819", this.classesColorBrightness),
+    },
+    {
+      //light blue
+      primaryColor: this.increaseBrightness("#39e6bf", this.classesColorBrightness),
+    },
+    {
+      //blue
+      primaryColor: this.increaseBrightness("#2dafe4", this.classesColorBrightness),
+    },
+    {
+      //dark blue
+      primaryColor: this.increaseBrightness("#2560da", this.classesColorBrightness),
+    },
+    {
+      //dark purple
+      primaryColor: this.increaseBrightness("#6c39e6", this.classesColorBrightness),
+    },
+    {
+      //purple
+      primaryColor: this.increaseBrightness("#c239e6", this.classesColorBrightness),
+    },
+    {
+      //light purple
+      primaryColor: this.increaseBrightness("#e639b4", this.classesColorBrightness),
     },
     {
       //salmon
       primaryColor: this.increaseBrightness("#ffb5a7", this.classesColorBrightness),
     },
     {
-      //dark orange
-      primaryColor: this.increaseBrightness("#cc5803", this.classesColorBrightness),
-    },
-    {
-      //default 5
-      //orange
-      primaryColor: this.increaseBrightness("#F8961E", this.classesColorBrightness),
-    },
-    {
-      //default 6
-      //yellow
-      primaryColor: this.increaseBrightness("#ffd933", this.classesColorBrightness),
-    },
-    {
-      //default 7
-      //green
-      primaryColor: this.increaseBrightness("#80b918", this.classesColorBrightness),
-    },
-    {
-      //dark green
-      primaryColor: this.increaseBrightness("#606c38", this.classesColorBrightness),
-    },
-    {
-      //default 9
-      //turquoise
-      primaryColor: this.increaseBrightness("#43AA8B", this.classesColorBrightness),
-    },
-    {
-      //default 10
-      //blue
-      primaryColor: this.increaseBrightness("#277DA1", this.classesColorBrightness),
-    },
-    {
-      //dark blue
-      primaryColor: this.increaseBrightness("#004e98", this.classesColorBrightness),
-    },
-    {
-      //default 12
-      //purple
-      primaryColor: this.increaseBrightness("#9673A6", this.classesColorBrightness),
-    },
-    {
-      //dark purple
-      primaryColor: this.increaseBrightness("#6a4c93", this.classesColorBrightness),
-    },
-    {
-      //brown
-      primaryColor: this.increaseBrightness("#cb997e", this.classesColorBrightness),
+      //tan
+      primaryColor: this.increaseBrightness("#dda15e", this.classesColorBrightness),
     },
     {
       //dark brown
       primaryColor: this.increaseBrightness("#734500", this.classesColorBrightness),
     },
     {
-      //gray
-      primaryColor: this.increaseBrightness("#b1a7a6", this.classesColorBrightness),
-    },
-    {
-      //default 17
       //black
       primaryColor: this.increaseBrightness("#23445D", this.classesColorBrightness),
+    },
+    {
+      //gray
+      primaryColor: this.increaseBrightness("#b1a7a6", this.classesColorBrightness),
     },
   ];
 
