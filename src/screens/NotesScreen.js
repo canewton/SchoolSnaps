@@ -87,7 +87,11 @@ const NotesScreen = ({ route }) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <NotesList notesFilteredByDate={notesFilteredByClass} mode={mode} />
+      <NotesList
+        notesFilteredByDate={notesFilteredByClass}
+        mode={mode}
+        imagesPerRow={2}
+      />
       {mode === modes[0] && (
         <FloatingActionButton
           schoolClass={schoolClass}

@@ -1,5 +1,12 @@
 import React, { useContext, useState, useEffect } from "react";
-import { View, Text, StyleSheet, ScrollView, TextInput } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Calendar } from "../classes/Calendar";
 import { Context as ClassesContext } from "../context/ClassesContext";
@@ -80,7 +87,7 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData }) => {
   return (
     <View style={{ flex: 1 }}>
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-        <View style={styles.textInputContainer}>
+        <View style={{ ...styles.textInputContainer, marginTop: 10 }}>
           <Text style={styles.textInputLabel}>{"Title: "}</Text>
           <TextInput
             style={styles.input}
@@ -156,6 +163,39 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData }) => {
             />
           </View>
         </AccordionListItem>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Attach Notes", schoolClass)}
+        >
+          <View
+            style={{
+              ...styles.textInputContainer,
+              justifyContent: "center",
+              marginTop: 10,
+              borderBottomWidth: 0,
+            }}
+          >
+            <Text
+              style={{
+                ...styles.textInputLabel,
+                fontWeight: "bold",
+                color: Colors.primaryColor,
+              }}
+            >
+              Attach Notes
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <View style={{ ...styles.textInputContainer }}>
+          <Text
+            style={{
+              ...styles.textInputLabel,
+              color: Colors.changeOpacity("#000000", 0.14),
+              height: 100,
+            }}
+          >
+            No Notes Attached
+          </Text>
+        </View>
         <View style={{ marginBottom: 50 }} />
       </ScrollView>
     </View>
@@ -171,7 +211,7 @@ const styles = StyleSheet.create({
   },
   textInputLabel: { fontSize: 16, fontWeight: "400", letterSpacing: 0.5 },
   textInputContainer: {
-    marginTop: 10,
+    //marginTop: 10,
     backgroundColor: "white",
     padding: 15,
     flexDirection: "row",
