@@ -55,11 +55,7 @@ const customTabBarStyle = {
     position: "absolute",
     backgroundColor: Colors.tabBackgroundColor,
     height: 90,
-    elevation: 4,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
     borderTopWidth: 0,
-    ...Colors.shadow,
   },
   tabStyle: {
     marginTop: 15,
@@ -78,9 +74,7 @@ const bigHeaderStyle = (headerHeight) => {
   return {
     headerStyle: {
       backgroundColor: "white",
-      ...Colors.shadow,
-      borderBottomLeftRadius: 10,
-      borderBottomRightRadius: 10,
+      shadowColor: "transparent",
       height: headerHeight,
     },
     headerTitleAlign: "left",

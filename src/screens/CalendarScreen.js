@@ -8,6 +8,7 @@ import { Colors } from "../classes/Colors";
 import AssignmentsList from "../components/AssignmentsList";
 import { Context as AssignmentContext } from "../context/AssignmentsContext";
 import { Context as CalendarContext } from "../context/CalendarContext";
+import BottomSheetTrigger from "../components/BottomSheetTrigger";
 
 const CalendarScreen = () => {
   const navigation = useNavigation();
@@ -48,14 +49,11 @@ const CalendarScreen = () => {
         <View>
           <View style={styles.headerContainer}>
             <Text style={styles.headerText}>Assignments</Text>
-            <AddButton
-              navigation={navigation}
-              destination="New Assignment"
-              propsToPass={{
-                monthDataArray: monthDataArray,
-                weeksArray: weeksArray,
-              }}
-            />
+            <BottomSheetTrigger>
+              {(openBottomSheet) => (
+                <AddButton onPressCallback={() => openBottomSheet()} />
+              )}
+            </BottomSheetTrigger>
           </View>
           <WeekdayCalendar
             weeksArray={weeksArray}
