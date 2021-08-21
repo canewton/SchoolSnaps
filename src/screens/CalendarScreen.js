@@ -9,6 +9,8 @@ import AssignmentsList from "../components/AssignmentsList";
 import { Context as AssignmentContext } from "../context/AssignmentsContext";
 import { Context as CalendarContext } from "../context/CalendarContext";
 import BottomSheetTrigger from "../components/BottomSheetTrigger";
+import AssignmentForm from "../components/AssignmentForm";
+import FormBottomSheetHeader from "../components/FormBottomSheetHeader";
 
 const CalendarScreen = () => {
   const navigation = useNavigation();
@@ -49,7 +51,22 @@ const CalendarScreen = () => {
         <View>
           <View style={styles.headerContainer}>
             <Text style={styles.headerText}>Assignments</Text>
-            <BottomSheetTrigger>
+            <BottomSheetTrigger
+              sheetStyle={{ backgroundColor: Colors.backgroundColor }}
+              headerComponent={() => <FormBottomSheetHeader title="New Assignment" />}
+              renderContent={() => (
+                <AssignmentForm
+                  initialValues={null}
+                  calendarData={{
+                    weeksArray: weeksArray,
+                    monthDataArray: monthDataArray,
+                  }}
+                  onSubmit={(assignmentSubmitted) => {
+                    assignments.add(assignmentSubmitted);
+                  }}
+                />
+              )}
+            >
               {(openBottomSheet) => (
                 <AddButton onPressCallback={() => openBottomSheet()} />
               )}

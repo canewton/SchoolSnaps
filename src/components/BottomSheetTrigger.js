@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Children } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Modal, Dimensions } from "react-native";
 import Animated, {
   useAnimatedGestureHandler,
@@ -7,10 +7,11 @@ import Animated, {
   withTiming,
   useDerivedValue,
   runOnJS,
+  withDecay,
 } from "react-native-reanimated";
 import { PanGestureHandler } from "react-native-gesture-handler";
 
-const BottomSheetTrigger = ({ children }) => {
+const BottomSheetTrigger = ({ children, sheetStyle, renderContent, headerComponent }) => {
   const viewHeight = Dimensions.get("window").height;
   const [modalVisible, setModalVisible] = useState(false);
   const spaceFromTop = 40;
@@ -18,10 +19,15 @@ const BottomSheetTrigger = ({ children }) => {
   const minPos = 0;
 
   const posY = useSharedValue(maxPos);
+  const scrollY = useSharedValue(0);
   const speed = 1.4;
 
-  const sheetStyle = useAnimatedStyle(() => {
+  const sheetAnimatedStyle = useAnimatedStyle(() => {
     return { transform: [{ translateY: posY.value }] };
+  });
+
+  const renderContentAnimatedStyle = useAnimatedStyle(() => {
+    return { transform: [{ translateY: scrollY.value }] };
   });
 
   const backgroundStyle = useAnimatedStyle(() => {
@@ -53,20 +59,31 @@ const BottomSheetTrigger = ({ children }) => {
   const gestureHandler = useAnimatedGestureHandler({
     onStart(_, context) {
       context.startPos = posY.value;
+      context.startScroll = scrollY.value;
     },
     onActive(event, context) {
-      if (posY.value <= maxPos && posY.value >= minPos) {
+      if (scrollY.value < 0 || (posY.value <= minPos && event.translationY < 0)) {
+        scrollY.value = context.startScroll + event.translationY;
+      } else {
         posY.value = context.startPos + event.translationY;
+        if (posY.value < minPos) {
+          posY.value = minPos;
+        }
+        if (posY.value > minPos) {
+          scrollY.value = 0;
+        }
       }
     },
-    onEnd() {
-      if (posY.value > minPos + 200) {
-        posY.value = withTiming(maxPos, {
-          duration: (maxPos - posY.value) / speed,
+    onEnd(event) {
+      scrollY.value = withDecay({ velocity: event.velocityY, clamp: [-300, 0] });
+
+      if (posY.value < minPos + 200) {
+        posY.value = withTiming(minPos, {
+          duration: ((posY.value - minPos) / speed) * 1.8,
         });
       } else {
-        posY.value = withTiming(minPos, {
-          duration: (posY.value - minPos) / speed,
+        posY.value = withTiming(maxPos, {
+          duration: (maxPos - posY.value) / speed,
         });
       }
     },
@@ -88,7 +105,7 @@ const BottomSheetTrigger = ({ children }) => {
           <PanGestureHandler onGestureEvent={gestureHandler}>
             <Animated.View
               style={[
-                sheetStyle,
+                sheetAnimatedStyle,
                 {
                   position: "absolute",
                   top: spaceFromTop,
@@ -99,9 +116,26 @@ const BottomSheetTrigger = ({ children }) => {
                   backgroundColor: "white",
                   borderTopLeftRadius: 10,
                   borderTopRightRadius: 10,
+                  overflow: "hidden",
+                  ...sheetStyle,
                 },
               ]}
-            />
+            >
+              <Animated.View style={[renderContentAnimatedStyle]}>
+                <View style={{ height: 900 }}>
+                  {headerComponent !== undefined ? (
+                    headerComponent()
+                  ) : (
+                    <Text>header content not defined</Text>
+                  )}
+                  {renderContent !== undefined ? (
+                    renderContent()
+                  ) : (
+                    <Text>render content not defined</Text>
+                  )}
+                </View>
+              </Animated.View>
+            </Animated.View>
           </PanGestureHandler>
         </Animated.View>
       </Modal>

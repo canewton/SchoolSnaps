@@ -1,12 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import {
-  View,
-  Text,
-  TouchableWithoutFeedback,
-  StyleSheet,
-  Animated,
-  Easing,
-} from "react-native";
+import { View, Text, StyleSheet, Animated, Easing, TouchableOpacity } from "react-native";
 import { Colors } from "../classes/Colors";
 
 const AccordionListItem = ({ title, children, pickedItem, open, setOpen, height }) => {
@@ -55,12 +48,12 @@ const AccordionListItem = ({ title, children, pickedItem, open, setOpen, height 
 
   return (
     <View style={styles.collapsibleContainer}>
-      <TouchableWithoutFeedback onPress={() => toggleListItem()}>
+      <TouchableOpacity onPress={() => toggleListItem()}>
         <View style={styles.collapsibleHeader}>
           <Text style={styles.headerText}>{title}</Text>
           {pickedItem()}
         </View>
-      </TouchableWithoutFeedback>
+      </TouchableOpacity>
 
       {open && <View style={styles.collapsibleDivider} />}
 
@@ -101,7 +94,6 @@ const styles = StyleSheet.create({
   },
   headerText: { fontSize: 16, fontWeight: "400", letterSpacing: 0.5 },
   collapsibleContainer: {
-    marginTop: 10,
     backgroundColor: "white",
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderTopWidth: StyleSheet.hairlineWidth,

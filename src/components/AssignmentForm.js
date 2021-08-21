@@ -58,7 +58,7 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData }) => {
   }, []);
 
   //add a save and cancel button on either side of the header
-  React.useLayoutEffect(() => {
+  /* React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
         <HeaderButton
@@ -82,122 +82,121 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData }) => {
         <HeaderButton name="Cancel" onPressCallback={() => navigation.pop()} />
       ),
     });
-  });
+  }); */
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-        <View style={{ ...styles.textInputContainer, marginTop: 10 }}>
-          <Text style={styles.textInputLabel}>{"Title: "}</Text>
-          <TextInput
-            style={styles.input}
-            value={title}
-            placeholder="(Optional)"
-            onChangeText={(text) => setTitle(text)}
+      <View style={{ ...styles.textInputContainer, marginTop: 10 }}>
+        <Text style={styles.textInputLabel}>{"Title: "}</Text>
+        <TextInput
+          style={styles.input}
+          value={title}
+          placeholder="(Optional)"
+          onChangeText={(text) => setTitle(text)}
+        />
+      </View>
+      <View style={{ marginBottom: 50 }} />
+      <AccordionListItem
+        title="Class:  "
+        pickedItem={() => <Text style={styles.headerText}>{schoolClass.name}</Text>}
+        open={classIsOpen}
+        setOpen={(boolean) => setClassIsOpen(boolean)}
+      >
+        <HorizontalScrollPicker
+          optionsToPick={classes.state}
+          onPressCallback={(pickedItem) => {
+            setSchoolClass(pickedItem);
+            setClassIsOpen(false);
+          }}
+          currentPick={schoolClass.id}
+        />
+      </AccordionListItem>
+      <View style={{ marginBottom: 15 }} />
+      <AccordionListItem
+        title="Type:  "
+        pickedItem={() => <Text style={styles.headerText}>{iconName}</Text>}
+        open={typeIsOpen}
+        setOpen={(boolean) => setTypeIsOpen(boolean)}
+      >
+        <HorizontalScrollPicker
+          optionsToPick={AssignmentTypeIcons.iconList(30, "black")}
+          onPressCallback={(pickedItem) => {
+            setIconName(pickedItem.name);
+            setTypeIsOpen(false);
+          }}
+          currentPick={iconName}
+          backgroundColor={schoolClass.primaryColor}
+        />
+      </AccordionListItem>
+      <View style={{ marginBottom: 50 }} />
+      <AccordionListItem
+        title="Date:  "
+        pickedItem={() => (
+          <Text style={styles.headerText}>
+            {Calendar.monthNames[date.getMonth()] +
+              " " +
+              date.getDate() +
+              ", " +
+              date.getFullYear()}
+          </Text>
+        )}
+        open={calendarIsOpen}
+        setOpen={setCalendarIsOpen}
+      >
+        <View style={{ marginBottom: 25 }}>
+          <CalendarDisplay
+            weeksArray={calendarData.weeksArray}
+            monthDataArray={calendarData.monthDataArray}
+            spaceBetweenPages={Calendar.spaceBetweenPages}
+            onPressCallback={(pickedItem) => {
+              const monthIndexOfSelectedDate = pickedItem.monthIndex;
+              const selectedDate = pickedItem.day;
+              const monthOfSelectedDate =
+                calendarData.monthDataArray[monthIndexOfSelectedDate].month + 1;
+              const yearOfSelectedDate =
+                calendarData.monthDataArray[monthIndexOfSelectedDate].year;
+              setDate(
+                new Date(
+                  monthOfSelectedDate + "/" + selectedDate + "/" + yearOfSelectedDate
+                )
+              );
+              setCalendarIsOpen(false);
+            }}
           />
         </View>
-        <AccordionListItem
-          title="Class:  "
-          pickedItem={() => <Text style={styles.headerText}>{schoolClass.name}</Text>}
-          open={classIsOpen}
-          setOpen={(boolean) => setClassIsOpen(boolean)}
+      </AccordionListItem>
+      <TouchableOpacity onPress={() => navigation.navigate("Attach Notes", schoolClass)}>
+        <View
+          style={{
+            ...styles.textInputContainer,
+            justifyContent: "center",
+            marginTop: 10,
+            borderBottomWidth: 0,
+          }}
         >
-          <HorizontalScrollPicker
-            optionsToPick={classes.state}
-            onPressCallback={(pickedItem) => {
-              setSchoolClass(pickedItem);
-              setClassIsOpen(false);
-            }}
-            currentPick={schoolClass.id}
-          />
-        </AccordionListItem>
-        <AccordionListItem
-          title="Type:  "
-          pickedItem={() => <Text style={styles.headerText}>{iconName}</Text>}
-          open={typeIsOpen}
-          setOpen={(boolean) => setTypeIsOpen(boolean)}
-        >
-          <HorizontalScrollPicker
-            optionsToPick={AssignmentTypeIcons.iconList(30, "black")}
-            onPressCallback={(pickedItem) => {
-              setIconName(pickedItem.name);
-              setTypeIsOpen(false);
-            }}
-            currentPick={iconName}
-            backgroundColor={schoolClass.primaryColor}
-          />
-        </AccordionListItem>
-        <AccordionListItem
-          title="Date:  "
-          pickedItem={() => (
-            <Text style={styles.headerText}>
-              {Calendar.monthNames[date.getMonth()] +
-                " " +
-                date.getDate() +
-                ", " +
-                date.getFullYear()}
-            </Text>
-          )}
-          open={calendarIsOpen}
-          setOpen={setCalendarIsOpen}
-        >
-          <View style={{ marginBottom: 25 }}>
-            <CalendarDisplay
-              weeksArray={calendarData.weeksArray}
-              monthDataArray={calendarData.monthDataArray}
-              spaceBetweenPages={Calendar.spaceBetweenPages}
-              onPressCallback={(pickedItem) => {
-                const monthIndexOfSelectedDate = pickedItem.monthIndex;
-                const selectedDate = pickedItem.day;
-                const monthOfSelectedDate =
-                  calendarData.monthDataArray[monthIndexOfSelectedDate].month + 1;
-                const yearOfSelectedDate =
-                  calendarData.monthDataArray[monthIndexOfSelectedDate].year;
-                setDate(
-                  new Date(
-                    monthOfSelectedDate + "/" + selectedDate + "/" + yearOfSelectedDate
-                  )
-                );
-                setCalendarIsOpen(false);
-              }}
-            />
-          </View>
-        </AccordionListItem>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("Attach Notes", schoolClass)}
-        >
-          <View
-            style={{
-              ...styles.textInputContainer,
-              justifyContent: "center",
-              marginTop: 10,
-              borderBottomWidth: 0,
-            }}
-          >
-            <Text
-              style={{
-                ...styles.textInputLabel,
-                fontWeight: "bold",
-                color: Colors.primaryColor,
-              }}
-            >
-              Attach Notes
-            </Text>
-          </View>
-        </TouchableOpacity>
-        <View style={{ ...styles.textInputContainer }}>
           <Text
             style={{
               ...styles.textInputLabel,
-              color: Colors.changeOpacity("#000000", 0.14),
-              height: 100,
+              fontWeight: "bold",
+              color: Colors.primaryColor,
             }}
           >
-            No Notes Attached
+            Attach Notes
           </Text>
         </View>
-        <View style={{ marginBottom: 50 }} />
-      </ScrollView>
+      </TouchableOpacity>
+      <View style={{ ...styles.textInputContainer }}>
+        <Text
+          style={{
+            ...styles.textInputLabel,
+            color: Colors.changeOpacity("#000000", 0.14),
+            height: 100,
+          }}
+        >
+          No Notes Attached
+        </Text>
+      </View>
+      <View style={{ marginBottom: 70 }} />
     </View>
   );
 };
@@ -211,7 +210,6 @@ const styles = StyleSheet.create({
   },
   textInputLabel: { fontSize: 16, fontWeight: "400", letterSpacing: 0.5 },
   textInputContainer: {
-    //marginTop: 10,
     backgroundColor: "white",
     padding: 15,
     flexDirection: "row",
