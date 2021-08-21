@@ -12,7 +12,7 @@ import { Assignment } from "../classes/Assignment";
 import { Colors } from "../classes/Colors";
 import FormBottomSheetHeader from "../components/FormBottomSheetHeader";
 
-const AssignmentForm = ({ onSubmit, initialValues, calendarData }) => {
+const AssignmentForm = ({ onSubmit, initialValues, calendarData, headerTitle }) => {
   const classes = useContext(ClassesContext);
   const specialDates = useContext(CalendarContext);
 
@@ -53,7 +53,7 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData }) => {
   return (
     <View style={{ flex: 1 }}>
       <FormBottomSheetHeader
-        title="New Assignment"
+        title={headerTitle}
         onSaveCallback={() => {
           onSubmit(
             new Assignment(

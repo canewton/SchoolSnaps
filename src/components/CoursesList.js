@@ -29,6 +29,7 @@ const CoursesList = ({ classesToDisplay }) => {
                       classes.edit(classSubmitted);
                       closeBottomSheet();
                     }}
+                    headerTitle="Edit Class"
                   />
                 )}
               >

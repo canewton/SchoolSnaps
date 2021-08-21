@@ -26,7 +26,7 @@ const totalColorWhiteSpace = optionColumns * optionCircleMargin * 2 + edgeMargin
 //calculate the circle diameter so that all of the circles can be spaced evenly on the screen
 const optionCircleDiameter = (windowWidth - totalColorWhiteSpace) / optionColumns;
 
-const ClassForm = ({ onSubmit, initialValues }) => {
+const ClassForm = ({ onSubmit, initialValues, headerTitle }) => {
   //set default values
   const [id, setId] = useState(ItemArray.generateUniqueID());
   const [name, setName] = useState("");
@@ -117,7 +117,7 @@ const ClassForm = ({ onSubmit, initialValues }) => {
   return (
     <View>
       <FormBottomSheetHeader
-        title="New Class"
+        title={headerTitle}
         onSaveCallback={() => {
           onSubmit(new SchoolClass(id, name, primaryColor, iconName, status));
         }}

@@ -63,6 +63,7 @@ const CalendarScreen = () => {
                     assignments.add(assignmentSubmitted);
                     closeBottomSheet();
                   }}
+                  headerTitle="New Assignment"
                 />
               )}
             >

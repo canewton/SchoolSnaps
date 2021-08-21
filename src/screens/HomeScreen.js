@@ -31,6 +31,7 @@ const HomeScreen = () => {
                     classes.add(classSubmitted);
                     closeBottomSheet();
                   }}
+                  headerTitle="New Class"
                 />
               )}
             >
