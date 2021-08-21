@@ -1,55 +1,68 @@
-import React from "react";
+import React, { useContext } from "react";
+import { Context as ClassesContext } from "../context/ClassesContext";
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from "react-native";
 import { ClassIcons } from "../icons/ClassIcons";
 import { GeneralIcons } from "../icons/GeneralIcons";
-import { useNavigation } from "@react-navigation/native";
 import { Colors } from "../classes/Colors";
+import BottomSheetTrigger from "./BottomSheetTrigger";
+import ClassForm from "./ClassForm";
 
-const CoursesList = ({ classes }) => {
-  const navigation = useNavigation();
+const CoursesList = ({ classesToDisplay }) => {
+  const classes = useContext(ClassesContext);
 
   return (
     <View style={{ flex: 1 }}>
       <FlatList
-        data={classes}
+        data={classesToDisplay}
         keyExtractor={(index) => index.id + ""}
         ListHeaderComponent={() => <View style={{ height: 10 }} />}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => {
           return (
             <View>
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate("Notes", item);
-                }}
-              >
-                <View
-                  style={{
-                    ...styles.classButton,
-                    backgroundColor: item.primaryColor,
-                  }}
-                >
-                  <View
-                    style={{
-                      ...styles.classIconContainer,
-                      backgroundColor: Colors.changeOpacity("#000000", 0.1),
+              <BottomSheetTrigger
+                sheetStyle={{ backgroundColor: Colors.backgroundColor }}
+                renderContent={(closeBottomSheet) => (
+                  <ClassForm
+                    initialValues={item}
+                    onSubmit={(classSubmitted) => {
+                      classes.edit(classSubmitted);
+                      closeBottomSheet();
                     }}
-                  >
-                    {ClassIcons.findIcon(item.iconName, 30, "white")}
-                  </View>
-                  <View style={styles.textContainer}>
-                    <Text style={styles.titleText}>{item.name}</Text>
-                    <Text style={styles.classDetail}>0 notes</Text>
-                  </View>
-                  <View style={styles.arrowContainer}>
-                    {GeneralIcons.findIcon(
-                      "Forward",
-                      20,
-                      Colors.changeOpacity("#000000", 0.15)
-                    )}
-                  </View>
-                </View>
-              </TouchableOpacity>
+                  />
+                )}
+              >
+                {(openBottomSheet) => (
+                  <TouchableOpacity onPress={() => openBottomSheet()}>
+                    <View
+                      style={{
+                        ...styles.classButton,
+                        backgroundColor: item.primaryColor,
+                      }}
+                    >
+                      <View
+                        style={{
+                          ...styles.classIconContainer,
+                          backgroundColor: Colors.changeOpacity("#000000", 0.1),
+                        }}
+                      >
+                        {ClassIcons.findIcon(item.iconName, 30, "white")}
+                      </View>
+                      <View style={styles.textContainer}>
+                        <Text style={styles.titleText}>{item.name}</Text>
+                        <Text style={styles.classDetail}>0 notes</Text>
+                      </View>
+                      <View style={styles.arrowContainer}>
+                        {GeneralIcons.findIcon(
+                          "Forward",
+                          20,
+                          Colors.changeOpacity("#000000", 0.15)
+                        )}
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                )}
+              </BottomSheetTrigger>
             </View>
           );
         }}

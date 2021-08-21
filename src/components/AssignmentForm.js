@@ -1,12 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Calendar } from "../classes/Calendar";
 import { Context as ClassesContext } from "../context/ClassesContext";
@@ -15,9 +8,9 @@ import HorizontalScrollPicker from "./HorizontalScrollPicker";
 import { AssignmentTypeIcons } from "../icons/AssignmentTypeIcons";
 import AccordionListItem from "./AccordianListItem";
 import CalendarDisplay from "../calendar/CalendarDisplay";
-import HeaderButton from "./HeaderButton";
 import { Assignment } from "../classes/Assignment";
 import { Colors } from "../classes/Colors";
+import FormBottomSheetHeader from "../components/FormBottomSheetHeader";
 
 const AssignmentForm = ({ onSubmit, initialValues, calendarData }) => {
   const classes = useContext(ClassesContext);
@@ -57,35 +50,24 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData }) => {
     }
   }, []);
 
-  //add a save and cancel button on either side of the header
-  /* React.useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <HeaderButton
-          name="Save"
-          onPressCallback={() =>
-            onSubmit(
-              new Assignment(
-                id,
-                schoolClass,
-                title,
-                iconName,
-                date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear(),
-                completed,
-                attachedNotes
-              )
-            )
-          }
-        />
-      ),
-      headerLeft: () => (
-        <HeaderButton name="Cancel" onPressCallback={() => navigation.pop()} />
-      ),
-    });
-  }); */
-
   return (
     <View style={{ flex: 1 }}>
+      <FormBottomSheetHeader
+        title="New Assignment"
+        onSaveCallback={() => {
+          onSubmit(
+            new Assignment(
+              id,
+              schoolClass,
+              title,
+              iconName,
+              date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear(),
+              completed,
+              attachedNotes
+            )
+          );
+        }}
+      />
       <View style={{ ...styles.textInputContainer, marginTop: 10 }}>
         <Text style={styles.textInputLabel}>{"Title: "}</Text>
         <TextInput

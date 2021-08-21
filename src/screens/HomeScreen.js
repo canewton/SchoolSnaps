@@ -7,6 +7,8 @@ import CoursesList from "../components/CoursesList";
 import TopTabs from "../components/TopTabs";
 import { ItemArray } from "../classes/ItemArray";
 import { Colors } from "../classes/Colors";
+import BottomSheetTrigger from "../components/BottomSheetTrigger";
+import ClassForm from "../components/ClassForm";
 
 const HomeScreen = () => {
   const classes = useContext(ClassesContext);
@@ -20,7 +22,22 @@ const HomeScreen = () => {
         <View>
           <View style={styles.headerContainer}>
             <Text style={styles.headerText}>My Courses</Text>
-            <AddButton navigation={navigation} destination="New Class" />
+            <BottomSheetTrigger
+              sheetStyle={{ backgroundColor: Colors.backgroundColor }}
+              renderContent={(closeBottomSheet) => (
+                <ClassForm
+                  initialValues={null}
+                  onSubmit={(classSubmitted) => {
+                    classes.add(classSubmitted);
+                    closeBottomSheet();
+                  }}
+                />
+              )}
+            >
+              {(openBottomSheet) => (
+                <AddButton onPressCallback={() => openBottomSheet()} />
+              )}
+            </BottomSheetTrigger>
           </View>
           <TopTabs
             tabButtons={tabButtons}
@@ -38,11 +55,15 @@ const HomeScreen = () => {
   return (
     <View style={{ flex: 1, marginBottom: 85 }}>
       {activeTab === "Current" && (
-        <CoursesList classes={ItemArray.filter(classes.state, "status", "Current")} />
+        <CoursesList
+          classesToDisplay={ItemArray.filter(classes.state, "status", "Current")}
+        />
       )}
-      {activeTab === "All" && <CoursesList classes={classes.state} />}
+      {activeTab === "All" && <CoursesList classesToDisplay={classes.state} />}
       {activeTab === "Completed" && (
-        <CoursesList classes={ItemArray.filter(classes.state, "status", "Completed")} />
+        <CoursesList
+          classesToDisplay={ItemArray.filter(classes.state, "status", "Completed")}
+        />
       )}
     </View>
   );

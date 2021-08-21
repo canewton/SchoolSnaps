@@ -8,14 +8,13 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import { Colors } from "../classes/Colors";
 import { ClassIcons } from "../icons/ClassIcons";
 import { ItemArray } from "../classes/ItemArray";
 import { FontAwesome } from "@expo/vector-icons";
-import HeaderButton from "./HeaderButton";
 import { SchoolClass } from "../classes/SchoolClass";
 import AccordionListItem from "./AccordianListItem";
+import FormBottomSheetHeader from "./FormBottomSheetHeader";
 
 //get the width of the window
 const windowWidth = Dimensions.get("window").width;
@@ -38,8 +37,6 @@ const ClassForm = ({ onSubmit, initialValues }) => {
   const [colorIsOpen, setColorIsOpen] = useState(true);
   const [iconIsOpen, setIconIsOpen] = useState(true);
 
-  const navigation = useNavigation();
-
   useEffect(() => {
     if (initialValues !== null) {
       setId(initialValues.id);
@@ -49,23 +46,6 @@ const ClassForm = ({ onSubmit, initialValues }) => {
       setStatus(initialValues.status);
     }
   }, []);
-
-  //add a save and cancel button on either side of the header
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <HeaderButton
-          name="Save"
-          onPressCallback={() =>
-            onSubmit(new SchoolClass(id, name, primaryColor, iconName, status))
-          }
-        />
-      ),
-      headerLeft: () => (
-        <HeaderButton name="Cancel" onPressCallback={() => navigation.pop()} />
-      ),
-    });
-  });
 
   const ChooseColorGrid = ({ onPressCallback }) => {
     return (
@@ -136,6 +116,12 @@ const ClassForm = ({ onSubmit, initialValues }) => {
 
   return (
     <View>
+      <FormBottomSheetHeader
+        title="New Class"
+        onSaveCallback={() => {
+          onSubmit(new SchoolClass(id, name, primaryColor, iconName, status));
+        }}
+      />
       <View style={styles.textInputContainer}>
         <TextInput
           style={{ ...styles.input, borderColor: primaryColor }}
@@ -144,6 +130,7 @@ const ClassForm = ({ onSubmit, initialValues }) => {
           onChangeText={(text) => setName(text)}
         />
       </View>
+      <View style={{ marginBottom: 40 }} />
       <AccordionListItem
         title="Color:  "
         pickedItem={() => (
@@ -154,6 +141,7 @@ const ClassForm = ({ onSubmit, initialValues }) => {
       >
         <ChooseColorGrid onPressCallback={() => setColorIsOpen(false)} />
       </AccordionListItem>
+      <View style={{ marginBottom: 40 }} />
       <AccordionListItem
         title="Icon:  "
         pickedItem={() => <View>{ClassIcons.findIcon(iconName, 18, primaryColor)}</View>}

@@ -12,7 +12,10 @@ const AddButton = ({ onPressCallback }) => {
           marginRight: 25,
           backgroundColor: Colors.primaryColor,
           borderRadius: 5,
-          padding: 0.5,
+          alignItems: "center",
+          justifyContent: "center",
+          height: 23,
+          width: 23,
         }}
       >
         <Entypo name="plus" size={22} color="white" />

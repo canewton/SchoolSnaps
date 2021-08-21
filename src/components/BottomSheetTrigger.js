@@ -14,6 +14,7 @@ import { PanGestureHandler } from "react-native-gesture-handler";
 const BottomSheetTrigger = ({ children, sheetStyle, renderContent, headerComponent }) => {
   const viewHeight = Dimensions.get("window").height;
   const [modalVisible, setModalVisible] = useState(false);
+  const [open, setOpen] = useState(false);
   const spaceFromTop = 40;
   const maxPos = viewHeight - spaceFromTop;
   const minPos = 0;
@@ -35,19 +36,29 @@ const BottomSheetTrigger = ({ children, sheetStyle, renderContent, headerCompone
   });
 
   const openBottomSheet = () => {
+    setOpen(true);
     setModalVisible(true);
   };
 
+  const closeBottomSheet = () => {
+    setOpen(false);
+  };
+
   useEffect(() => {
-    if (modalVisible === true) {
+    if (open === true) {
       posY.value = withTiming(minPos, {
         duration: (posY.value - minPos) / speed,
       });
+    } else if (open === false) {
+      posY.value = withTiming(maxPos, {
+        duration: (maxPos - posY.value) / speed,
+      });
     }
-  }, [modalVisible]);
+  }, [open]);
 
   const stopRenderingModal = () => {
     setModalVisible(false);
+    setOpen(false);
   };
 
   useDerivedValue(() => {
@@ -64,13 +75,16 @@ const BottomSheetTrigger = ({ children, sheetStyle, renderContent, headerCompone
     onActive(event, context) {
       if (scrollY.value < 0 || (posY.value <= minPos && event.translationY < 0)) {
         scrollY.value = context.startScroll + event.translationY;
+        if (scrollY.value > 0) {
+          scrollY.value = 0;
+        }
       } else {
         posY.value = context.startPos + event.translationY;
         if (posY.value < minPos) {
           posY.value = minPos;
         }
-        if (posY.value > minPos) {
-          scrollY.value = 0;
+        if (posY.value > minPos && context.startScroll !== 0) {
+          context.startScroll = 0;
         }
       }
     },
@@ -123,16 +137,8 @@ const BottomSheetTrigger = ({ children, sheetStyle, renderContent, headerCompone
             >
               <Animated.View style={[renderContentAnimatedStyle]}>
                 <View style={{ height: 900 }}>
-                  {headerComponent !== undefined ? (
-                    headerComponent()
-                  ) : (
-                    <Text>header content not defined</Text>
-                  )}
-                  {renderContent !== undefined ? (
-                    renderContent()
-                  ) : (
-                    <Text>render content not defined</Text>
-                  )}
+                  {headerComponent !== undefined && headerComponent()}
+                  {renderContent !== undefined && renderContent(closeBottomSheet)}
                 </View>
               </Animated.View>
             </Animated.View>

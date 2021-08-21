@@ -7,13 +7,9 @@ import { MenuProvider } from "react-native-popup-menu";
 import HomeScreen from "./src/screens/HomeScreen";
 import CalendarScreen from "./src/screens/CalendarScreen";
 import SettingsScreen from "./src/screens/SettingsScreen";
-import ClassesAddScreen from "./src/screens/ClassesAddScreen";
 import NotesScreen from "./src/screens/NotesScreen";
 import NotesEditScreen from "./src/screens/NotesEditScreen";
 import CameraSceen from "./src/screens/CameraScreen";
-import ClassesEditScreen from "./src/screens/ClassesEditScreen";
-import AssignmentAddScreen from "./src/screens/AssignmentAddScreen";
-import AssignmentEditScreen from "./src/screens/AssignmentEditScreen";
 import AttachNotesScreen from "./src/screens/AttachNotesScreen";
 
 import { BottomTabIcons } from "./src/icons/BottomTabIcons";
@@ -191,26 +187,6 @@ export default function App() {
                       name="Main"
                       component={MainStackScreen}
                       options={{ headerShown: false }}
-                    />
-                    <RootStack.Screen
-                      name="New Class"
-                      component={ClassesAddScreen}
-                      options={formHeaderStyle}
-                    />
-                    <RootStack.Screen
-                      name="Edit Class"
-                      component={ClassesEditScreen}
-                      options={formHeaderStyle}
-                    />
-                    <RootStack.Screen
-                      name="New Assignment"
-                      component={AssignmentAddScreen}
-                      options={formHeaderStyle}
-                    />
-                    <RootStack.Screen
-                      name="Edit Assignment"
-                      component={AssignmentEditScreen}
-                      options={formHeaderStyle}
                     />
                     <RootStack.Screen
                       name="Attach Notes"
