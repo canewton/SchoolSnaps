@@ -79,7 +79,7 @@ const AssignmentListItem = ({ item, onPressCheckmark }) => {
         >
           {AssignmentTypeIcons.findIcon(item.iconName, 30, "white")}
         </View>
-        <Text style={{ fontSize: 20, fontWeight: "600", marginLeft: 10 }}>
+        <Text style={styles.assignmentText}>
           {item.schoolClass.name + " " + item.iconName}
         </Text>
       </TouchableOpacity>
@@ -96,7 +96,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     flex: 1,
-    ...Colors.shadow,
   },
   classIconContainer: {
     height: 55,
@@ -124,6 +123,7 @@ const styles = StyleSheet.create({
     height: 55,
     borderRadius: 1,
   },
+  assignmentText: { fontSize: 20, fontWeight: "600", marginLeft: 10, color: "white" },
 });
 
 export default AssignmentListItem;

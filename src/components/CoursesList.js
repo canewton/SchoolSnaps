@@ -14,6 +14,7 @@ const CoursesList = ({ classesToDisplay }) => {
         data={classesToDisplay}
         keyExtractor={(index) => index.id + ""}
         ListHeaderComponent={() => <View style={{ height: 10 }} />}
+        ListFooterComponent={() => <View style={{ height: 5 }} />}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => {
           return (
