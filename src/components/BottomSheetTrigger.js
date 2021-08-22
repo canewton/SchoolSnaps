@@ -11,7 +11,13 @@ import Animated, {
 } from "react-native-reanimated";
 import { PanGestureHandler } from "react-native-gesture-handler";
 
-const BottomSheetTrigger = ({ children, sheetStyle, renderContent, headerComponent }) => {
+const BottomSheetTrigger = ({
+  children,
+  sheetStyle,
+  renderContent,
+  headerComponent,
+  onSheetClose,
+}) => {
   const viewHeight = Dimensions.get("window").height;
   const [modalVisible, setModalVisible] = useState(false);
   const [open, setOpen] = useState(false);
@@ -59,6 +65,9 @@ const BottomSheetTrigger = ({ children, sheetStyle, renderContent, headerCompone
   const stopRenderingModal = () => {
     setModalVisible(false);
     setOpen(false);
+    if (onSheetClose !== undefined) {
+      onSheetClose();
+    }
   };
 
   useDerivedValue(() => {
