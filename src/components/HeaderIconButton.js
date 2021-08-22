@@ -6,7 +6,7 @@ const HeaderIconButton = ({ style, iconName, callback, color }) => {
   return (
     <View style={{ ...style, marginHorizontal: 10 }}>
       <TouchableOpacity onPress={() => callback()}>
-        {GeneralIcons.findIcon(iconName, 24, color)}
+        {GeneralIcons.findIcon(iconName, 26, color)}
       </TouchableOpacity>
     </View>
   );

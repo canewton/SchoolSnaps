@@ -75,10 +75,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 11,
+    marginBottom: 15,
   },
   headerText: {
-    color: Colors.primaryColor,
+    color: Colors.textColor,
     fontWeight: "bold",
     fontSize: 26,
     marginLeft: 25,

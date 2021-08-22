@@ -41,7 +41,7 @@ const CoursesList = ({ classesToDisplay }) => {
                     {GeneralIcons.findIcon(
                       "Forward",
                       20,
-                      Colors.changeOpacity("#000000", 0.15)
+                      Colors.changeOpacity("#ffffff", 0.25)
                     )}
                   </View>
                 </View>
@@ -60,7 +60,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginHorizontal: 10,
     backgroundColor: "white",
-    ...Colors.shadow,
     flexDirection: "row",
     alignItems: "center",
   },
@@ -78,12 +77,14 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontSize: 18,
-    fontWeight: "600",
+    fontWeight: "700",
     marginBottom: 3,
+    color: "white",
   },
   classDetail: {
     fontSize: 10,
-    fontWeight: "300",
+    fontWeight: "400",
+    color: "white",
   },
   arrowContainer: {
     marginRight: 15,

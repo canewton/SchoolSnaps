@@ -23,6 +23,8 @@ const NotesList = ({ notesFilteredByDate, mode, imagesPerRow }) => {
   const outerSpacing = 3;
   const columnWidth = (windowWidth - outerSpacing * 2) / imagesPerRow;
   const scaleFactor = 2 / imagesPerRow;
+  const textColor = "black";
+  const noteColor = "white";
 
   const selectedNotes = useContext(SelectedNotesContext);
 
@@ -37,7 +39,7 @@ const NotesList = ({ notesFilteredByDate, mode, imagesPerRow }) => {
         disabled={disableButton}
       >
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text style={{ ...styles.title, fontSize: 16 * scaleFactor }}>
+          <Text style={{ ...styles.title, fontSize: 16 * scaleFactor, color: textColor }}>
             {firstPage.title === "" ? "Untitled" : firstPage.title}
           </Text>
           <View
@@ -48,13 +50,19 @@ const NotesList = ({ notesFilteredByDate, mode, imagesPerRow }) => {
               borderRadius: documentIconContainerRadius,
             }}
           >
-            {GeneralIcons.findIcon("Document", 12 * scaleFactor, "black")}
-            <Text style={{ fontSize: 10, marginLeft: 1, fontSize: 12 * scaleFactor }}>
+            {GeneralIcons.findIcon("Document", 12 * scaleFactor, textColor)}
+            <Text
+              style={{
+                ...styles.numNotesInGroupText,
+                color: textColor,
+                fontSize: 12 * scaleFactor,
+              }}
+            >
               {noteGroup.notes.length}
             </Text>
           </View>
         </View>
-        <Text style={{ fontSize: 14 * scaleFactor }}>
+        <Text style={{ fontSize: 14 * scaleFactor, color: textColor }}>
           {firstPage.content === "" ? "" : firstPage.content}
         </Text>
       </TouchableOpacity>
@@ -113,6 +121,7 @@ const NotesList = ({ notesFilteredByDate, mode, imagesPerRow }) => {
       <FlatList
         numColumns={imagesPerRow}
         data={notesFilteredByDate}
+        ListHeaderComponent={() => <View style={{ marginBottom: 3 }} />}
         keyExtractor={(item) => item.id + ""}
         renderItem={({ item }) => {
           return (
@@ -140,7 +149,7 @@ const NotesList = ({ notesFilteredByDate, mode, imagesPerRow }) => {
                 {item instanceof WrittenNote && (
                   <NoteButton
                     style={{
-                      backgroundColor: item.schoolClass.primaryColor,
+                      backgroundColor: noteColor,
                       borderRadius: 10 * scaleFactor,
                       padding: 10 * scaleFactor,
                       flex: 1,
@@ -153,7 +162,7 @@ const NotesList = ({ notesFilteredByDate, mode, imagesPerRow }) => {
                 {item instanceof NoteGroup && (
                   <NoteGroupButton
                     style={{
-                      backgroundColor: item.schoolClass.primaryColor,
+                      backgroundColor: noteColor,
                       borderRadius: 10 * scaleFactor,
                       padding: 10 * scaleFactor,
                       flex: 1,
@@ -234,6 +243,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexDirection: "row",
   },
+  numNotesInGroupText: { marginLeft: 1 },
 });
 
 export default NotesList;

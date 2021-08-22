@@ -25,7 +25,7 @@ const SettingsScreen = ({ navigation }) => {
   const OptionsList = ({ options }) => {
     React.useLayoutEffect(() => {
       navigation.setOptions({
-        headerTitle: () => <ProfileHeader textColor={Colors.primaryColor} />,
+        headerTitle: () => <ProfileHeader textColor={Colors.textColor} />,
       });
     });
 

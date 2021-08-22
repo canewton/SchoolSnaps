@@ -1,7 +1,7 @@
 export class Colors {
   static primaryColor = "#023e8a";
-  static backgroundColor = "rgb(242, 242, 242)";
-  static headerBackgroundColor = "white";
+  static backgroundColor = "rgb(240, 240, 240)";
+  static headerBackgroundColor = this.primaryColor;
   static textColor = "white";
   static tabBackgroundColor = "white";
   static tabInactiveColor = "gray";
@@ -10,7 +10,7 @@ export class Colors {
 
   static shadow = {
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
     elevation: 1,

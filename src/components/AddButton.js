@@ -10,7 +10,7 @@ const AddButton = ({ onPressCallback }) => {
       <View
         style={{
           marginRight: 25,
-          backgroundColor: Colors.primaryColor,
+          backgroundColor: Colors.textColor,
           borderRadius: 5,
           alignItems: "center",
           justifyContent: "center",
@@ -18,7 +18,7 @@ const AddButton = ({ onPressCallback }) => {
           width: 23,
         }}
       >
-        <Entypo name="plus" size={22} color="white" />
+        <Entypo name="plus" size={22} color={Colors.headerBackgroundColor} />
       </View>
     </TouchableOpacity>
   );

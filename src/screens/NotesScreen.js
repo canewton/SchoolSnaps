@@ -41,14 +41,14 @@ const NotesScreen = ({ route }) => {
         <View>
           {mode === modes[0] && (
             <HeaderIconButton
-              color={schoolClass.primaryColor}
+              color="white"
               iconName="Back"
               callback={() => navigation.pop()}
             />
           )}
           {mode === modes[1] && (
             <HeaderIconButton
-              color={schoolClass.primaryColor}
+              color="white"
               iconName="Done"
               callback={() => setMode(modes[0])}
             />
@@ -64,18 +64,18 @@ const NotesScreen = ({ route }) => {
               }}
               style={{ paddingRight: 15 }}
             >
-              {GeneralIcons.findIcon("Three Dots", 24, schoolClass.primaryColor)}
+              {GeneralIcons.findIcon("Three Dots", 24, "white")}
             </TouchableOpacity>
           )}
           {mode === modes[1] && (
             <View style={{ flexDirection: "row" }}>
               <HeaderIconButton
-                color={schoolClass.primaryColor}
+                color="white"
                 iconName="Plus"
                 callback={() => createSheetRef.current.open()}
               />
               <HeaderIconButton
-                color={schoolClass.primaryColor}
+                color="white"
                 iconName="Delete Outline"
                 callback={() => {
                   selectedNotes.state.forEach((selectedNote) => {
@@ -92,7 +92,12 @@ const NotesScreen = ({ route }) => {
   });
 
   return (
-    <View style={{ flex: 1 }}>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: Colors.changeOpacity(schoolClass.primaryColor, 0.5),
+      }}
+    >
       <NotesList
         notesFilteredByDate={notesFilteredByClass}
         mode={mode}

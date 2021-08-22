@@ -32,7 +32,7 @@ const TopTabs = ({ tabButtons, callback }) => {
                     backgroundColor: Colors.headerBackgroundColor,
                   }}
                 >
-                  <Text style={{ ...styles.tabText, color: Colors.primaryColor }}>
+                  <Text style={{ ...styles.tabText, color: Colors.textColor }}>
                     {item.name}
                   </Text>
                 </View>
@@ -47,15 +47,15 @@ const TopTabs = ({ tabButtons, callback }) => {
 
 const styles = StyleSheet.create({
   tabButton: {
-    backgroundColor: Colors.primaryColor,
+    backgroundColor: Colors.textColor,
     marginRight: 12,
     borderRadius: 10,
-    borderWidth: 2,
-    borderColor: Colors.primaryColor,
+    //borderWidth: 2,
+    //borderColor: Colors.textColor,
   },
   tabText: {
     fontSize: 14,
-    color: "white",
+    color: Colors.headerBackgroundColor,
     marginVertical: 8,
     marginHorizontal: 15,
     fontWeight: "600",

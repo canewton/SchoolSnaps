@@ -59,17 +59,10 @@ const customTabBarStyle = {
   showLabel: false,
 };
 
-const formHeaderStyle = {
-  headerStyle: {
-    backgroundColor: "white",
-    ...Colors.shadow,
-  },
-};
-
 const bigHeaderStyle = (headerHeight) => {
   return {
     headerStyle: {
-      backgroundColor: "white",
+      backgroundColor: Colors.headerBackgroundColor,
       shadowColor: "transparent",
       height: headerHeight,
     },
@@ -160,12 +153,15 @@ const MainStackScreen = () => {
         component={NotesScreen}
         options={({ route }) => ({
           headerStyle: {
-            backgroundColor: "white",
-            ...Colors.shadow,
+            backgroundColor: route.params.primaryColor,
+            shadowColor: "transparent",
           },
           title: route.params.name,
+          headerTitleAlign: "left",
           headerTitleStyle: {
-            color: route.params.primaryColor,
+            color: "white",
+            fontSize: 20,
+            fontWeight: "700",
           },
         })}
       />
@@ -188,11 +184,7 @@ export default function App() {
                       component={MainStackScreen}
                       options={{ headerShown: false }}
                     />
-                    <RootStack.Screen
-                      name="Attach Notes"
-                      component={AttachNotesScreen}
-                      options={formHeaderStyle}
-                    />
+                    <RootStack.Screen name="Attach Notes" component={AttachNotesScreen} />
                     <RootStack.Screen
                       name="Camera"
                       component={CameraSceen}

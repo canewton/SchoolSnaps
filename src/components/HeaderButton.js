@@ -6,7 +6,7 @@ const HeaderButton = ({ name, onPressCallback }) => {
   return (
     <TouchableOpacity onPress={() => onPressCallback()}>
       <View style={{ marginHorizontal: 15 }}>
-        <Text style={{ color: Colors.primaryColor, fontSize: 18, fontWeight: "400" }}>
+        <Text style={{ color: Colors.textColor, fontSize: 18, fontWeight: "400" }}>
           {name}
         </Text>
       </View>

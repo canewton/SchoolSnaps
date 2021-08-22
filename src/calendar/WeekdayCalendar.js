@@ -130,14 +130,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   dateText: {
-    color: Colors.primaryColor,
+    color: Colors.textColor,
   },
   todaysDateText: {
-    color: Colors.primaryColor,
+    color: Colors.textColor,
     fontWeight: "800",
   },
   chosenDateText: {
-    color: "white",
+    color: Colors.headerBackgroundColor,
   },
   chosenDateHolder: {
     height: 30,
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 15,
-    backgroundColor: Colors.primaryColor,
+    backgroundColor: Colors.textColor,
   },
   defaultDateHolder: {
     height: 30,
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   weekdayText: {
-    color: Colors.primaryColor,
+    color: Colors.textColor,
     fontWeight: "200",
     marginBottom: 7,
   },
