@@ -98,7 +98,7 @@ const WeekdayCalendar = ({
   }));
 
   return (
-    <View style={{ height: 90, marginHorizontal: marginHorizontal }}>
+    <View style={{ height: 60, marginHorizontal: marginHorizontal }}>
       {/* <Button
         title="scroll"
         onPress={() => weekCalendarFlatListRef.current.scrollToIndex({ index: 3 })}

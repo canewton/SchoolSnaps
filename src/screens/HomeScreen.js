@@ -9,6 +9,7 @@ import { ItemArray } from "../classes/ItemArray";
 import { Colors } from "../classes/Colors";
 import BottomSheetTrigger from "../components/BottomSheetTrigger";
 import ClassForm from "../components/ClassForm";
+import HeaderStyle from "../classes/HeaderStyle";
 
 const HomeScreen = () => {
   const classes = useContext(ClassesContext);
@@ -19,9 +20,9 @@ const HomeScreen = () => {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: () => (
-        <View>
-          <View style={styles.headerContainer}>
-            <Text style={styles.headerText}>My Courses</Text>
+        <View style={{ height: HeaderStyle.classesHeaderHeight }}>
+          <View style={HeaderStyle.styles.headerContainer}>
+            <Text style={HeaderStyle.styles.headerText}>My Courses</Text>
             <BottomSheetTrigger
               sheetStyle={{ backgroundColor: Colors.backgroundColor }}
               renderContent={(closeBottomSheet) => (
@@ -40,6 +41,7 @@ const HomeScreen = () => {
               )}
             </BottomSheetTrigger>
           </View>
+          <View style={{ marginBottom: 15 }} />
           <TopTabs
             tabButtons={tabButtons}
             callback={(tab) => {
@@ -70,19 +72,6 @@ const HomeScreen = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  headerContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 15,
-  },
-  headerText: {
-    color: Colors.textColor,
-    fontWeight: "bold",
-    fontSize: 26,
-    marginLeft: 25,
-  },
-});
+const styles = StyleSheet.create({});
 
 export default HomeScreen;

@@ -2,6 +2,7 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { MenuProvider } from "react-native-popup-menu";
 
 import HomeScreen from "./src/screens/HomeScreen";
@@ -19,6 +20,7 @@ import { Provider as NotesProvider } from "./src/context/NotesContext";
 import { Provider as SelectedNotesProvider } from "./src/context/SelectedNotesContext";
 import { Provider as CalendarProvider } from "./src/context/CalendarContext";
 import { Provider as AssignmentsProvider } from "./src/context/AssignmentsContext";
+import HeaderStyle from "./src/classes/HeaderStyle";
 
 const RootStack = createStackNavigator();
 const MainStack = createStackNavigator();
@@ -80,7 +82,7 @@ const HomeStackScreen = () => {
       <HomeStack.Screen
         name="Home"
         component={HomeScreen}
-        options={bigHeaderStyle(160)}
+        options={bigHeaderStyle(HeaderStyle.classesHeaderHeight)}
       />
     </HomeStack.Navigator>
   );
@@ -92,7 +94,7 @@ const CalendarStackScreen = () => {
       <CalendarStack.Screen
         name="Calendar"
         component={CalendarScreen}
-        options={bigHeaderStyle(210)}
+        options={bigHeaderStyle(HeaderStyle.assignmentsHeaderHeight)}
       />
     </CalendarStack.Navigator>
   );
@@ -104,7 +106,7 @@ const SettingsStackScreen = () => {
       <SettingsStack.Screen
         name="Library"
         component={SettingsScreen}
-        options={bigHeaderStyle(160)}
+        options={bigHeaderStyle(HeaderStyle.profileHeaderHeight)}
       />
     </SettingsStack.Navigator>
   );

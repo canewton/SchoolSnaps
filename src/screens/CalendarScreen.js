@@ -10,6 +10,7 @@ import { Context as AssignmentContext } from "../context/AssignmentsContext";
 import { Context as CalendarContext } from "../context/CalendarContext";
 import BottomSheetTrigger from "../components/BottomSheetTrigger";
 import AssignmentForm from "../components/AssignmentForm";
+import HeaderStyle from "../classes/HeaderStyle";
 
 const CalendarScreen = () => {
   const navigation = useNavigation();
@@ -47,9 +48,9 @@ const CalendarScreen = () => {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: () => (
-        <View>
-          <View style={styles.headerContainer}>
-            <Text style={styles.headerText}>Assignments</Text>
+        <View style={{ height: HeaderStyle.assignmentsHeaderHeight }}>
+          <View style={HeaderStyle.styles.headerContainer}>
+            <Text style={HeaderStyle.styles.headerText}>Assignments</Text>
             <BottomSheetTrigger
               sheetStyle={{ backgroundColor: Colors.backgroundColor }}
               renderContent={(closeBottomSheet) => (
@@ -72,8 +73,9 @@ const CalendarScreen = () => {
               )}
             </BottomSheetTrigger>
           </View>
+          <View style={{ marginBottom: 20 }} />
           <WeekdayCalendar
-            weeksArray={weeksArray}
+            weeksArray={weeksArray.slice(0, 20)}
             spaceBetweenPages={Calendar.spaceBetweenPages}
             weekCalendarFlatListRef={weekCalendarFlatListRef}
             marginHorizontal={10}
@@ -99,19 +101,6 @@ const CalendarScreen = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  headerContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  headerText: {
-    color: Colors.textColor,
-    fontWeight: "bold",
-    fontSize: 26,
-    marginLeft: 25,
-  },
-});
+const styles = StyleSheet.create({});
 
 export default CalendarScreen;

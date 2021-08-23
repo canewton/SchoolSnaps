@@ -1,10 +1,18 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
+import HeaderStyle from "../classes/HeaderStyle";
 import { GeneralIcons } from "../icons/GeneralIcons";
 
 const ProfileHeader = ({ textColor }) => {
   return (
-    <View style={{ flexDirection: "row", marginLeft: 25, alignItems: "center" }}>
+    <View
+      style={{
+        flexDirection: "row",
+        marginLeft: 25,
+        alignItems: "center",
+        height: HeaderStyle.profileHeaderHeight,
+      }}
+    >
       {GeneralIcons.findIcon("Profile", 80, textColor)}
       <View style={{ marginLeft: 10 }}>
         <Text
