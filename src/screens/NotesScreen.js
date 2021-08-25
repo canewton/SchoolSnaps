@@ -95,7 +95,7 @@ const NotesScreen = ({ route }) => {
     <View
       style={{
         flex: 1,
-        backgroundColor: Colors.changeOpacity(schoolClass.primaryColor, 0.5),
+        //backgroundColor: Colors.changeOpacity(schoolClass.primaryColor, 0.5),
       }}
     >
       <NotesList

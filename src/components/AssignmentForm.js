@@ -1,16 +1,11 @@
 import React, { useContext, useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  Dimensions,
-} from "react-native";
+import { View, Text, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Calendar } from "../classes/Calendar";
 import { Context as ClassesContext } from "../context/ClassesContext";
 import { Context as CalendarContext } from "../context/CalendarContext";
+import { Context as SelectedNotesContext } from "../context/SelectedNotesContext";
+import { Context as NotesContext } from "../context/NotesContext";
 import HorizontalScrollPicker from "./HorizontalScrollPicker";
 import { AssignmentTypeIcons } from "../icons/AssignmentTypeIcons";
 import AccordionListItem from "./AccordianListItem";
@@ -20,10 +15,14 @@ import { Colors } from "../classes/Colors";
 import FormBottomSheetHeader from "../components/FormBottomSheetHeader";
 import BottomSheetTrigger from "./BottomSheetTrigger";
 import AttachNotesForm from "./AttachNotesForm";
+import NotesList from "./NotesList";
+import { ItemArray } from "../classes/ItemArray";
 
 const AssignmentForm = ({ onSubmit, initialValues, calendarData, headerTitle }) => {
   const classes = useContext(ClassesContext);
   const specialDates = useContext(CalendarContext);
+  const selectedNotes = useContext(SelectedNotesContext);
+  const notes = useContext(NotesContext);
 
   //set default values
   const [id, setId] = useState(Date.now());
@@ -38,7 +37,7 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData, headerTitle }) 
       calendarData.monthDataArray
     )
   );
-  const [attachedNotes, setAttachedNotes] = useState([]);
+  const [attachedNotesIDs, setAttachedNotesIDs] = useState([]);
   const [completed, setCompleted] = useState(false);
 
   const [classIsOpen, setClassIsOpen] = useState(true);
@@ -55,7 +54,7 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData, headerTitle }) 
       setIconName(initialValues.iconName);
       setDate(new Date(initialValues.date));
       setCompleted(initialValues.completed);
-      setAttachedNotes(initialValues.attachedNotes);
+      setAttachedNotesIDs(initialValues.attachedNotesIDs);
     }
   }, []);
 
@@ -84,18 +83,32 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData, headerTitle }) 
     );
   };
 
-  const AttachedNotesList = () => {
+  const AttachedNotesList = ({ attachedNotesIDs }) => {
+    const attachedNotes = attachedNotesIDs.map((noteID) =>
+      ItemArray.find(notes.state, "id", noteID.id)
+    );
     return (
-      <View style={{ ...styles.textInputContainer }}>
-        <Text
-          style={{
-            ...styles.textInputLabel,
-            color: Colors.changeOpacity("#000000", 0.14),
-            height: 100,
-          }}
-        >
-          No Notes Attached
-        </Text>
+      <View style={{ ...styles.textInputContainer, paddingLeft: 0 }}>
+        {attachedNotesIDs.length <= 0 && (
+          <Text
+            style={{
+              ...styles.textInputLabel,
+              color: Colors.changeOpacity("#000000", 0.14),
+              height: 100,
+              marginLeft: 15,
+            }}
+          >
+            No Notes Attached
+          </Text>
+        )}
+        {attachedNotesIDs.length > 0 && (
+          <NotesList
+            notesFilteredByDate={attachedNotes}
+            mode="display"
+            imagesPerRow={4}
+            scrollable={false}
+          />
+        )}
       </View>
     );
   };
@@ -113,7 +126,7 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData, headerTitle }) 
               iconName,
               date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear(),
               completed,
-              attachedNotes
+              attachedNotesIDs
             )
           );
         }}
@@ -200,9 +213,15 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData, headerTitle }) 
       <BottomSheetTrigger
         sheetStyle={{ backgroundColor: Colors.backgroundColor }}
         renderContent={() => <AttachNotesForm schoolClass={schoolClass} />}
+        onSheetClose={() => selectedNotes.clear()}
         headerComponent={(closeBottomSheet) => (
           <View style={styles.attachNotesButtonContainer}>
-            <TouchableOpacity onPress={() => closeBottomSheet()}>
+            <TouchableOpacity
+              onPress={() => {
+                setAttachedNotesIDs(selectedNotes.state);
+                closeBottomSheet();
+              }}
+            >
               <View
                 style={{
                   ...styles.attachNotesButton,
@@ -210,7 +229,7 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData, headerTitle }) 
                 }}
               >
                 <Text style={{ fontSize: 18, color: "white", fontWeight: "500" }}>
-                  Attach Notes
+                  {"Attach " + selectedNotes.state.length + " Notes"}
                 </Text>
               </View>
             </TouchableOpacity>
@@ -218,10 +237,15 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData, headerTitle }) 
         )}
       >
         {(openBottomSheet) => (
-          <AttachNotesButton onPressCallback={() => openBottomSheet()} />
+          <AttachNotesButton
+            onPressCallback={() => {
+              attachedNotesIDs.forEach((noteID) => selectedNotes.add(noteID));
+              openBottomSheet();
+            }}
+          />
         )}
       </BottomSheetTrigger>
-      <AttachedNotesList />
+      <AttachedNotesList attachedNotesIDs={attachedNotesIDs} />
       <View style={{ marginBottom: 70 }} />
     </View>
   );

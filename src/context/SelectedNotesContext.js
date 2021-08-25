@@ -11,6 +11,7 @@ export const { Context, Provider } = createDataContext(
     add: SelectedNotesContext.add,
     edit: SelectedNotesContext.edit,
     delete: SelectedNotesContext.delete,
+    clear: SelectedNotesContext.clear,
   },
   SelectedNotesContext.notes
 );

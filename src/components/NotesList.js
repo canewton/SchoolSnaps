@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import {
   View,
   Text,
@@ -15,16 +15,20 @@ import { GeneralIcons } from "../icons/GeneralIcons";
 import { ItemArray } from "../classes/ItemArray";
 import { NoteGroup } from "../classes/NoteGroup";
 import { Context as SelectedNotesContext } from "../context/SelectedNotesContext";
+import { Colors } from "../classes/Colors";
 
 const NotesList = ({ notesFilteredByDate, mode, imagesPerRow, scrollable }) => {
-  const modes = ["browse", "select"];
+  const modes = ["browse", "select", "display"];
   const navigation = useNavigation();
   const windowWidth = Dimensions.get("window").width;
   const outerSpacing = 3;
   const columnWidth = (windowWidth - outerSpacing * 2) / imagesPerRow;
   const scaleFactor = 2 / imagesPerRow;
   const textColor = "black";
-  const noteColor = "white";
+  const noteColor =
+    notesFilteredByDate.length > 0
+      ? Colors.changeOpacity(notesFilteredByDate[0].schoolClass.primaryColor, 0.35)
+      : "white";
 
   const selectedNotes = useContext(SelectedNotesContext);
 
@@ -134,7 +138,7 @@ const NotesList = ({ notesFilteredByDate, mode, imagesPerRow, scrollable }) => {
           return (
             <View style={{ width: columnWidth }}>
               <TouchableOpacity
-                disabled={mode === modes[0]}
+                disabled={mode === modes[0] || mode === modes[2]}
                 onPress={() => {
                   ItemArray.find(selectedNotes.state, "id", item.id) === undefined
                     ? selectedNotes.add({ id: item.id })

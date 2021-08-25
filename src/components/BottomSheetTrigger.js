@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, Text, StyleSheet, Modal, Dimensions } from "react-native";
 import Animated, {
   useAnimatedGestureHandler,
@@ -66,10 +66,15 @@ const BottomSheetTrigger = ({
   const stopRenderingModal = () => {
     setModalVisible(false);
     setOpen(false);
-    if (onSheetClose !== undefined) {
-      onSheetClose();
-    }
   };
+
+  useEffect(() => {
+    if (!modalVisible) {
+      if (onSheetClose !== undefined) {
+        onSheetClose();
+      }
+    }
+  }, [modalVisible]);
 
   useDerivedValue(() => {
     if (posY.value === maxPos) {
