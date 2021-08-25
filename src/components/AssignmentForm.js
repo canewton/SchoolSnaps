@@ -1,5 +1,12 @@
 import React, { useContext, useState, useEffect } from "react";
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Calendar } from "../classes/Calendar";
 import { Context as ClassesContext } from "../context/ClassesContext";
@@ -11,6 +18,8 @@ import CalendarDisplay from "../calendar/CalendarDisplay";
 import { Assignment } from "../classes/Assignment";
 import { Colors } from "../classes/Colors";
 import FormBottomSheetHeader from "../components/FormBottomSheetHeader";
+import BottomSheetTrigger from "./BottomSheetTrigger";
+import AttachNotesForm from "./AttachNotesForm";
 
 const AssignmentForm = ({ onSubmit, initialValues, calendarData, headerTitle }) => {
   const classes = useContext(ClassesContext);
@@ -49,6 +58,47 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData, headerTitle }) 
       setAttachedNotes(initialValues.attachedNotes);
     }
   }, []);
+
+  const AttachNotesButton = ({ onPressCallback }) => {
+    return (
+      <TouchableOpacity onPress={() => onPressCallback()}>
+        <View
+          style={{
+            ...styles.textInputContainer,
+            justifyContent: "center",
+            marginTop: 10,
+            borderBottomWidth: 0,
+          }}
+        >
+          <Text
+            style={{
+              ...styles.textInputLabel,
+              fontWeight: "bold",
+              color: Colors.primaryColor,
+            }}
+          >
+            Attach Notes
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  const AttachedNotesList = () => {
+    return (
+      <View style={{ ...styles.textInputContainer }}>
+        <Text
+          style={{
+            ...styles.textInputLabel,
+            color: Colors.changeOpacity("#000000", 0.14),
+            height: 100,
+          }}
+        >
+          No Notes Attached
+        </Text>
+      </View>
+    );
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -147,37 +197,31 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData, headerTitle }) 
           />
         </View>
       </AccordionListItem>
-      <TouchableOpacity onPress={() => navigation.navigate("Attach Notes", schoolClass)}>
-        <View
-          style={{
-            ...styles.textInputContainer,
-            justifyContent: "center",
-            marginTop: 10,
-            borderBottomWidth: 0,
-          }}
-        >
-          <Text
-            style={{
-              ...styles.textInputLabel,
-              fontWeight: "bold",
-              color: Colors.primaryColor,
-            }}
-          >
-            Attach Notes
-          </Text>
-        </View>
-      </TouchableOpacity>
-      <View style={{ ...styles.textInputContainer }}>
-        <Text
-          style={{
-            ...styles.textInputLabel,
-            color: Colors.changeOpacity("#000000", 0.14),
-            height: 100,
-          }}
-        >
-          No Notes Attached
-        </Text>
-      </View>
+      <BottomSheetTrigger
+        sheetStyle={{ backgroundColor: Colors.backgroundColor }}
+        renderContent={() => <AttachNotesForm schoolClass={schoolClass} />}
+        headerComponent={(closeBottomSheet) => (
+          <View style={styles.attachNotesButtonContainer}>
+            <TouchableOpacity onPress={() => closeBottomSheet()}>
+              <View
+                style={{
+                  ...styles.attachNotesButton,
+                  backgroundColor: schoolClass.primaryColor,
+                }}
+              >
+                <Text style={{ fontSize: 18, color: "white", fontWeight: "500" }}>
+                  Attach Notes
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        )}
+      >
+        {(openBottomSheet) => (
+          <AttachNotesButton onPressCallback={() => openBottomSheet()} />
+        )}
+      </BottomSheetTrigger>
+      <AttachedNotesList />
       <View style={{ marginBottom: 70 }} />
     </View>
   );
@@ -200,6 +244,19 @@ const styles = StyleSheet.create({
     borderColor: Colors.changeOpacity("#000000", 0.14),
   },
   headerText: { fontSize: 16, fontWeight: "400", letterSpacing: 0.5 },
+  attachNotesButtonContainer: {
+    position: "absolute",
+    alignSelf: "center",
+    bottom: 80 + 56 / 2,
+    width: 220,
+  },
+  attachNotesButton: {
+    height: 56,
+    width: 220,
+    borderRadius: 28,
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });
 
 export default AssignmentForm;

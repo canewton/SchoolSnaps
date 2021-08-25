@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import HeaderStyle from "../classes/HeaderStyle";
+import Styles from "../classes/Styles";
 import { GeneralIcons } from "../icons/GeneralIcons";
 
 const ProfileHeader = ({ textColor }) => {
@@ -10,7 +10,7 @@ const ProfileHeader = ({ textColor }) => {
         flexDirection: "row",
         marginLeft: 25,
         alignItems: "center",
-        height: HeaderStyle.profileHeaderHeight,
+        height: Styles.profileHeaderHeight,
       }}
     >
       {GeneralIcons.findIcon("Profile", 80, textColor)}

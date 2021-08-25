@@ -16,6 +16,7 @@ const BottomSheetTrigger = ({
   sheetStyle,
   renderContent,
   headerComponent,
+  floatingActionButton,
   onSheetClose,
 }) => {
   const viewHeight = Dimensions.get("window").height;
@@ -125,33 +126,33 @@ const BottomSheetTrigger = ({
             },
           ]}
         >
-          <PanGestureHandler onGestureEvent={gestureHandler}>
-            <Animated.View
-              style={[
-                sheetAnimatedStyle,
-                {
-                  position: "absolute",
-                  top: spaceFromTop,
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  height: viewHeight,
-                  backgroundColor: "white",
-                  borderTopLeftRadius: 10,
-                  borderTopRightRadius: 10,
-                  overflow: "hidden",
-                  ...sheetStyle,
-                },
-              ]}
-            >
+          <Animated.View
+            style={[
+              sheetAnimatedStyle,
+              {
+                position: "absolute",
+                top: spaceFromTop,
+                bottom: 0,
+                left: 0,
+                right: 0,
+                height: viewHeight,
+                backgroundColor: "white",
+                borderTopLeftRadius: 10,
+                borderTopRightRadius: 10,
+                overflow: "hidden",
+                ...sheetStyle,
+              },
+            ]}
+          >
+            <PanGestureHandler onGestureEvent={gestureHandler}>
               <Animated.View style={[renderContentAnimatedStyle]}>
                 <View style={{ height: 900 }}>
-                  {headerComponent !== undefined && headerComponent()}
                   {renderContent !== undefined && renderContent(closeBottomSheet)}
                 </View>
               </Animated.View>
-            </Animated.View>
-          </PanGestureHandler>
+            </PanGestureHandler>
+            {headerComponent !== undefined && headerComponent(closeBottomSheet)}
+          </Animated.View>
         </Animated.View>
       </Modal>
     </View>

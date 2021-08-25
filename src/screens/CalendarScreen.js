@@ -10,7 +10,7 @@ import { Context as AssignmentContext } from "../context/AssignmentsContext";
 import { Context as CalendarContext } from "../context/CalendarContext";
 import BottomSheetTrigger from "../components/BottomSheetTrigger";
 import AssignmentForm from "../components/AssignmentForm";
-import HeaderStyle from "../classes/HeaderStyle";
+import Styles from "../classes/Styles";
 
 const CalendarScreen = () => {
   const navigation = useNavigation();
@@ -48,9 +48,9 @@ const CalendarScreen = () => {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: () => (
-        <View style={{ height: HeaderStyle.assignmentsHeaderHeight }}>
-          <View style={HeaderStyle.styles.headerContainer}>
-            <Text style={HeaderStyle.styles.headerText}>Assignments</Text>
+        <View style={{ height: Styles.assignmentsHeaderHeight }}>
+          <View style={Styles.header.container}>
+            <Text style={Styles.header.text}>Assignments</Text>
             <BottomSheetTrigger
               sheetStyle={{ backgroundColor: Colors.backgroundColor }}
               renderContent={(closeBottomSheet) => (

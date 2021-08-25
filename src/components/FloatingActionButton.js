@@ -7,12 +7,7 @@ const buttonHeight = 56;
 const buttonBorderRadius = buttonHeight / 2;
 const buttonWidth = 220;
 
-const FloatingActionButton = ({
-  schoolClass,
-  onPressPhoto,
-  onPressNote,
-  onPressTask,
-}) => {
+const FloatingActionButton = ({ schoolClass, onPressPhoto, onPressNote }) => {
   const Button = ({ color }) => {
     return (
       <View
@@ -63,44 +58,9 @@ const FloatingActionButton = ({
   );
 };
 
-const optionStyles = {
-  optionTouchable: {
-    underlayColor: "transparent",
-    activeOpacity: 0.7,
-  },
-  optionWrapper: {
-    backgroundColor: "#e5e5e5",
-    borderRadius: 10,
-    margin: 3,
-  },
-  optionText: {
-    color: "black",
-    alignSelf: "center",
-    fontSize: 14,
-    margin: 6,
-  },
-  optionsContainer: {
-    backgroundColor: "white",
-    borderRadius: 10,
-    width: 200,
-    padding: 3,
-  },
-};
-
-const triggerStyles = {
-  triggerTouchable: {
-    underlayColor: "transparent",
-    activeOpacity: 0.5,
-  },
-};
-
 const styles = StyleSheet.create({
   buttonContainer: { width: buttonWidth, alignSelf: "center" },
   buttonPosition: { position: "absolute", bottom: 80 },
-  anchorStyle: {
-    backgroundColor: "white",
-    opacity: 0,
-  },
 });
 
 export default FloatingActionButton;

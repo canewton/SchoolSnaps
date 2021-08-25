@@ -16,7 +16,7 @@ import { ItemArray } from "../classes/ItemArray";
 import { NoteGroup } from "../classes/NoteGroup";
 import { Context as SelectedNotesContext } from "../context/SelectedNotesContext";
 
-const NotesList = ({ notesFilteredByDate, mode, imagesPerRow }) => {
+const NotesList = ({ notesFilteredByDate, mode, imagesPerRow, scrollable }) => {
   const modes = ["browse", "select"];
   const navigation = useNavigation();
   const windowWidth = Dimensions.get("window").width;
@@ -117,10 +117,17 @@ const NotesList = ({ notesFilteredByDate, mode, imagesPerRow }) => {
   };
 
   return (
-    <View style={{ flex: 1, paddingHorizontal: outerSpacing }}>
+    <View
+      style={
+        scrollable === undefined || scrollable === true
+          ? { flex: 1, paddingHorizontal: outerSpacing }
+          : { paddingHorizontal: outerSpacing }
+      }
+    >
       <FlatList
         numColumns={imagesPerRow}
         data={notesFilteredByDate}
+        scrollEnabled={scrollable !== undefined ? scrollable : true}
         ListHeaderComponent={() => <View style={{ marginBottom: 3 }} />}
         keyExtractor={(item) => item.id + ""}
         renderItem={({ item }) => {

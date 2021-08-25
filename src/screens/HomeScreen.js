@@ -9,7 +9,7 @@ import { ItemArray } from "../classes/ItemArray";
 import { Colors } from "../classes/Colors";
 import BottomSheetTrigger from "../components/BottomSheetTrigger";
 import ClassForm from "../components/ClassForm";
-import HeaderStyle from "../classes/HeaderStyle";
+import Styles from "../classes/Styles";
 
 const HomeScreen = () => {
   const classes = useContext(ClassesContext);
@@ -20,9 +20,9 @@ const HomeScreen = () => {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: () => (
-        <View style={{ height: HeaderStyle.classesHeaderHeight }}>
-          <View style={HeaderStyle.styles.headerContainer}>
-            <Text style={HeaderStyle.styles.headerText}>My Courses</Text>
+        <View style={{ height: Styles.classesHeaderHeight }}>
+          <View style={Styles.header.container}>
+            <Text style={Styles.header.text}>My Courses</Text>
             <BottomSheetTrigger
               sheetStyle={{ backgroundColor: Colors.backgroundColor }}
               renderContent={(closeBottomSheet) => (

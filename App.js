@@ -11,7 +11,6 @@ import SettingsScreen from "./src/screens/SettingsScreen";
 import NotesScreen from "./src/screens/NotesScreen";
 import NotesEditScreen from "./src/screens/NotesEditScreen";
 import CameraSceen from "./src/screens/CameraScreen";
-import AttachNotesScreen from "./src/screens/AttachNotesScreen";
 
 import { BottomTabIcons } from "./src/icons/BottomTabIcons";
 import { Colors } from "./src/classes/Colors";
@@ -20,7 +19,7 @@ import { Provider as NotesProvider } from "./src/context/NotesContext";
 import { Provider as SelectedNotesProvider } from "./src/context/SelectedNotesContext";
 import { Provider as CalendarProvider } from "./src/context/CalendarContext";
 import { Provider as AssignmentsProvider } from "./src/context/AssignmentsContext";
-import HeaderStyle from "./src/classes/HeaderStyle";
+import Styles from "./src/classes/Styles";
 
 const RootStack = createStackNavigator();
 const MainStack = createStackNavigator();
@@ -82,7 +81,7 @@ const HomeStackScreen = () => {
       <HomeStack.Screen
         name="Home"
         component={HomeScreen}
-        options={bigHeaderStyle(HeaderStyle.classesHeaderHeight)}
+        options={bigHeaderStyle(Styles.classesHeaderHeight)}
       />
     </HomeStack.Navigator>
   );
@@ -94,7 +93,7 @@ const CalendarStackScreen = () => {
       <CalendarStack.Screen
         name="Calendar"
         component={CalendarScreen}
-        options={bigHeaderStyle(HeaderStyle.assignmentsHeaderHeight)}
+        options={bigHeaderStyle(Styles.assignmentsHeaderHeight)}
       />
     </CalendarStack.Navigator>
   );
@@ -106,7 +105,7 @@ const SettingsStackScreen = () => {
       <SettingsStack.Screen
         name="Library"
         component={SettingsScreen}
-        options={bigHeaderStyle(HeaderStyle.profileHeaderHeight)}
+        options={bigHeaderStyle(Styles.profileHeaderHeight)}
       />
     </SettingsStack.Navigator>
   );
@@ -186,7 +185,6 @@ export default function App() {
                       component={MainStackScreen}
                       options={{ headerShown: false }}
                     />
-                    <RootStack.Screen name="Attach Notes" component={AttachNotesScreen} />
                     <RootStack.Screen
                       name="Camera"
                       component={CameraSceen}
