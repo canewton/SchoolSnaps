@@ -101,7 +101,7 @@ const NotesScreen = ({ route }) => {
       <NotesList
         notesFilteredByDate={notesFilteredByClass}
         mode={mode}
-        imagesPerRow={2}
+        imagesPerRow={4}
       />
       {mode === modes[0] && (
         <FloatingActionButton

@@ -25,10 +25,11 @@ const NotesList = ({ notesFilteredByDate, mode, imagesPerRow, scrollable }) => {
   const columnWidth = (windowWidth - outerSpacing * 2) / imagesPerRow;
   const scaleFactor = 2 / imagesPerRow;
   const textColor = "black";
-  const noteColor =
+  /* const noteColor =
     notesFilteredByDate.length > 0
       ? Colors.changeOpacity(notesFilteredByDate[0].schoolClass.primaryColor, 0.35)
-      : "white";
+      : "white"; */
+  const noteColor = "white";
 
   const selectedNotes = useContext(SelectedNotesContext);
 

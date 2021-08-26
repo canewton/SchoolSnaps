@@ -1,6 +1,6 @@
 export class Colors {
   static primaryColor = "#023e8a";
-  static backgroundColor = "rgb(240, 240, 240)";
+  static backgroundColor = "rgb(238, 238, 238)";
   static headerBackgroundColor = this.primaryColor;
   static textColor = "white";
   static tabBackgroundColor = "white";
