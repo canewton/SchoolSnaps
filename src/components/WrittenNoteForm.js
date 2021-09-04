@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, TextInput, Text } from "react-native";
-import { Colors } from "../classes/Colors";
+import { View, StyleSheet, TextInput, Text, Dimensions } from "react-native";
 
-const WrittenNoteForm = ({ onChange, initialValues, editable, isActive }) => {
+const WrittenNoteForm = ({ onChange, initialValues, editable }) => {
   //set default values
   const [title, setTitle] = useState(initialValues.title);
   const [content, setContent] = useState(initialValues.content);
@@ -12,17 +11,7 @@ const WrittenNoteForm = ({ onChange, initialValues, editable, isActive }) => {
   }, [title, content]);
 
   return (
-    <View
-      style={{
-        ...styles.noteContainer,
-        ...(isActive
-          ? Colors.shadow
-          : {
-              borderBottomWidth: StyleSheet.hairlineWidth,
-              borderBottomColor: Colors.borderColor,
-            }),
-      }}
-    >
+    <View style={styles.noteContainer}>
       {editable && (
         <View>
           <TextInput
@@ -67,7 +56,7 @@ const WrittenNoteForm = ({ onChange, initialValues, editable, isActive }) => {
   );
 };
 
-const noteHeight = 300;
+const noteHeight = Dimensions.get("window").height;
 const inputBoxHeight = noteHeight - 90;
 
 const styles = StyleSheet.create({
