@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
   },
   collapsibleDivider: {
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: Colors.changeOpacity("#000000", 0.14),
+    borderBottomColor: Colors.borderColor,
     marginLeft: 15,
   },
   headerText: { fontSize: 16, fontWeight: "400", letterSpacing: 0.5 },
@@ -97,6 +97,6 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderColor: Colors.changeOpacity("#000000", 0.14),
+    borderColor: Colors.borderColor,
   },
 });

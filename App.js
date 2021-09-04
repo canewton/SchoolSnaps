@@ -75,6 +75,22 @@ const bigHeaderStyle = (headerHeight) => {
   };
 };
 
+const classHeaderStyle = (color, title) => {
+  return {
+    headerStyle: {
+      backgroundColor: color,
+      shadowColor: "transparent",
+    },
+    title: title,
+    headerTitleAlign: "left",
+    headerTitleStyle: {
+      color: "white",
+      fontSize: 20,
+      fontWeight: "700",
+    },
+  };
+};
+
 const HomeStackScreen = () => {
   return (
     <HomeStack.Navigator>
@@ -152,19 +168,16 @@ const MainStackScreen = () => {
       <MainStack.Screen
         name="Notes"
         component={NotesScreen}
-        options={({ route }) => ({
-          headerStyle: {
-            backgroundColor: route.params.primaryColor,
-            shadowColor: "transparent",
-          },
-          title: route.params.name,
-          headerTitleAlign: "left",
-          headerTitleStyle: {
-            color: "white",
-            fontSize: 20,
-            fontWeight: "700",
-          },
-        })}
+        options={({ route }) =>
+          classHeaderStyle(route.params.primaryColor, route.params.name)
+        }
+      />
+      <MainStack.Screen
+        name="Edit Note"
+        component={NotesEditScreen}
+        options={({ route }) =>
+          classHeaderStyle(route.params.schoolClass.primaryColor, "")
+        }
       />
     </MainStack.Navigator>
   );
@@ -188,11 +201,6 @@ export default function App() {
                     <RootStack.Screen
                       name="Camera"
                       component={CameraSceen}
-                      options={{ headerShown: false }}
-                    />
-                    <RootStack.Screen
-                      name="Edit Note"
-                      component={NotesEditScreen}
                       options={{ headerShown: false }}
                     />
                   </RootStack.Navigator>

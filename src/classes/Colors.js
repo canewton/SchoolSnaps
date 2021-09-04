@@ -3,6 +3,7 @@ export class Colors {
   static backgroundColor = "rgb(238, 238, 238)";
   static headerBackgroundColor = this.primaryColor;
   static textColor = "white";
+  static borderColor = Colors.changeOpacity("#000000", 0.14);
   static tabBackgroundColor = "white";
   static tabInactiveColor = "gray";
   static tabActiveColor = this.primaryColor;
@@ -11,8 +12,8 @@ export class Colors {
   static shadow = {
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
+    shadowOpacity: 0.25,
+    shadowRadius: 5,
     elevation: 1,
   };
 

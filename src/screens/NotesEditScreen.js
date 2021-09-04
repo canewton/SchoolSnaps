@@ -16,6 +16,8 @@ import FloatingActionButton from "../components/FloatingActionButton";
 import { NoteGroup } from "../classes/NoteGroup";
 import DraggableFlatList from "react-native-draggable-flatlist";
 import { ItemArray } from "../classes/ItemArray";
+import HeaderIconButton from "../components/HeaderIconButton";
+import { Colors } from "../classes/Colors";
 
 const NotesEditScreen = ({ route }) => {
   useEffect(() => {
@@ -32,50 +34,57 @@ const NotesEditScreen = ({ route }) => {
   const [noteGroupID, setNoteGroupID] = useState(
     initialValues instanceof NoteGroup ? initialValues.id : null
   );
-  return (
-    <View style={{ flex: 1, backgroundColor: "black" }}>
-      {/* Header with buttons */}
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <View style={styles.cameraButtonsContainer}>
-          <IconButton
-            onPressCallback={() => {
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <View>
+          <HeaderIconButton
+            color="white"
+            iconName="Back"
+            callback={() => {
               if (noteGroupID !== null) {
                 notes.edit({ id: noteGroupID, notes: notesOnScreen });
               }
               navigation.pop();
             }}
-            iconName="Close"
           />
-          <View style={{ flexDirection: "row" }}>
-            {!notesAreEditable && (
-              <IconButton
-                onPressCallback={() => setNotesAreEditable(true)}
-                iconName="Edit Circle"
-              />
-            )}
-            {notesAreEditable && (
-              <IconButton
-                onPressCallback={() => setNotesAreEditable(false)}
-                iconName="Done"
-              />
-            )}
-            <IconButton
-              onPressCallback={() => console.log("bookmark")}
-              iconName="Bookmark"
-            />
-            <IconButton
-              onPressCallback={() => {
-                noteGroupID !== null
-                  ? notes.delete(noteGroupID)
-                  : notes.delete(initialValues.id);
-                navigation.pop();
-              }}
-              iconName="Delete"
-            />
-          </View>
         </View>
-      </TouchableWithoutFeedback>
+      ),
+      headerRight: () => (
+        <View style={{ flexDirection: "row" }}>
+          {!notesAreEditable && (
+            <IconButton
+              onPressCallback={() => setNotesAreEditable(true)}
+              iconName="Edit Circle"
+            />
+          )}
+          {notesAreEditable && (
+            <IconButton
+              onPressCallback={() => setNotesAreEditable(false)}
+              iconName="Done"
+            />
+          )}
+          <IconButton
+            onPressCallback={() => console.log("bookmark")}
+            iconName="Bookmark"
+          />
+          <IconButton
+            onPressCallback={() => {
+              noteGroupID !== null
+                ? notes.delete(noteGroupID)
+                : notes.delete(initialValues.id);
+              navigation.pop();
+            }}
+            iconName="Delete"
+          />
+        </View>
+      ),
+    });
+  });
 
+  return (
+    <View style={{ flex: 1, backgroundColor: Colors.backgroundColor }}>
       {/* Notes List */}
       <DraggableFlatList
         data={notesOnScreen}
@@ -89,7 +98,7 @@ const NotesEditScreen = ({ route }) => {
           return (
             <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
               <TouchableOpacity onLongPress={drag} activeOpacity={1}>
-                <View style={{ flex: 1, margin: 15 }}>
+                <View style={{ flex: 1 }}>
                   {item instanceof WrittenNote && (
                     <WrittenNoteForm
                       initialValues={item}
@@ -101,7 +110,7 @@ const NotesEditScreen = ({ route }) => {
                         }
                       }}
                       editable={notesAreEditable}
-                      opacity={isActive ? 0.6 : 1}
+                      isActive={isActive}
                     />
                   )}
 
@@ -177,7 +186,7 @@ const NotesEditScreen = ({ route }) => {
 const IconButton = ({ iconName, onPressCallback }) => {
   return (
     <TouchableOpacity onPress={() => onPressCallback()} style={styles.button}>
-      {GeneralIcons.findIcon(iconName, 25, "white")}
+      {GeneralIcons.findIcon(iconName, 22, "white")}
     </TouchableOpacity>
   );
 };
@@ -190,7 +199,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   button: {
-    marginBottom: 15,
     marginHorizontal: 20,
   },
   deleteButtonContainter: {

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, StyleSheet, TextInput, Text } from "react-native";
 import { Colors } from "../classes/Colors";
 
-const WrittenNoteForm = ({ onChange, initialValues, editable, opacity }) => {
+const WrittenNoteForm = ({ onChange, initialValues, editable, isActive }) => {
   //set default values
   const [title, setTitle] = useState(initialValues.title);
   const [content, setContent] = useState(initialValues.content);
@@ -15,10 +15,12 @@ const WrittenNoteForm = ({ onChange, initialValues, editable, opacity }) => {
     <View
       style={{
         ...styles.noteContainer,
-        backgroundColor: Colors.changeOpacity(
-          initialValues.schoolClass.primaryColor,
-          opacity
-        ),
+        ...(isActive
+          ? Colors.shadow
+          : {
+              borderBottomWidth: StyleSheet.hairlineWidth,
+              borderBottomColor: Colors.borderColor,
+            }),
       }}
     >
       {editable && (
@@ -65,10 +67,13 @@ const WrittenNoteForm = ({ onChange, initialValues, editable, opacity }) => {
   );
 };
 
+const noteHeight = 300;
+const inputBoxHeight = noteHeight - 90;
+
 const styles = StyleSheet.create({
   input: {
     fontSize: 14,
-    minHeight: 160,
+    minHeight: inputBoxHeight,
   },
   titleInput: {
     fontSize: 16,
@@ -76,12 +81,11 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   noteContainer: {
-    minHeight: 300,
-    padding: 15,
+    minHeight: noteHeight,
+    padding: 20,
     paddingBottom: 45,
-    borderRadius: 10,
-    ...Colors.shadow,
-    minHeight: 250,
+    minHeight: 300,
+    backgroundColor: "white",
   },
 });
 

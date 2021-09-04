@@ -41,15 +41,15 @@ export class Calendar {
   }
 
   static getDayDataFromDate(date, weeksArray, monthDataArray) {
-    const firstMonthInWeeksArray = monthDataArray[weeksArray[0][0].monthIndex].month;
-    const monthIndexOfDate = firstMonthInWeeksArray - date.getMonth();
+    const monthIndexOfDate = 0;
     var dayIndex = date.getDay();
-    var weekIndex = monthIndexOfDate * 4;
+    var weekIndex = 0;
+    //get the week index of the current month
     while (
       date.getDate() !== weeksArray[weekIndex][dayIndex].day ||
       monthIndexOfDate !== weeksArray[weekIndex][dayIndex].monthIndex
     ) {
-      weekIndex++;
+      weekIndex += 4;
     }
     return weeksArray[weekIndex][dayIndex];
   }

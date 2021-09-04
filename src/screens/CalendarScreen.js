@@ -19,7 +19,6 @@ const CalendarScreen = () => {
   const [weeksArray, setWeeksArray] = useState();
 
   const weekCalendarFlatListRef = React.useRef();
-  const monthCalendarFlatListRef = React.useRef();
 
   const assignments = useContext(AssignmentContext);
   const specialDates = useContext(CalendarContext);
@@ -80,8 +79,11 @@ const CalendarScreen = () => {
             weekCalendarFlatListRef={weekCalendarFlatListRef}
             marginHorizontal={10}
             todaysCalendarDayIndex={
-              Calendar.getDayDataFromDate(new Date(), weeksArray, monthDataArray)
-                .calendarDayIndex
+              Calendar.getDayDataFromDate(
+                new Date(),
+                weeksArray.slice(0, 20),
+                monthDataArray
+              ).calendarDayIndex
             }
           />
         </View>
