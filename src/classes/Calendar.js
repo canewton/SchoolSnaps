@@ -49,7 +49,7 @@ export class Calendar {
       date.getDate() !== weeksArray[weekIndex][dayIndex].day ||
       monthIndexOfDate !== weeksArray[weekIndex][dayIndex].monthIndex
     ) {
-      weekIndex += 4;
+      weekIndex += 1;
     }
     return weeksArray[weekIndex][dayIndex];
   }
