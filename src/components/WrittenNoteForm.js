@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, TextInput, Text, Dimensions } from "react-native";
 
-const WrittenNoteForm = ({ onChange, initialTitle, initialContent, editable }) => {
+const WrittenNoteForm = ({
+  onChange,
+  initialTitle,
+  initialContent,
+  editable,
+  noteContainerStyle,
+}) => {
   const [title, setTitle] = useState(initialTitle);
   const [content, setContent] = useState(initialContent);
 
@@ -15,7 +21,7 @@ const WrittenNoteForm = ({ onChange, initialTitle, initialContent, editable }) =
   }, [initialContent, initialTitle]);
 
   return (
-    <View style={styles.noteContainer}>
+    <View style={{ ...styles.noteContainer, ...noteContainerStyle }}>
       {editable && (
         <View>
           <TextInput
