@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import { View, StyleSheet, TouchableOpacity, LogBox } from "react-native";
 import { Context as NotesContext } from "../context/NotesContext";
 import { GeneralIcons } from "../icons/GeneralIcons";
@@ -8,9 +8,9 @@ import FloatingActionButton from "../components/FloatingActionButton";
 import { NoteGroup } from "../classes/NoteGroup";
 import DraggableFlatList from "react-native-draggable-flatlist";
 import HeaderIconButton from "../components/HeaderIconButton";
-import { Colors } from "../classes/Colors";
 import DraggableNote from "../components/DraggableNote";
 import { ItemArray } from "../classes/ItemArray";
+import { Transition, Transitioning } from "react-native-reanimated";
 
 const NotesEditScreen = ({ route }) => {
   useEffect(() => {
@@ -22,6 +22,7 @@ const NotesEditScreen = ({ route }) => {
   }, []);
 
   const navigation = useNavigation();
+  const transitionRef = useRef();
   const notes = useContext(NotesContext);
   const initialValues = route.params;
   const [notesOnScreen, setNotesOnScreen] = useState(initialValues.notes);
@@ -87,8 +88,11 @@ const NotesEditScreen = ({ route }) => {
     }
   };
 
+  /* Define the animation that happens when an assignment is deleted */
+  const transition = <Transition.Change interpolation="easeInOut" durationMs={400} />;
+
   return (
-    <View style={{ flex: 1, backgroundColor: Colors.backgroundColor }}>
+    <Transitioning.View style={{ flex: 1 }} transition={transition} ref={transitionRef}>
       {/* Notes List */}
       <DraggableFlatList
         data={notesOnScreen}
@@ -105,7 +109,10 @@ const NotesEditScreen = ({ route }) => {
               isDraggable={isActive}
               note={item}
               noteGroupID={noteGroupID}
-              deleteNote={(note) => deleteNote(note)}
+              deleteNote={(note) => {
+                deleteNote(note);
+                transitionRef.current.animateNextTransition();
+              }}
             />
           );
         }}
@@ -139,7 +146,7 @@ const NotesEditScreen = ({ route }) => {
           }
         }}
       />
-    </View>
+    </Transitioning.View>
   );
 };
 
