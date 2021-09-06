@@ -7,6 +7,8 @@ const WrittenNoteForm = ({
   initialContent,
   editable,
   noteContainerStyle,
+  titleInputStyle,
+  inputStyle,
 }) => {
   const [title, setTitle] = useState(initialTitle);
   const [content, setContent] = useState(initialContent);
@@ -26,13 +28,13 @@ const WrittenNoteForm = ({
         <View>
           <TextInput
             value={title}
-            style={styles.titleInput}
+            style={{ ...styles.titleInput, ...titleInputStyle }}
             placeholder="Untitled"
             onChangeText={(text) => setTitle(text)}
           />
           <TextInput
             value={content}
-            style={styles.input}
+            style={{ ...styles.input, ...inputStyle }}
             placeholder="Start Typing Here..."
             onChangeText={(text) => setContent(text)}
             multiline={true}
@@ -67,7 +69,7 @@ const WrittenNoteForm = ({
 };
 
 const noteHeight = Dimensions.get("window").height;
-const inputBoxHeight = noteHeight - 90;
+const inputBoxHeight = noteHeight * 0.7;
 
 const styles = StyleSheet.create({
   input: {
@@ -83,7 +85,6 @@ const styles = StyleSheet.create({
     minHeight: noteHeight,
     padding: 20,
     paddingBottom: 45,
-    minHeight: 300,
     backgroundColor: "white",
   },
 });

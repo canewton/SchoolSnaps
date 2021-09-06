@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { View, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Dimensions, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import WrittenNoteForm from "../components/WrittenNoteForm";
 import { WrittenNote } from "../classes/WrittenNote";
@@ -8,6 +8,7 @@ import Lightbox from "react-native-lightbox";
 import { Colors } from "../classes/Colors";
 import { GeneralIcons } from "../icons/GeneralIcons";
 import { ItemArray } from "../classes/ItemArray";
+import HeaderIconButton from "./HeaderIconButton";
 
 const DraggableNote = ({ onLongPress, isDraggable, note, noteGroupID }) => {
   const notes = useContext(NotesContext);
@@ -19,14 +20,30 @@ const DraggableNote = ({ onLongPress, isDraggable, note, noteGroupID }) => {
 
   const WrittenNoteThatCanBeFullscreened = () => {
     return (
-      <WrittenNoteForm
-        initialContent={note.content}
-        initialTitle={note.title}
-        onChange={(title, content) => note.changeText(title, content)}
-        editable={notesAreEditable}
-        noteContainerStyle={
-          isFullscreened ? styles.fullscreenStyle : { height: defaultNoteHeight }
-        }
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <WrittenNoteForm
+          initialContent={note.content}
+          initialTitle={note.title}
+          onChange={(title, content) => note.changeText(title, content)}
+          editable={notesAreEditable}
+          noteContainerStyle={
+            isFullscreened
+              ? styles.fullscreenNoteContainerStyle
+              : { height: defaultNoteHeight }
+          }
+          titleInputStyle={isFullscreened ? styles.fullscreenTitleInputStyle : {}}
+        />
+      </ScrollView>
+    );
+  };
+
+  const FullscreenHeader = ({ onCloseCallback }) => {
+    return (
+      <HeaderIconButton
+        callback={onCloseCallback()}
+        color="gray"
+        iconName="Back"
+        style={{ marginTop: 57 }}
       />
     );
   };
@@ -35,6 +52,7 @@ const DraggableNote = ({ onLongPress, isDraggable, note, noteGroupID }) => {
     <Lightbox
       onLongPress={onLongPress()}
       underlayColor="white"
+      swipeToDismiss={false}
       onOpen={() => {
         setIsFullscreened(true);
         setNotesAreEditable(true);
@@ -44,6 +62,7 @@ const DraggableNote = ({ onLongPress, isDraggable, note, noteGroupID }) => {
         setNotesAreEditable(false);
         notes.edit({ id: note.id, title: note.title, content: note.content });
       }}
+      renderHeader={(close) => <FullscreenHeader onCloseCallback={() => close} />}
       renderContent={() => <WrittenNoteThatCanBeFullscreened />}
     >
       <View
@@ -107,8 +126,10 @@ const styles = StyleSheet.create({
     height: 30,
     width: 30,
   },
-  fullscreenStyle: {
-    paddingTop: 100,
+  fullscreenNoteContainerStyle: { paddingTop: 100 },
+  fullscreenTitleInputStyle: {
+    fontSize: 22,
+    marginBottom: 12,
   },
 });
 
