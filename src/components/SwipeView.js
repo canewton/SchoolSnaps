@@ -68,7 +68,6 @@ const SwipeView = ({ lowerHeight, upperHeight, lowerComponent, upperComponent })
           style={[
             sheetStyle,
             {
-              //margin: 10,
               backgroundColor: "white",
               borderBottomLeftRadius: 10,
               borderBottomRightRadius: 10,

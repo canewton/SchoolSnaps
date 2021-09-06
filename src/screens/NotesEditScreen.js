@@ -10,6 +10,7 @@ import DraggableFlatList from "react-native-draggable-flatlist";
 import HeaderIconButton from "../components/HeaderIconButton";
 import { Colors } from "../classes/Colors";
 import DraggableNote from "../components/DraggableNote";
+import { ItemArray } from "../classes/ItemArray";
 
 const NotesEditScreen = ({ route }) => {
   useEffect(() => {
@@ -64,6 +65,28 @@ const NotesEditScreen = ({ route }) => {
     });
   });
 
+  const deleteNote = (note) => {
+    if (noteGroupID === null) {
+      /* The edit screen is displaying a single note */
+      notes.delete(note.id);
+      navigation.pop();
+    } else {
+      /* The edit screen is displaying a note group */
+      var newNotesList = ItemArray.remove(notesOnScreen, note.id);
+      if (notesOnScreen.length === 2) {
+        /* Convert the note group into a single note */
+        notes.add(newNotesList[0]);
+        notes.delete(noteGroupID);
+        setNotesOnScreen(newNotesList);
+        setNoteGroupID(null);
+      } else {
+        /* Remove a note from the note group */
+        setNotesOnScreen(newNotesList);
+        notes.edit({ id: noteGroupID, notes: newNotesList });
+      }
+    }
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: Colors.backgroundColor }}>
       {/* Notes List */}
@@ -82,6 +105,7 @@ const NotesEditScreen = ({ route }) => {
               isDraggable={isActive}
               note={item}
               noteGroupID={noteGroupID}
+              deleteNote={(note) => deleteNote(note)}
             />
           );
         }}

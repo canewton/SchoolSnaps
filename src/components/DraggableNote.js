@@ -6,21 +6,19 @@ import { WrittenNote } from "../classes/WrittenNote";
 import { Context as NotesContext } from "../context/NotesContext";
 import Lightbox from "react-native-lightbox";
 import { Colors } from "../classes/Colors";
-import { GeneralIcons } from "../icons/GeneralIcons";
-import { ItemArray } from "../classes/ItemArray";
 import HeaderIconButton from "./HeaderIconButton";
 
-const DraggableNote = ({ onLongPress, isDraggable, note, noteGroupID }) => {
+const DraggableNote = ({ onLongPress, isDraggable, note, deleteNote }) => {
   const notes = useContext(NotesContext);
-  const navigation = useNavigation();
   const [notesAreEditable, setNotesAreEditable] = useState(false);
   const [isFullscreened, setIsFullscreened] = useState(false);
+  const [deleteNoteBool, setDeleteNoteBool] = useState(false);
   const fullscreenNoteHeight = Dimensions.get("window").height;
   const defaultNoteHeight = 300;
 
   const WrittenNoteThatCanBeFullscreened = () => {
     return (
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} scrollEnabled={isFullscreened}>
         <WrittenNoteForm
           initialContent={note.content}
           initialTitle={note.title}
@@ -39,20 +37,37 @@ const DraggableNote = ({ onLongPress, isDraggable, note, noteGroupID }) => {
 
   const FullscreenHeader = ({ onCloseCallback }) => {
     return (
-      <HeaderIconButton
-        callback={onCloseCallback()}
-        color="gray"
-        iconName="Back"
-        style={{ marginTop: 57 }}
-      />
+      <View
+        style={{
+          flexDirection: "row",
+          marginTop: 57,
+          justifyContent: "space-between",
+          marginRight: 10,
+        }}
+      >
+        <HeaderIconButton
+          callback={() => onCloseCallback()}
+          color="gray"
+          iconName="Back"
+        />
+        <HeaderIconButton
+          callback={() => {
+            setDeleteNoteBool(true);
+            onCloseCallback();
+          }}
+          color="gray"
+          iconName="Delete"
+          size={22}
+        />
+      </View>
     );
   };
 
   return (
     <Lightbox
-      onLongPress={onLongPress()}
       underlayColor="white"
       swipeToDismiss={false}
+      onLongPress={onLongPress()}
       onOpen={() => {
         setIsFullscreened(true);
         setNotesAreEditable(true);
@@ -62,19 +77,15 @@ const DraggableNote = ({ onLongPress, isDraggable, note, noteGroupID }) => {
         setNotesAreEditable(false);
         notes.edit({ id: note.id, title: note.title, content: note.content });
       }}
-      renderHeader={(close) => <FullscreenHeader onCloseCallback={() => close} />}
+      onClose={() => {
+        if (deleteNoteBool === true) {
+          deleteNote(note);
+        }
+      }}
+      renderHeader={(close) => <FullscreenHeader onCloseCallback={close} />}
       renderContent={() => <WrittenNoteThatCanBeFullscreened />}
     >
-      <View
-        style={{
-          ...(isDraggable
-            ? Colors.shadow
-            : {
-                borderBottomWidth: StyleSheet.hairlineWidth,
-                borderBottomColor: Colors.borderColor,
-              }),
-        }}
-      >
+      <View style={{ ...(isDraggable ? Colors.shadow : styles.nonDraggableNote) }}>
         <View
           style={{
             height: isFullscreened ? fullscreenNoteHeight : defaultNoteHeight,
@@ -82,37 +93,6 @@ const DraggableNote = ({ onLongPress, isDraggable, note, noteGroupID }) => {
           }}
         >
           {note instanceof WrittenNote && <WrittenNoteThatCanBeFullscreened />}
-
-          {/* Make a delete button that either deletes a note from a note group
-            or deletes a single note and then navigates back to the notes screen */}
-          <TouchableOpacity
-            style={{ position: "absolute", right: 10, bottom: 14 }}
-            onPress={() => {
-              if (noteGroupID === null) {
-                /* The edit screen is displaying a single note */
-                notes.delete(note.id);
-                navigation.pop();
-              } else {
-                /* The edit screen is displaying a note group */
-                var newNotesList = ItemArray.remove(notesOnScreen, note.id);
-                if (notesOnScreen.length === 2) {
-                  /* Convert the note group into a single note */
-                  notes.add(newNotesList[0]);
-                  notes.delete(noteGroupID);
-                  setNotesOnScreen(newNotesList);
-                  setNoteGroupID(null);
-                } else {
-                  /* Remove a note from the note group */
-                  setNotesOnScreen(newNotesList);
-                  notes.edit({ id: noteGroupID, notes: newNotesList });
-                }
-              }
-            }}
-          >
-            <View style={styles.deleteButtonContainter}>
-              {GeneralIcons.findIcon("Delete", 20, "rgba(0,0,0,.5)")}
-            </View>
-          </TouchableOpacity>
         </View>
       </View>
     </Lightbox>
@@ -130,6 +110,10 @@ const styles = StyleSheet.create({
   fullscreenTitleInputStyle: {
     fontSize: 22,
     marginBottom: 12,
+  },
+  nonDraggableNote: {
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: Colors.borderColor,
   },
 });
 

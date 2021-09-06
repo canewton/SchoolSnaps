@@ -16,7 +16,6 @@ const BottomSheetTrigger = ({
   sheetStyle,
   renderContent,
   headerComponent,
-  floatingActionButton,
   onSheetClose,
 }) => {
   const viewHeight = Dimensions.get("window").height;
