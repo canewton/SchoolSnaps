@@ -1,21 +1,22 @@
 import React, { useEffect, useState, useRef } from "react";
 import { View, Text, StyleSheet, Animated, Dimensions } from "react-native";
-import { Colors } from "../classes/Colors";
 import { Transition, Transitioning } from "react-native-reanimated";
 import AssignmentListItem from "./AssignmentListItem";
 import { Calendar } from "../classes/Calendar";
-import { ItemArray } from "../classes/ItemArray";
 
 const hiddenViewHeight = 300;
 
-const AssignmentsList = ({ assignments, assignmentStats }) => {
-  //console.log(assignments);
+const AssignmentsList = ({
+  assignments,
+  assignmentStats,
+  onPressCheckmark,
+  descending,
+}) => {
   const transitionRef = useRef();
   const assignmentFlatlistRef = useRef();
   const screenWidth = Dimensions.get("window").width;
 
   const scrollY = useRef(new Animated.Value(0)).current;
-  const [assignmentsData, setAssignmentsData] = useState(assignments);
   const [assignmentsList, setAssignmentsList] = useState([]);
 
   const hiddenViewTranslation = scrollY.interpolate({
@@ -23,6 +24,16 @@ const AssignmentsList = ({ assignments, assignmentStats }) => {
     outputRange: [hiddenViewHeight, 0],
     extrapolate: "clamp",
   });
+
+  const refreshAssignmentList = (assignmentsInput) => {
+    setAssignmentsList(
+      groupAssignmentsByDate(sortAssignmentsByDate(assignmentsInput, descending))
+    );
+  };
+
+  useEffect(() => {
+    refreshAssignmentList(assignments);
+  }, [assignments.length]);
 
   /* Filter the assignments array by its completeness and sort it by date */
   const filterAssignmentsByDate = (assignmentsInput, date) => {
@@ -53,21 +64,6 @@ const AssignmentsList = ({ assignments, assignmentStats }) => {
     };
     return assignmentsInput.sort((a, b) => booleanExpression(a, b));
   };
-
-  const refreshAssignmentList = () => {
-    setAssignmentsList(
-      groupAssignmentsByDate(sortAssignmentsByDate(assignmentsData, true))
-    );
-  };
-
-  useEffect(() => {
-    setAssignmentsData(assignments);
-    refreshAssignmentList();
-  }, [assignments.length]);
-
-  useEffect(() => {
-    refreshAssignmentList();
-  }, [assignmentsData.length]);
 
   /* Define the animation that happens when an assignment is deleted */
   const transition = <Transition.Change interpolation="easeInOut" durationMs={400} />;
@@ -143,10 +139,7 @@ const AssignmentsList = ({ assignments, assignmentStats }) => {
                     onPressCheckmark={(fadeAnimation) => {
                       fadeAnimation.start(() => {
                         transitionRef.current.animateNextTransition();
-                        setAssignmentsData(
-                          ItemArray.remove(assignmentsData, listItemData.id)
-                        );
-                        refreshAssignmentList();
+                        onPressCheckmark();
                       });
                     }}
                   />

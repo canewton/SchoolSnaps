@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AddButton from "../components/AddButton";
-import WeekdayCalendar from "../calendar/WeekdayCalendar";
 import { Calendar } from "../classes/Calendar";
 import { Colors } from "../classes/Colors";
 import AssignmentsList from "../components/AssignmentsList";
@@ -126,18 +125,18 @@ const CalendarScreen = () => {
   const lateAssignments = getLateAssignments(assignments.state);
   const completedAssignments = getCompletedAssignments(assignments.state);
 
-  const [assignmentStats, setAssignmentStats] = useState({
-    current: currentAssignments.length,
-    late: lateAssignments.length,
-    completed: completedAssignments.length,
-  });
+  const [assignmentStats, setAssignmentStats] = useState({});
 
-  useEffect(() => {
+  const refreshAssignmentStats = () => {
     setAssignmentStats({
       current: currentAssignments.length,
       late: lateAssignments.length,
       completed: completedAssignments.length,
     });
+  };
+
+  useEffect(() => {
+    refreshAssignmentStats();
   }, [currentAssignments.length, lateAssignments.length, completedAssignments.length]);
 
   return (
@@ -146,18 +145,24 @@ const CalendarScreen = () => {
         <AssignmentsList
           assignments={currentAssignments}
           assignmentStats={assignmentStats}
+          onPressCheckmark={() => refreshAssignmentStats()}
+          descending={true}
         />
       )}
       {activeTab === "Late" && (
         <AssignmentsList
           assignments={lateAssignments}
           assignmentStats={assignmentStats}
+          onPressCheckmark={() => refreshAssignmentStats()}
+          descending={false}
         />
       )}
       {activeTab === "Completed" && (
         <AssignmentsList
           assignments={completedAssignments}
           assignmentStats={assignmentStats}
+          onPressCheckmark={() => refreshAssignmentStats()}
+          descending={false}
         />
       )}
     </View>
