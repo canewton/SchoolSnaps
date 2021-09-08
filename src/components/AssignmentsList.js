@@ -1,75 +1,27 @@
-import React, { useEffect, useState, useRef, useCallback, useContext } from "react";
-import { View, Text, StyleSheet, FlatList, Animated } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import React, { useEffect, useState, useRef } from "react";
+import { View, Text, StyleSheet, Animated, Dimensions } from "react-native";
 import { Colors } from "../classes/Colors";
 import { Transition, Transitioning } from "react-native-reanimated";
 import AssignmentListItem from "./AssignmentListItem";
 import { Calendar } from "../classes/Calendar";
-import { Context as CalendarContext } from "../context/CalendarContext";
+import { ItemArray } from "../classes/ItemArray";
 
 const hiddenViewHeight = 300;
 
-const AssignmentsList = ({ assignments, weeksArray, monthDataArray }) => {
-  const navigation = useNavigation();
+const AssignmentsList = ({ assignments, assignmentStats }) => {
+  //console.log(assignments);
   const transitionRef = useRef();
   const assignmentFlatlistRef = useRef();
-  const specialDates = useContext(CalendarContext);
+  const screenWidth = Dimensions.get("window").width;
 
-  const [incompletedAssignments, setIncompletedAssignments] = useState();
-  const [completedOrLateAssignments, setCompletedOrLateAssignments] = useState();
-  const [pulledFarEnough, setPulledFarEnough] = useState(false);
-  const [isSwithchingToAnotherList, setIsSwitchingToAnotherList] = useState(false);
-  const [assignmentsDisplayed, setAssignmentsDisplayed] = useState("Incomplete");
-
-  /* Hidden View Functions and Constants */
-  const minPullDownDistance = -60;
   const scrollY = useRef(new Animated.Value(0)).current;
+  const [assignmentsData, setAssignmentsData] = useState(assignments);
+  const [assignmentsList, setAssignmentsList] = useState([]);
 
   const hiddenViewTranslation = scrollY.interpolate({
     inputRange: [hiddenViewHeight * -1, 0],
     outputRange: [hiddenViewHeight, 0],
     extrapolate: "clamp",
-  });
-
-  const handleScroll = (pullDownDistance, isSwithchingToAnotherList) => {
-    if (!isSwithchingToAnotherList) {
-      if (pullDownDistance.value <= minPullDownDistance) {
-        setPulledFarEnough(true);
-      } else if (pullDownDistance.value > minPullDownDistance) {
-        setPulledFarEnough(false);
-      }
-    } else if (pullDownDistance.value >= -5) {
-      setIsSwitchingToAnotherList(false);
-    }
-  };
-
-  const handleRelease = useCallback(() => {
-    if (pulledFarEnough && !isSwithchingToAnotherList) {
-      setIsSwitchingToAnotherList(true);
-      setAssignmentsDisplayed(
-        assignmentsDisplayed === "Incomplete" ? "Complete" : "Incomplete"
-      );
-    }
-  });
-
-  useEffect(() => {
-    scrollY.addListener((value) => handleScroll(value, isSwithchingToAnotherList));
-  }, [isSwithchingToAnotherList]);
-
-  /* Change the date selected on the week calendar as the user scrolls through assignments */
-  const onViewRef = React.useRef(({ viewableItems }) => {
-    if (viewableItems.length > 0) {
-      const firstViewableItemDate = new Date(viewableItems[0].item[0].date);
-      const firstViewableItemDayData = Calendar.getDayDataFromDate(
-        firstViewableItemDate,
-        weeksArray,
-        monthDataArray
-      );
-      specialDates.edit({
-        id: "Selected Date",
-        dateObject: firstViewableItemDayData,
-      });
-    }
   });
 
   /* Filter the assignments array by its completeness and sort it by date */
@@ -102,45 +54,20 @@ const AssignmentsList = ({ assignments, weeksArray, monthDataArray }) => {
     return assignmentsInput.sort((a, b) => booleanExpression(a, b));
   };
 
-  /* Filter assignments based on their lateness and completeness */
-  const getIncompletedAssignments = (assignmentsInput) => {
-    return assignmentsInput.filter((assignment) => {
-      return !isAssignmentLate(assignment.date) && assignment.completed === false;
-    });
-  };
-
-  const getCompletedOrLateAssignments = (assignmentsInput) => {
-    return assignmentsInput.filter((assignment) => {
-      return isAssignmentLate(assignment.date) || assignment.completed === true;
-    });
-  };
-
-  const isAssignmentLate = (assignmentDateString) => {
-    const today = new Date();
-    return (
-      new Date(assignmentDateString).getTime() <
-      new Date(
-        today.getMonth() + 1 + "/" + today.getDate() + "/" + today.getFullYear()
-      ).getTime()
-    );
-  };
-
-  const refreshAssignmentLists = () => {
-    setIncompletedAssignments(
-      groupAssignmentsByDate(
-        sortAssignmentsByDate(getIncompletedAssignments(assignments), true)
-      )
-    );
-    setCompletedOrLateAssignments(
-      groupAssignmentsByDate(
-        sortAssignmentsByDate(getCompletedOrLateAssignments(assignments), false)
-      )
+  const refreshAssignmentList = () => {
+    setAssignmentsList(
+      groupAssignmentsByDate(sortAssignmentsByDate(assignmentsData, true))
     );
   };
 
   useEffect(() => {
-    refreshAssignmentLists();
+    setAssignmentsData(assignments);
+    refreshAssignmentList();
   }, [assignments.length]);
+
+  useEffect(() => {
+    refreshAssignmentList();
+  }, [assignmentsData.length]);
 
   /* Define the animation that happens when an assignment is deleted */
   const transition = <Transition.Change interpolation="easeInOut" durationMs={400} />;
@@ -154,50 +81,45 @@ const AssignmentsList = ({ assignments, weeksArray, monthDataArray }) => {
           transform: [{ translateY: hiddenViewTranslation }],
         }}
       >
-        {assignmentsDisplayed === "Incomplete" &&
-          !pulledFarEnough &&
-          !isSwithchingToAnotherList && (
-            <Text style={styles.hiddenTextPull}>
-              Pull to view completed and late assignments
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-around",
+            width: screenWidth,
+          }}
+        >
+          <View style={styles.hiddenTextContainer}>
+            <Text style={{ ...styles.hiddenTextCounter, color: "orange" }}>
+              {assignmentStats.current}
             </Text>
-          )}
-        {assignmentsDisplayed === "Incomplete" &&
-          (pulledFarEnough || isSwithchingToAnotherList) && (
-            <Text style={styles.hiddenTextRelease}>
-              Release to view completed and late assignments
+            <Text style={{ ...styles.hiddenText, color: "orange" }}>Current</Text>
+          </View>
+          <View style={styles.hiddenTextContainer}>
+            <Text style={{ ...styles.hiddenTextCounter, color: "red" }}>
+              {assignmentStats.late}
             </Text>
-          )}
-        {assignmentsDisplayed === "Complete" &&
-          !pulledFarEnough &&
-          !isSwithchingToAnotherList && (
-            <Text style={styles.hiddenTextPull}>Pull to view current assignments</Text>
-          )}
-        {assignmentsDisplayed === "Complete" &&
-          (pulledFarEnough || isSwithchingToAnotherList) && (
-            <Text style={styles.hiddenTextRelease}>
-              Release to view current assignments
+            <Text style={{ ...styles.hiddenText, color: "red" }}>Late</Text>
+          </View>
+          <View style={styles.hiddenTextContainer}>
+            <Text style={{ ...styles.hiddenTextCounter, color: "green" }}>
+              {assignmentStats.completed}
             </Text>
-          )}
+            <Text style={{ ...styles.hiddenText, color: "green" }}>Completed</Text>
+          </View>
+        </View>
       </Animated.View>
 
       {/* List of Assignments */}
       <Animated.FlatList
-        data={
-          assignmentsDisplayed === "Incomplete"
-            ? incompletedAssignments
-            : completedOrLateAssignments
-        }
+        data={assignmentsList}
         keyExtractor={(index) => index[0].date}
         ref={assignmentFlatlistRef}
-        extraData={assignmentsDisplayed}
         showsVerticalScrollIndicator={false}
         ListFooterComponent={() => <View style={{ height: 560 }} />}
-        onResponderRelease={handleRelease}
-        onViewableItemsChanged={onViewRef.current}
         onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], {
           useNativeDriver: true,
         })}
-        renderItem={({ item, index }) => {
+        renderItem={({ item }) => {
           const itemDate = new Date(item[0].date);
           return (
             <View>
@@ -219,12 +141,13 @@ const AssignmentsList = ({ assignments, weeksArray, monthDataArray }) => {
                     item={listItemData}
                     index={listItemIndex}
                     onPressCheckmark={(fadeAnimation) => {
-                      if (!isAssignmentLate(listItemData.date)) {
-                        fadeAnimation.start(() => {
-                          transitionRef.current.animateNextTransition();
-                          refreshAssignmentLists();
-                        });
-                      }
+                      fadeAnimation.start(() => {
+                        transitionRef.current.animateNextTransition();
+                        setAssignmentsData(
+                          ItemArray.remove(assignmentsData, listItemData.id)
+                        );
+                        refreshAssignmentList();
+                      });
                     }}
                   />
                 );
@@ -246,7 +169,7 @@ const styles = StyleSheet.create({
     height: hiddenViewHeight,
     alignItems: "center",
     justifyContent: "flex-end",
-    paddingBottom: 20,
+    paddingBottom: 15,
   },
   dateText: {
     fontSize: 16,
@@ -256,8 +179,17 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginBottom: 5,
   },
-  hiddenTextPull: { fontSize: 14, fontWeight: "600", color: Colors.primaryColor },
-  hiddenTextRelease: { fontSize: 14, fontWeight: "800", color: Colors.primaryColor },
+  hiddenText: {
+    fontSize: 10,
+    fontWeight: "500",
+    color: "black",
+    marginTop: 2,
+  },
+  hiddenTextCounter: {
+    fontSize: 34,
+    fontWeight: "600",
+  },
+  hiddenTextContainer: { borderRadius: 10, alignItems: "center", width: 100 },
 });
 
 export default AssignmentsList;

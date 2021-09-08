@@ -11,14 +11,14 @@ import { Context as CalendarContext } from "../context/CalendarContext";
 import BottomSheetTrigger from "../components/BottomSheetTrigger";
 import AssignmentForm from "../components/AssignmentForm";
 import Styles from "../classes/Styles";
+import TopTabs from "../components/TopTabs";
 
 const CalendarScreen = () => {
   const navigation = useNavigation();
   const [monthDataArray, setMonthDataArray] = useState([]);
   const [singletonHasRun, setSingletonHasRun] = useState(false);
   const [weeksArray, setWeeksArray] = useState();
-
-  const weekCalendarFlatListRef = React.useRef();
+  const [activeTab, setActiveTab] = useState("Current");
 
   const assignments = useContext(AssignmentContext);
   const specialDates = useContext(CalendarContext);
@@ -43,6 +43,8 @@ const CalendarScreen = () => {
       dateObject: Calendar.getDayDataFromDate(new Date(), weeksArray, monthDataArray),
     });
   }, []);
+
+  const tabButtons = [{ name: "Current" }, { name: "Late" }, { name: "Completed" }];
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -78,56 +80,86 @@ const CalendarScreen = () => {
               marginHorizontal: 25,
               borderRadius: 10,
               backgroundColor: Colors.changeOpacity("#ffffff", 0.25),
-              justifyContent: "space-around",
               flexDirection: "row",
             }}
           >
-            <Text
-              style={{
-                fontSize: 14,
-                color: "white",
-                marginVertical: 8,
-                marginHorizontal: 15,
-                fontWeight: "600",
-              }}
-            >
-              Current
-            </Text>
-            <Text
-              style={{
-                fontSize: 14,
-                color: Colors.headerBackgroundColor,
-                marginVertical: 8,
-                marginHorizontal: 15,
-                fontWeight: "600",
-              }}
-            >
-              Late
-            </Text>
-            <Text
-              style={{
-                fontSize: 14,
-                color: Colors.headerBackgroundColor,
-                marginVertical: 8,
-                marginHorizontal: 15,
-                fontWeight: "600",
-              }}
-            >
-              Completed
-            </Text>
+            <TopTabs
+              tabButtons={tabButtons}
+              callback={(tabName) => setActiveTab(tabName)}
+            />
           </View>
         </View>
       ),
     });
   });
 
+  /* Filter assignments based on their lateness and completeness */
+  const getCurrentAssignments = (assignmentsInput) => {
+    return assignmentsInput.filter((assignment) => {
+      return !isAssignmentLate(assignment.date) && assignment.completed === false;
+    });
+  };
+
+  const getCompletedAssignments = (assignmentsInput) => {
+    return assignmentsInput.filter((assignment) => {
+      return assignment.completed === true;
+    });
+  };
+
+  const getLateAssignments = (assignmentsInput) => {
+    return assignmentsInput.filter((assignment) => {
+      return isAssignmentLate(assignment.date) && assignment.completed === false;
+    });
+  };
+
+  const isAssignmentLate = (assignmentDateString) => {
+    const today = new Date();
+    return (
+      new Date(assignmentDateString).getTime() <
+      new Date(
+        today.getMonth() + 1 + "/" + today.getDate() + "/" + today.getFullYear()
+      ).getTime()
+    );
+  };
+
+  const currentAssignments = getCurrentAssignments(assignments.state);
+  const lateAssignments = getLateAssignments(assignments.state);
+  const completedAssignments = getCompletedAssignments(assignments.state);
+
+  const [assignmentStats, setAssignmentStats] = useState({
+    current: currentAssignments.length,
+    late: lateAssignments.length,
+    completed: completedAssignments.length,
+  });
+
+  useEffect(() => {
+    setAssignmentStats({
+      current: currentAssignments.length,
+      late: lateAssignments.length,
+      completed: completedAssignments.length,
+    });
+  }, [currentAssignments.length, lateAssignments.length, completedAssignments.length]);
+
   return (
     <View style={{ flex: 1 }}>
-      <AssignmentsList
-        assignments={assignments.state}
-        monthDataArray={monthDataArray}
-        weeksArray={weeksArray}
-      />
+      {activeTab === "Current" && (
+        <AssignmentsList
+          assignments={currentAssignments}
+          assignmentStats={assignmentStats}
+        />
+      )}
+      {activeTab === "Late" && (
+        <AssignmentsList
+          assignments={lateAssignments}
+          assignmentStats={assignmentStats}
+        />
+      )}
+      {activeTab === "Completed" && (
+        <AssignmentsList
+          assignments={completedAssignments}
+          assignmentStats={assignmentStats}
+        />
+      )}
     </View>
   );
 };

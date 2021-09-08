@@ -4,7 +4,6 @@ import { Context as ClassesContext } from "../context/ClassesContext";
 import { useNavigation } from "@react-navigation/native";
 import AddButton from "../components/AddButton";
 import CoursesList from "../components/CoursesList";
-import TopTabs from "../components/TopTabs";
 import { ItemArray } from "../classes/ItemArray";
 import { Colors } from "../classes/Colors";
 import BottomSheetTrigger from "../components/BottomSheetTrigger";
@@ -47,13 +46,14 @@ const HomeScreen = () => {
               marginHorizontal: 25,
               borderRadius: 10,
               backgroundColor: Colors.changeOpacity("#ffffff", 0.25),
+              height: 35,
+              justifyContent: "center",
             }}
           >
             <Text
               style={{
                 fontSize: 14,
                 color: Colors.headerBackgroundColor,
-                marginVertical: 8,
                 marginHorizontal: 15,
                 fontWeight: "600",
               }}
