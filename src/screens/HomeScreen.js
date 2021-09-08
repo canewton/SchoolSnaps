@@ -41,19 +41,30 @@ const HomeScreen = () => {
               )}
             </BottomSheetTrigger>
           </View>
-          <View style={{ marginBottom: 15 }} />
-          <TopTabs
-            tabButtons={tabButtons}
-            callback={(tab) => {
-              setActiveTab(tab);
+          <View style={{ marginBottom: 12.5 }} />
+          <View
+            style={{
+              marginHorizontal: 25,
+              borderRadius: 10,
+              backgroundColor: Colors.changeOpacity("#ffffff", 0.25),
             }}
-          />
+          >
+            <Text
+              style={{
+                fontSize: 14,
+                color: Colors.headerBackgroundColor,
+                marginVertical: 8,
+                marginHorizontal: 15,
+                fontWeight: "600",
+              }}
+            >
+              Fall Quarter 2021
+            </Text>
+          </View>
         </View>
       ),
     });
   });
-
-  const tabButtons = [{ name: "All" }, { name: "Current" }, { name: "Completed" }];
 
   return (
     <View style={{ flex: 1, marginBottom: 85 }}>

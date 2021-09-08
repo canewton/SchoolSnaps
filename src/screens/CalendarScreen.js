@@ -72,20 +72,50 @@ const CalendarScreen = () => {
               )}
             </BottomSheetTrigger>
           </View>
-          <View style={{ marginBottom: 20 }} />
-          <WeekdayCalendar
-            weeksArray={weeksArray.slice(0, 20)}
-            spaceBetweenPages={Calendar.spaceBetweenPages}
-            weekCalendarFlatListRef={weekCalendarFlatListRef}
-            marginHorizontal={10}
-            todaysCalendarDayIndex={
-              Calendar.getDayDataFromDate(
-                new Date(),
-                weeksArray.slice(0, 20),
-                monthDataArray
-              ).calendarDayIndex
-            }
-          />
+          <View style={{ marginBottom: 12.5 }} />
+          <View
+            style={{
+              marginHorizontal: 25,
+              borderRadius: 10,
+              backgroundColor: Colors.changeOpacity("#ffffff", 0.25),
+              justifyContent: "space-around",
+              flexDirection: "row",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 14,
+                color: "white",
+                marginVertical: 8,
+                marginHorizontal: 15,
+                fontWeight: "600",
+              }}
+            >
+              Current
+            </Text>
+            <Text
+              style={{
+                fontSize: 14,
+                color: Colors.headerBackgroundColor,
+                marginVertical: 8,
+                marginHorizontal: 15,
+                fontWeight: "600",
+              }}
+            >
+              Late
+            </Text>
+            <Text
+              style={{
+                fontSize: 14,
+                color: Colors.headerBackgroundColor,
+                marginVertical: 8,
+                marginHorizontal: 15,
+                fontWeight: "600",
+              }}
+            >
+              Completed
+            </Text>
+          </View>
         </View>
       ),
     });
@@ -97,7 +127,6 @@ const CalendarScreen = () => {
         assignments={assignments.state}
         monthDataArray={monthDataArray}
         weeksArray={weeksArray}
-        weekCalendarFlatListRef={weekCalendarFlatListRef}
       />
     </View>
   );

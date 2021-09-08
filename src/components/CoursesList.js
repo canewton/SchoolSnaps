@@ -1,38 +1,37 @@
-import React from "react";
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from "react-native";
+import React, { useEffect } from "react";
+import { View, Text, StyleSheet, TouchableOpacity, LogBox } from "react-native";
 import { ClassIcons } from "../icons/ClassIcons";
 import { GeneralIcons } from "../icons/GeneralIcons";
 import { Colors } from "../classes/Colors";
 import { useNavigation } from "@react-navigation/native";
+import DraggableFlatList from "react-native-draggable-flatlist";
 
 const CoursesList = ({ classesToDisplay }) => {
+  useEffect(() => {
+    LogBox.ignoreLogs([
+      "ReactNativeFiberHostComponent: Calling getNode() on the ref of an Animated component is no longer necessary.",
+    ]);
+  }, []);
+
   const navigation = useNavigation();
 
   return (
     <View style={{ flex: 1 }}>
-      <FlatList
+      <DraggableFlatList
         data={classesToDisplay}
         keyExtractor={(index) => index.id + ""}
-        ListHeaderComponent={() => <View style={{ height: 10 }} />}
         ListFooterComponent={() => <View style={{ height: 5 }} />}
         showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => {
+        renderItem={({ item, drag, isActive }) => {
           return (
-            <View>
-              <TouchableOpacity onPress={() => navigation.navigate("Notes", item)}>
-                <View
-                  style={{
-                    ...styles.classButton,
-                    backgroundColor: item.primaryColor,
-                  }}
-                >
-                  <View
-                    style={{
-                      ...styles.classIconContainer,
-                      backgroundColor: Colors.changeOpacity("#000000", 0.1),
-                    }}
-                  >
-                    {ClassIcons.findIcon(item.iconName, 30, "white")}
+            <View style={{ ...(isActive ? Colors.shadow : styles.nonDraggableClass) }}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("Notes", item)}
+                onLongPress={drag}
+              >
+                <View style={styles.classButton}>
+                  <View style={styles.classIconContainer}>
+                    {ClassIcons.findIcon(item.iconName, 36, item.primaryColor)}
                   </View>
                   <View style={styles.textContainer}>
                     <Text style={styles.titleText}>{item.name}</Text>
@@ -42,7 +41,7 @@ const CoursesList = ({ classesToDisplay }) => {
                     {GeneralIcons.findIcon(
                       "Forward",
                       20,
-                      Colors.changeOpacity("#ffffff", 0.25)
+                      Colors.changeOpacity("#000000", 0.25)
                     )}
                   </View>
                 </View>
@@ -57,18 +56,15 @@ const CoursesList = ({ classesToDisplay }) => {
 
 const styles = StyleSheet.create({
   classButton: {
-    marginBottom: 12,
-    borderRadius: 10,
-    marginHorizontal: 10,
     backgroundColor: "white",
     flexDirection: "row",
     alignItems: "center",
+    backgroundColor: "white",
+    height: 80,
   },
   classIconContainer: {
     height: 55,
     width: 55,
-    borderRadius: 10,
-    marginVertical: 12,
     alignItems: "center",
     justifyContent: "center",
     marginLeft: 12,
@@ -78,19 +74,23 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontSize: 18,
-    fontWeight: "700",
+    fontWeight: "500",
     marginBottom: 3,
-    color: "white",
+    color: "black",
   },
   classDetail: {
     fontSize: 10,
     fontWeight: "400",
-    color: "white",
+    color: "black",
   },
   arrowContainer: {
     marginRight: 15,
     alignItems: "flex-end",
     flex: 1,
+  },
+  nonDraggableClass: {
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: Colors.borderColor,
   },
 });
 

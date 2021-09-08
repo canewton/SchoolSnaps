@@ -9,12 +9,7 @@ import { Context as CalendarContext } from "../context/CalendarContext";
 
 const hiddenViewHeight = 300;
 
-const AssignmentsList = ({
-  assignments,
-  weeksArray,
-  monthDataArray,
-  weekCalendarFlatListRef,
-}) => {
+const AssignmentsList = ({ assignments, weeksArray, monthDataArray }) => {
   const navigation = useNavigation();
   const transitionRef = useRef();
   const assignmentFlatlistRef = useRef();
@@ -73,9 +68,6 @@ const AssignmentsList = ({
       specialDates.edit({
         id: "Selected Date",
         dateObject: firstViewableItemDayData,
-      });
-      weekCalendarFlatListRef.current.scrollToIndex({
-        index: firstViewableItemDayData.weekIndex,
       });
     }
   });

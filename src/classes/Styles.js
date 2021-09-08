@@ -3,7 +3,7 @@ import { Colors } from "./Colors";
 
 export default class Styles {
   static classesHeaderHeight = 160;
-  static assignmentsHeaderHeight = 200;
+  static assignmentsHeaderHeight = this.classesHeaderHeight;
   static profileHeaderHeight = this.classesHeaderHeight;
 
   static header = StyleSheet.create({
