@@ -17,7 +17,6 @@ import { Colors } from "./src/classes/Colors";
 import { Provider as ClassesProvider } from "./src/context/ClassesContext";
 import { Provider as NotesProvider } from "./src/context/NotesContext";
 import { Provider as SelectedNotesProvider } from "./src/context/SelectedNotesContext";
-import { Provider as CalendarProvider } from "./src/context/CalendarContext";
 import { Provider as AssignmentsProvider } from "./src/context/AssignmentsContext";
 import Styles from "./src/classes/Styles";
 
@@ -189,24 +188,22 @@ export default function App() {
       <NotesProvider>
         <ClassesProvider>
           <AssignmentsProvider>
-            <CalendarProvider>
-              <MenuProvider>
-                <NavigationContainer theme={Theme}>
-                  <RootStack.Navigator mode="modal">
-                    <RootStack.Screen
-                      name="Main"
-                      component={MainStackScreen}
-                      options={{ headerShown: false }}
-                    />
-                    <RootStack.Screen
-                      name="Camera"
-                      component={CameraSceen}
-                      options={{ headerShown: false }}
-                    />
-                  </RootStack.Navigator>
-                </NavigationContainer>
-              </MenuProvider>
-            </CalendarProvider>
+            <MenuProvider>
+              <NavigationContainer theme={Theme}>
+                <RootStack.Navigator mode="modal">
+                  <RootStack.Screen
+                    name="Main"
+                    component={MainStackScreen}
+                    options={{ headerShown: false }}
+                  />
+                  <RootStack.Screen
+                    name="Camera"
+                    component={CameraSceen}
+                    options={{ headerShown: false }}
+                  />
+                </RootStack.Navigator>
+              </NavigationContainer>
+            </MenuProvider>
           </AssignmentsProvider>
         </ClassesProvider>
       </NotesProvider>

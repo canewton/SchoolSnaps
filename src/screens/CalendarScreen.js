@@ -2,11 +2,9 @@ import React, { useState, useEffect, useContext } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AddButton from "../components/AddButton";
-import { Calendar } from "../classes/Calendar";
 import { Colors } from "../classes/Colors";
 import AssignmentsList from "../components/AssignmentsList";
 import { Context as AssignmentContext } from "../context/AssignmentsContext";
-import { Context as CalendarContext } from "../context/CalendarContext";
 import BottomSheetTrigger from "../components/BottomSheetTrigger";
 import AssignmentForm from "../components/AssignmentForm";
 import Styles from "../classes/Styles";
@@ -14,35 +12,8 @@ import TopTabs from "../components/TopTabs";
 
 const CalendarScreen = () => {
   const navigation = useNavigation();
-  const [monthDataArray, setMonthDataArray] = useState([]);
-  const [singletonHasRun, setSingletonHasRun] = useState(false);
-  const [weeksArray, setWeeksArray] = useState();
   const [activeTab, setActiveTab] = useState("Current");
-
   const assignments = useContext(AssignmentContext);
-  const specialDates = useContext(CalendarContext);
-
-  if (!singletonHasRun) {
-    const monthArray = Calendar.getFollowingMonths(
-      Calendar.currentMonth,
-      Calendar.currentYear,
-      Calendar.numberOfFutureMonthsToDisplay
-    );
-
-    const dayDataArray = Calendar.getAllDaysOfTheseMonths(monthArray);
-    setWeeksArray(Calendar.breakUpDaysIntoWeeks(dayDataArray));
-    setMonthDataArray(monthArray);
-
-    setSingletonHasRun(true);
-  }
-
-  useEffect(() => {
-    specialDates.edit({
-      id: "Selected Date",
-      dateObject: Calendar.getDayDataFromDate(new Date(), weeksArray, monthDataArray),
-    });
-  }, []);
-
   const tabButtons = [{ name: "Current" }, { name: "Late" }, { name: "Completed" }];
 
   React.useLayoutEffect(() => {
@@ -56,10 +27,6 @@ const CalendarScreen = () => {
               renderContent={(closeBottomSheet) => (
                 <AssignmentForm
                   initialValues={null}
-                  calendarData={{
-                    weeksArray: weeksArray,
-                    monthDataArray: monthDataArray,
-                  }}
                   onSubmit={(assignmentSubmitted) => {
                     assignments.add(assignmentSubmitted);
                     closeBottomSheet();
