@@ -131,6 +131,7 @@ const ClassForm = ({ onSubmit, initialValues, headerTitle }) => {
         />
       </View>
       <View style={{ marginBottom: 40 }} />
+      {!colorIsOpen && <View style={styles.collapsibleDivider} />}
       <AccordionListItem
         title="Color:  "
         pickedItem={() => (
@@ -141,7 +142,6 @@ const ClassForm = ({ onSubmit, initialValues, headerTitle }) => {
       >
         <ChooseColorGrid onPressCallback={() => setColorIsOpen(false)} />
       </AccordionListItem>
-      <View style={{ marginBottom: 40 }} />
       <AccordionListItem
         title="Icon:  "
         pickedItem={() => <View>{ClassIcons.findIcon(iconName, 18, primaryColor)}</View>}
@@ -159,6 +159,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "400",
     width: 500,
+    marginLeft: 10,
   },
   color: {
     height: optionCircleDiameter,
@@ -181,6 +182,10 @@ const styles = StyleSheet.create({
     height: 20,
     width: 20,
     borderRadius: 12,
+  },
+  collapsibleDivider: {
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: Colors.borderColor,
   },
 });
 

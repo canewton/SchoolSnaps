@@ -64,20 +64,10 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData, headerTitle }) 
         <View
           style={{
             ...styles.textInputContainer,
-            justifyContent: "center",
-            marginTop: 10,
-            borderBottomWidth: 0,
+            borderTopWidth: 0,
           }}
         >
-          <Text
-            style={{
-              ...styles.textInputLabel,
-              fontWeight: "bold",
-              color: Colors.primaryColor,
-            }}
-          >
-            Attach Notes
-          </Text>
+          <Text style={styles.textInputLabel}>Attached Notes:</Text>
         </View>
       </TouchableOpacity>
     );
@@ -131,7 +121,7 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData, headerTitle }) 
           );
         }}
       />
-      <View style={{ ...styles.textInputContainer, marginTop: 10 }}>
+      {/* <View style={{ ...styles.textInputContainer, marginTop: 10 }}>
         <Text style={styles.textInputLabel}>{"Title: "}</Text>
         <TextInput
           style={styles.input}
@@ -139,8 +129,8 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData, headerTitle }) 
           placeholder="(Optional)"
           onChangeText={(text) => setTitle(text)}
         />
-      </View>
-      <View style={{ marginBottom: 50 }} />
+      </View> */}
+      {!classIsOpen && <View style={styles.collapsibleDivider} />}
       <AccordionListItem
         title="Class:  "
         pickedItem={() => <Text style={styles.headerText}>{schoolClass.name}</Text>}
@@ -156,7 +146,6 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData, headerTitle }) 
           currentPick={schoolClass.id}
         />
       </AccordionListItem>
-      <View style={{ marginBottom: 15 }} />
       <AccordionListItem
         title="Type:  "
         pickedItem={() => <Text style={styles.headerText}>{iconName}</Text>}
@@ -174,6 +163,9 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData, headerTitle }) 
         />
       </AccordionListItem>
       <View style={{ marginBottom: 50 }} />
+      <TouchableOpacity style={styles.textInputContainer}>
+        <Text style={styles.textInputLabel}>{"Date: "}</Text>
+      </TouchableOpacity>
       {/* <AccordionListItem
         title="Date:  "
         pickedItem={() => (
@@ -245,8 +237,6 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData, headerTitle }) 
           />
         )}
       </BottomSheetTrigger>
-      <AttachedNotesList attachedNotesIDs={attachedNotesIDs} />
-      <View style={{ marginBottom: 70 }} />
     </View>
   );
 };
@@ -258,7 +248,7 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     width: 500,
   },
-  textInputLabel: { fontSize: 16, fontWeight: "400", letterSpacing: 0.5 },
+  textInputLabel: { fontSize: 16, fontWeight: "400", marginHorizontal: 10 },
   textInputContainer: {
     backgroundColor: "white",
     padding: 15,
@@ -280,6 +270,10 @@ const styles = StyleSheet.create({
     borderRadius: 28,
     alignItems: "center",
     justifyContent: "center",
+  },
+  collapsibleDivider: {
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: Colors.borderColor,
   },
 });
 

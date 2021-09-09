@@ -3,12 +3,17 @@ import { View, Text, StyleSheet, Animated, Easing, TouchableOpacity } from "reac
 import { Colors } from "../classes/Colors";
 
 const AccordionListItem = ({ title, children, pickedItem, open, setOpen, height }) => {
-  const animatedController = useRef(new Animated.Value(1)).current;
+  const expandAndCollapseAnimation = useRef(new Animated.Value(1)).current;
   const [bodySectionHeight, setBodySectionHeight] = useState(height);
 
-  const bodyHeight = animatedController.interpolate({
+  const bodyHeight = expandAndCollapseAnimation.interpolate({
     inputRange: [0, 1],
     outputRange: [0, bodySectionHeight === undefined ? 500 : bodySectionHeight],
+  });
+
+  const containerColor = expandAndCollapseAnimation.interpolate({
+    inputRange: [0, 1],
+    outputRange: ["rgba(255, 255, 255, 1)", "rgba(255, 255, 255, 0)"],
   });
 
   const toggleListItem = () => {
@@ -21,7 +26,7 @@ const AccordionListItem = ({ title, children, pickedItem, open, setOpen, height 
   };
 
   const closeListItem = () => {
-    Animated.timing(animatedController, {
+    Animated.timing(expandAndCollapseAnimation, {
       duration: 600,
       toValue: 0,
       useNativeDriver: false,
@@ -30,7 +35,7 @@ const AccordionListItem = ({ title, children, pickedItem, open, setOpen, height 
   };
 
   const openListItem = () => {
-    Animated.timing(animatedController, {
+    Animated.timing(expandAndCollapseAnimation, {
       duration: 600,
       toValue: 1,
       useNativeDriver: false,
@@ -49,10 +54,12 @@ const AccordionListItem = ({ title, children, pickedItem, open, setOpen, height 
   return (
     <View style={styles.collapsibleContainer}>
       <TouchableOpacity onPress={() => toggleListItem()}>
-        <View style={styles.collapsibleHeader}>
+        <Animated.View
+          style={[styles.collapsibleHeader, { backgroundColor: containerColor }]}
+        >
           <Text style={styles.headerText}>{title}</Text>
           {pickedItem()}
-        </View>
+        </Animated.View>
       </TouchableOpacity>
 
       {open && <View style={styles.collapsibleDivider} />}
@@ -77,6 +84,7 @@ export default AccordionListItem;
 const styles = StyleSheet.create({
   bodyBackground: {
     overflow: "hidden",
+    backgroundColor: "white",
   },
   bodyContainer: {
     position: "absolute",
@@ -90,13 +98,14 @@ const styles = StyleSheet.create({
   collapsibleDivider: {
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: Colors.borderColor,
-    marginLeft: 15,
   },
-  headerText: { fontSize: 16, fontWeight: "400", letterSpacing: 0.5 },
+  headerText: {
+    fontSize: 16,
+    fontWeight: "400",
+    marginLeft: 10,
+  },
   collapsibleContainer: {
-    backgroundColor: "white",
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderTopWidth: StyleSheet.hairlineWidth,
     borderColor: Colors.borderColor,
   },
 });
