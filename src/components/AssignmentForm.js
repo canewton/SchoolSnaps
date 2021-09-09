@@ -174,7 +174,7 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData, headerTitle }) 
         />
       </AccordionListItem>
       <View style={{ marginBottom: 50 }} />
-      <AccordionListItem
+      {/* <AccordionListItem
         title="Date:  "
         pickedItem={() => (
           <Text style={styles.headerText}>
@@ -209,7 +209,7 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData, headerTitle }) 
             }}
           />
         </View>
-      </AccordionListItem>
+      </AccordionListItem> */}
       <BottomSheetTrigger
         sheetStyle={{ backgroundColor: Colors.backgroundColor }}
         renderContent={() => <AttachNotesForm schoolClass={schoolClass} />}

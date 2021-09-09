@@ -123,12 +123,15 @@ const AssignmentsList = ({
                 {itemDate.getDate() === new Date().getDate() &&
                 itemDate.getMonth() === new Date().getMonth() &&
                 itemDate.getFullYear() === new Date().getFullYear()
-                  ? "Today"
-                  : Calendar.monthNames[itemDate.getMonth()] +
+                  ? "Today, " +
+                    Calendar.monthNames[itemDate.getMonth()] +
                     " " +
-                    itemDate.getDate() +
+                    itemDate.getDate()
+                  : Calendar.weekNames[itemDate.getDay()] +
                     ", " +
-                    itemDate.getFullYear()}
+                    Calendar.monthNames[itemDate.getMonth()] +
+                    " " +
+                    itemDate.getDate()}
               </Text>
               {item.map((listItemData, listItemIndex) => {
                 return (

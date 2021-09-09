@@ -21,6 +21,15 @@ export class Calendar {
     "November",
     "December",
   ];
+  static weekNames = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
 
   static getFollowingMonths(currentMonth, currentYear, numberOfMonths) {
     if (currentMonth === 12) {
