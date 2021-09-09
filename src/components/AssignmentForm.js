@@ -1,15 +1,22 @@
-import React, { useContext, useState, useEffect } from "react";
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import React, { useContext, useState, useEffect, useRef } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  Modal,
+  Animated,
+  Easing,
+} from "react-native";
 import { Calendar } from "../classes/Calendar";
 import { Context as ClassesContext } from "../context/ClassesContext";
-import { Context as CalendarContext } from "../context/CalendarContext";
 import { Context as SelectedNotesContext } from "../context/SelectedNotesContext";
 import { Context as NotesContext } from "../context/NotesContext";
 import HorizontalScrollPicker from "./HorizontalScrollPicker";
 import { AssignmentTypeIcons } from "../icons/AssignmentTypeIcons";
 import AccordionListItem from "./AccordianListItem";
-import CalendarDisplay from "../calendar/CalendarDisplay";
 import { Assignment } from "../classes/Assignment";
 import { Colors } from "../classes/Colors";
 import FormBottomSheetHeader from "../components/FormBottomSheetHeader";
@@ -17,10 +24,10 @@ import BottomSheetTrigger from "./BottomSheetTrigger";
 import AttachNotesForm from "./AttachNotesForm";
 import NotesList from "./NotesList";
 import { ItemArray } from "../classes/ItemArray";
+import { Calendar as CalendarDisplay } from "react-native-calendars";
 
-const AssignmentForm = ({ onSubmit, initialValues, calendarData, headerTitle }) => {
+const AssignmentForm = ({ onSubmit, initialValues, headerTitle }) => {
   const classes = useContext(ClassesContext);
-  const specialDates = useContext(CalendarContext);
   const selectedNotes = useContext(SelectedNotesContext);
   const notes = useContext(NotesContext);
 
@@ -31,20 +38,14 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData, headerTitle }) 
   const [iconName, setIconName] = useState(
     AssignmentTypeIcons.iconList(30, "white")[0].name
   );
-  const [date, setDate] = useState(
-    Calendar.getDateFromDayData(
-      specialDates.state[0].dateObject,
-      calendarData.monthDataArray
-    )
-  );
+  const [date, setDate] = useState(new Date());
   const [attachedNotesIDs, setAttachedNotesIDs] = useState([]);
   const [completed, setCompleted] = useState(false);
 
   const [classIsOpen, setClassIsOpen] = useState(true);
   const [typeIsOpen, setTypeIsOpen] = useState(true);
-  const [calendarIsOpen, setCalendarIsOpen] = useState(true);
-
-  const navigation = useNavigation();
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [showCalendarModal, setShowCalendarModal] = useState(false);
 
   useEffect(() => {
     if (initialValues !== null) {
@@ -73,24 +74,46 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData, headerTitle }) 
     );
   };
 
+  const calendarOpacityRef = useRef(new Animated.Value(0)).current;
+
+  const calendarOpacity = calendarOpacityRef.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 1],
+  });
+
+  const fadeIn = () => {
+    Animated.timing(calendarOpacityRef, {
+      duration: 600,
+      toValue: 1,
+      useNativeDriver: false,
+      easing: Easing.bezier(0.4, 0.0, 0.2, 1),
+    }).start();
+  };
+
+  const fadeOut = () => {
+    Animated.timing(calendarOpacityRef, {
+      duration: 600,
+      toValue: 0,
+      useNativeDriver: false,
+      easing: Easing.bezier(0.4, 0.0, 0.2, 1),
+    }).start(() => setShowCalendarModal(false));
+  };
+
+  useEffect(() => {
+    if (showCalendar === true) {
+      setShowCalendarModal(true);
+      fadeIn();
+    } else {
+      fadeOut();
+    }
+  }, [showCalendar]);
+
   const AttachedNotesList = ({ attachedNotesIDs }) => {
     const attachedNotes = attachedNotesIDs.map((noteID) =>
       ItemArray.find(notes.state, "id", noteID.id)
     );
     return (
-      <View style={{ ...styles.textInputContainer, paddingLeft: 0 }}>
-        {attachedNotesIDs.length <= 0 && (
-          <Text
-            style={{
-              ...styles.textInputLabel,
-              color: Colors.changeOpacity("#000000", 0.14),
-              height: 100,
-              marginLeft: 15,
-            }}
-          >
-            No Notes Attached
-          </Text>
-        )}
+      <View>
         {attachedNotesIDs.length > 0 && (
           <NotesList
             notesFilteredByDate={attachedNotes}
@@ -99,6 +122,9 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData, headerTitle }) 
             scrollable={false}
           />
         )}
+        <TouchableWithoutFeedback>
+          <View style={{ position: "absolute", left: 0, right: 0, top: 0, bottom: 0 }} />
+        </TouchableWithoutFeedback>
       </View>
     );
   };
@@ -114,7 +140,7 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData, headerTitle }) 
               schoolClass,
               title,
               iconName,
-              date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear(),
+              date.toLocaleDateString(),
               completed,
               attachedNotesIDs
             )
@@ -163,45 +189,14 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData, headerTitle }) 
         />
       </AccordionListItem>
       <View style={{ marginBottom: 50 }} />
-      <TouchableOpacity style={styles.textInputContainer}>
-        <Text style={styles.textInputLabel}>{"Date: "}</Text>
-      </TouchableOpacity>
-      {/* <AccordionListItem
-        title="Date:  "
-        pickedItem={() => (
-          <Text style={styles.headerText}>
-            {Calendar.monthNames[date.getMonth()] +
-              " " +
-              date.getDate() +
-              ", " +
-              date.getFullYear()}
-          </Text>
-        )}
-        open={calendarIsOpen}
-        setOpen={setCalendarIsOpen}
+      <TouchableOpacity
+        onPress={() => setShowCalendar(true)}
+        style={styles.textInputContainer}
       >
-        <View style={{ marginBottom: 25 }}>
-          <CalendarDisplay
-            weeksArray={calendarData.weeksArray}
-            monthDataArray={calendarData.monthDataArray}
-            spaceBetweenPages={Calendar.spaceBetweenPages}
-            onPressCallback={(pickedItem) => {
-              const monthIndexOfSelectedDate = pickedItem.monthIndex;
-              const selectedDate = pickedItem.day;
-              const monthOfSelectedDate =
-                calendarData.monthDataArray[monthIndexOfSelectedDate].month + 1;
-              const yearOfSelectedDate =
-                calendarData.monthDataArray[monthIndexOfSelectedDate].year;
-              setDate(
-                new Date(
-                  monthOfSelectedDate + "/" + selectedDate + "/" + yearOfSelectedDate
-                )
-              );
-              setCalendarIsOpen(false);
-            }}
-          />
-        </View>
-      </AccordionListItem> */}
+        <Text style={styles.textInputLabel}>
+          {"Date:  " + Calendar.getDateInWords(date)}
+        </Text>
+      </TouchableOpacity>
       <BottomSheetTrigger
         sheetStyle={{ backgroundColor: Colors.backgroundColor }}
         renderContent={() => <AttachNotesForm schoolClass={schoolClass} />}
@@ -237,6 +232,32 @@ const AssignmentForm = ({ onSubmit, initialValues, calendarData, headerTitle }) 
           />
         )}
       </BottomSheetTrigger>
+      <AttachedNotesList attachedNotesIDs={attachedNotesIDs} />
+      {showCalendarModal && (
+        <Modal transparent={true}>
+          <TouchableWithoutFeedback onPress={() => setShowCalendar(false)}>
+            <Animated.View
+              style={[
+                {
+                  flex: 1,
+                  backgroundColor: Colors.changeOpacity("#000000", 0.8),
+                  justifyContent: "center",
+                },
+                { opacity: calendarOpacity },
+              ]}
+            >
+              <CalendarDisplay
+                style={{ marginHorizontal: 25, padding: 10, borderRadius: 10 }}
+                onDayPress={(date) => {
+                  setDate(new Date(date.month + "/" + date.day + "/" + date.year));
+                  setShowCalendar(false);
+                }}
+                markedDates={{ [date.toISOString().split("T")[0]]: { selected: true } }}
+              />
+            </Animated.View>
+          </TouchableWithoutFeedback>
+        </Modal>
+      )}
     </View>
   );
 };

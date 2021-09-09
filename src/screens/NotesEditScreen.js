@@ -92,31 +92,33 @@ const NotesEditScreen = ({ route }) => {
   const transition = <Transition.Change interpolation="easeInOut" durationMs={400} />;
 
   return (
-    <Transitioning.View style={{ flex: 1 }} transition={transition} ref={transitionRef}>
-      {/* Notes List */}
-      <DraggableFlatList
-        data={notesOnScreen}
-        keyExtractor={(item) => item.id + ""}
-        ListFooterComponent={() => <View style={{ height: 160 }} />}
-        onDragEnd={({ data }) => {
-          notes.edit({ id: noteGroupID, notes: data });
-          setNotesOnScreen(data);
-        }}
-        renderItem={({ item, drag, isActive }) => {
-          return (
-            <DraggableNote
-              onLongPress={() => drag}
-              isDraggable={isActive}
-              note={item}
-              noteGroupID={noteGroupID}
-              deleteNote={(note) => {
-                deleteNote(note);
-                transitionRef.current.animateNextTransition();
-              }}
-            />
-          );
-        }}
-      />
+    <View style={{ flex: 1 }}>
+      <Transitioning.View style={{ flex: 1 }} transition={transition} ref={transitionRef}>
+        {/* Notes List */}
+        <DraggableFlatList
+          data={notesOnScreen}
+          keyExtractor={(item) => item.id + ""}
+          ListFooterComponent={() => <View style={{ height: 160 }} />}
+          onDragEnd={({ data }) => {
+            notes.edit({ id: noteGroupID, notes: data });
+            setNotesOnScreen(data);
+          }}
+          renderItem={({ item, drag, isActive }) => {
+            return (
+              <DraggableNote
+                onLongPress={drag}
+                isDraggable={isActive}
+                note={item}
+                noteGroupID={noteGroupID}
+                deleteNote={(note) => {
+                  deleteNote(note);
+                  transitionRef.current.animateNextTransition();
+                }}
+              />
+            );
+          }}
+        />
+      </Transitioning.View>
 
       {/* Floating action button to add notes */}
       <FloatingActionButton
@@ -146,7 +148,7 @@ const NotesEditScreen = ({ route }) => {
           }
         }}
       />
-    </Transitioning.View>
+    </View>
   );
 };
 

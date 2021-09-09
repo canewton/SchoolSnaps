@@ -31,6 +31,18 @@ export class Calendar {
     "Saturday",
   ];
 
+  static getDateInWords(date) {
+    return date.getDate() === new Date().getDate() &&
+      date.getMonth() === new Date().getMonth() &&
+      date.getFullYear() === new Date().getFullYear()
+      ? "Today, " + this.monthNames[date.getMonth()] + " " + date.getDate()
+      : this.weekNames[date.getDay()] +
+          ", " +
+          this.monthNames[date.getMonth()] +
+          " " +
+          date.getDate();
+  }
+
   static getFollowingMonths(currentMonth, currentYear, numberOfMonths) {
     if (currentMonth === 12) {
       currentMonth = 1;

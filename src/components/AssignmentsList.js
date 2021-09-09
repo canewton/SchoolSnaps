@@ -119,20 +119,7 @@ const AssignmentsList = ({
           const itemDate = new Date(item[0].date);
           return (
             <View>
-              <Text style={styles.dateText}>
-                {itemDate.getDate() === new Date().getDate() &&
-                itemDate.getMonth() === new Date().getMonth() &&
-                itemDate.getFullYear() === new Date().getFullYear()
-                  ? "Today, " +
-                    Calendar.monthNames[itemDate.getMonth()] +
-                    " " +
-                    itemDate.getDate()
-                  : Calendar.weekNames[itemDate.getDay()] +
-                    ", " +
-                    Calendar.monthNames[itemDate.getMonth()] +
-                    " " +
-                    itemDate.getDate()}
-              </Text>
+              <Text style={styles.dateText}>{Calendar.getDateInWords(itemDate)}</Text>
               {item.map((listItemData, listItemIndex) => {
                 return (
                   <AssignmentListItem

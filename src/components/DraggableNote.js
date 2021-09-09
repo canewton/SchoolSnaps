@@ -67,7 +67,11 @@ const DraggableNote = ({ onLongPress, isDraggable, note, deleteNote }) => {
     <Lightbox
       underlayColor="white"
       swipeToDismiss={false}
-      onLongPress={onLongPress()}
+      onLongPress={() => {
+        if (onLongPress !== undefined) {
+          onLongPress();
+        }
+      }}
       onOpen={() => {
         setIsFullscreened(true);
         setNotesAreEditable(true);

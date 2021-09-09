@@ -112,12 +112,9 @@ const CalendarScreen = () => {
   };
 
   const isAssignmentLate = (assignmentDateString) => {
-    const today = new Date();
     return (
       new Date(assignmentDateString).getTime() <
-      new Date(
-        today.getMonth() + 1 + "/" + today.getDate() + "/" + today.getFullYear()
-      ).getTime()
+      new Date(new Date().toLocaleDateString()).getTime()
     );
   };
 
