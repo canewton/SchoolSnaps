@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
-import { View, Text, StyleSheet, Modal, Dimensions } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import { View, StyleSheet, Modal, Dimensions } from "react-native";
 import Animated, {
   useAnimatedGestureHandler,
   useSharedValue,
@@ -7,9 +7,12 @@ import Animated, {
   withTiming,
   useDerivedValue,
   runOnJS,
-  withDecay,
 } from "react-native-reanimated";
-import { PanGestureHandler } from "react-native-gesture-handler";
+import {
+  PanGestureHandler,
+  NativeViewGestureHandler,
+  TapGestureHandler,
+} from "react-native-gesture-handler";
 
 const BottomSheetTrigger = ({
   children,
@@ -19,27 +22,36 @@ const BottomSheetTrigger = ({
   onSheetClose,
 }) => {
   const viewHeight = Dimensions.get("window").height;
-  const [modalVisible, setModalVisible] = useState(false);
-  const [open, setOpen] = useState(false);
   const spaceFromTop = 40;
   const maxPos = viewHeight - spaceFromTop;
   const minPos = 0;
+  const scrollViewY = useRef(new Animated.Value(0)).current;
+  const scroll = useRef();
+  const sheet = useRef();
+  const masterSheet = useRef();
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [scrolledToTop, setScrolledToTop] = useState(true);
 
   const posY = useSharedValue(maxPos);
-  const scrollY = useSharedValue(0);
   const speed = 1.4;
 
   const sheetAnimatedStyle = useAnimatedStyle(() => {
     return { transform: [{ translateY: posY.value }] };
   });
 
-  const renderContentAnimatedStyle = useAnimatedStyle(() => {
-    return { transform: [{ translateY: scrollY.value }] };
-  });
-
   const backgroundStyle = useAnimatedStyle(() => {
     return { opacity: (maxPos - posY.value) / (maxPos - minPos) };
   });
+
+  const onScrollToTop = (scrollYValue) => {
+    if (scrollYValue === 0 && scrolledToTop === false) {
+      setScrolledToTop(true);
+    } else if (scrollYValue !== 0 && scrolledToTop === true) {
+      setScrolledToTop(false);
+    }
+  };
 
   const openBottomSheet = () => {
     setOpen(true);
@@ -81,88 +93,103 @@ const BottomSheetTrigger = ({
     }
   }, [posY.value]);
 
-  const gestureHandler = useAnimatedGestureHandler({
-    onStart(_, context) {
-      context.startPos = posY.value;
-      context.startScroll = scrollY.value;
-    },
-    onActive(event, context) {
-      if (scrollY.value < 0 || (posY.value <= minPos && event.translationY < 0)) {
-        scrollY.value = context.startScroll + event.translationY;
-        if (scrollY.value > 0) {
-          scrollY.value = 0;
-        }
-      } else {
+  const gestureHandler = useAnimatedGestureHandler(
+    {
+      onStart(_, context) {
+        context.startPos = posY.value;
+      },
+      onActive(event, context) {
         posY.value = context.startPos + event.translationY;
         if (posY.value < minPos) {
           posY.value = minPos;
         }
-        if (posY.value > minPos && context.startScroll !== 0) {
-          context.startScroll = 0;
+        //console.log(scrollViewY);
+      },
+      onEnd() {
+        if (posY.value < minPos + 200) {
+          posY.value = withTiming(minPos, {
+            duration: ((posY.value - minPos) / speed) * 1.8,
+          });
+        } else {
+          posY.value = withTiming(maxPos, {
+            duration: (maxPos - posY.value) / speed,
+          });
         }
-      }
+      },
     },
-    onEnd(event) {
-      scrollY.value = withDecay({ velocity: event.velocityY, clamp: [-300, 0] });
-
-      if (posY.value < minPos + 200) {
-        posY.value = withTiming(minPos, {
-          duration: ((posY.value - minPos) / speed) * 1.8,
-        });
-      } else {
-        posY.value = withTiming(maxPos, {
-          duration: (maxPos - posY.value) / speed,
-        });
-      }
-    },
-  });
+    []
+  );
 
   return (
     <View>
       <View>{children(openBottomSheet)}</View>
       <Modal animationType="none" transparent={true} visible={modalVisible}>
-        <Animated.View
-          style={[
-            backgroundStyle,
-            {
-              flex: 1,
-              backgroundColor: "black",
-            },
-          ]}
-        >
+        <TapGestureHandler maxDurationMs={100000} ref={masterSheet} maxDeltaY={maxPos}>
           <Animated.View
             style={[
-              sheetAnimatedStyle,
+              backgroundStyle,
               {
-                position: "absolute",
-                top: spaceFromTop,
-                bottom: 0,
-                left: 0,
-                right: 0,
-                height: viewHeight,
-                backgroundColor: "white",
-                borderTopLeftRadius: 10,
-                borderTopRightRadius: 10,
-                overflow: "hidden",
-                ...sheetStyle,
+                flex: 1,
+                backgroundColor: "black",
               },
             ]}
           >
-            <PanGestureHandler onGestureEvent={gestureHandler}>
-              <Animated.View style={[renderContentAnimatedStyle]}>
-                <View style={{ height: 900 }}>
-                  {renderContent !== undefined && renderContent(closeBottomSheet)}
-                </View>
-              </Animated.View>
-            </PanGestureHandler>
-            {headerComponent !== undefined && headerComponent(closeBottomSheet)}
+            <Animated.View
+              style={[
+                sheetAnimatedStyle,
+                {
+                  ...styles.bottomSheet,
+                  top: spaceFromTop,
+                  height: maxPos,
+                  ...sheetStyle,
+                },
+              ]}
+            >
+              <PanGestureHandler
+                ref={sheet}
+                simultaneousHandlers={[scroll, masterSheet]}
+                onGestureEvent={gestureHandler}
+              >
+                <Animated.View style={{ flex: 1 }}>
+                  <NativeViewGestureHandler
+                    ref={scroll}
+                    simultaneousHandlers={sheet}
+                    waitFor={masterSheet}
+                  >
+                    <Animated.ScrollView
+                      style={{ flex: 1 }}
+                      bounces={false}
+                      onScrollBeginDrag={(event) =>
+                        onScrollToTop(event.nativeEvent.contentOffset.y)
+                      }
+                      scrollEventThrottle={5}
+                    >
+                      {renderContent !== undefined && renderContent(closeBottomSheet)}
+                    </Animated.ScrollView>
+                  </NativeViewGestureHandler>
+                </Animated.View>
+              </PanGestureHandler>
+              {headerComponent !== undefined && headerComponent(closeBottomSheet)}
+            </Animated.View>
           </Animated.View>
-        </Animated.View>
+        </TapGestureHandler>
       </Modal>
     </View>
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  bottomSheet: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "white",
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    overflow: "hidden",
+    flex: 1,
+  },
+});
 
 export default BottomSheetTrigger;
