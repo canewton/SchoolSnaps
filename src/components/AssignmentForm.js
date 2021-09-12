@@ -233,6 +233,7 @@ const AssignmentForm = ({ onSubmit, initialValues, headerTitle }) => {
         )}
       </BottomSheetTrigger>
       <AttachedNotesList attachedNotesIDs={attachedNotesIDs} />
+      <View style={{ height: 1000, backgroundColor: "red" }} />
       {showCalendarModal && (
         <Modal transparent={true}>
           <TouchableWithoutFeedback onPress={() => setShowCalendar(false)}>

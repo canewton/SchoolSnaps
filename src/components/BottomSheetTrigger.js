@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { View, StyleSheet, Modal, Dimensions } from "react-native";
-import Animated, {
-  useAnimatedGestureHandler,
+import { View, StyleSheet, Modal, Dimensions, Animated } from "react-native";
+import {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
@@ -12,6 +11,7 @@ import {
   PanGestureHandler,
   NativeViewGestureHandler,
   TapGestureHandler,
+  State,
 } from "react-native-gesture-handler";
 
 const BottomSheetTrigger = ({
@@ -23,124 +23,108 @@ const BottomSheetTrigger = ({
 }) => {
   const viewHeight = Dimensions.get("window").height;
   const spaceFromTop = 40;
-  const maxPos = viewHeight - spaceFromTop;
-  const minPos = 0;
-  const scrollViewY = useRef(new Animated.Value(0)).current;
+  const sheetHeight = viewHeight - spaceFromTop;
+  const closePos = sheetHeight;
+  const openPos = 0;
+  const dragY = new Animated.Value(0);
+  const translateYOffset = new Animated.Value(closePos);
+  const lastScrollY = new Animated.Value(0);
+  const reverseLastScrollY = Animated.multiply(new Animated.Value(-1), lastScrollY);
+
+  const translateY = Animated.add(
+    Animated.add(dragY, reverseLastScrollY),
+    translateYOffset
+  ).interpolate({
+    inputRange: [openPos, closePos],
+    outputRange: [openPos, closePos],
+    extrapolate: "clamp",
+  });
+  const sheetOpacity = Animated.add(
+    Animated.add(dragY, reverseLastScrollY),
+    translateYOffset
+  ).interpolate({
+    inputRange: [openPos, closePos],
+    outputRange: [1, 0],
+    extrapolate: "clamp",
+  });
+
   const scroll = useRef();
   const sheet = useRef();
   const masterSheet = useRef();
 
   const [modalVisible, setModalVisible] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [scrolledToTop, setScrolledToTop] = useState(true);
+  const [sheetIsOpen, setSheetIsOpen] = useState(false);
+  const sheetSpeed = 1;
 
-  const posY = useSharedValue(maxPos);
-  const speed = 1.4;
-
-  const sheetAnimatedStyle = useAnimatedStyle(() => {
-    return { transform: [{ translateY: posY.value }] };
-  });
-
-  const backgroundStyle = useAnimatedStyle(() => {
-    return { opacity: (maxPos - posY.value) / (maxPos - minPos) };
-  });
-
-  const onScrollToTop = (scrollYValue) => {
-    if (scrollYValue === 0 && scrolledToTop === false) {
-      setScrolledToTop(true);
-    } else if (scrollYValue !== 0 && scrolledToTop === true) {
-      setScrolledToTop(false);
+  useEffect(() => {
+    if (sheetIsOpen === true) {
+      setModalVisible(true);
+      animateBottomSheet(openPos, closePos);
+    } else {
+      animateBottomSheet(closePos, openPos);
     }
-  };
+  }, [sheetIsOpen]);
 
   const openBottomSheet = () => {
-    setOpen(true);
-    setModalVisible(true);
+    setSheetIsOpen(true);
   };
 
   const closeBottomSheet = () => {
-    setOpen(false);
+    setSheetIsOpen(false);
   };
 
-  useEffect(() => {
-    if (open === true) {
-      posY.value = withTiming(minPos, {
-        duration: (posY.value - minPos) / speed,
-      });
-    } else if (open === false) {
-      posY.value = withTiming(maxPos, {
-        duration: (maxPos - posY.value) / speed,
-      });
-    }
-  }, [open]);
-
-  const stopRenderingModal = () => {
-    setModalVisible(false);
-    setOpen(false);
-  };
-
-  useEffect(() => {
-    if (!modalVisible) {
-      if (onSheetClose !== undefined) {
-        onSheetClose();
+  const animateBottomSheet = (destination, translationY) => {
+    Animated.timing(translateYOffset, {
+      duration: (translationY - spaceFromTop) / sheetSpeed,
+      toValue: destination,
+      useNativeDriver: true,
+    }).start(() => {
+      if (destination === closePos) {
+        setModalVisible(false);
       }
-    }
-  }, [modalVisible]);
+    });
+  };
 
-  useDerivedValue(() => {
-    if (posY.value === maxPos) {
-      runOnJS(stopRenderingModal)();
-    }
-  }, [posY.value]);
+  const gestureHandler = Animated.event([{ nativeEvent: { translationY: dragY } }], {
+    useNativeDriver: true,
+  });
 
-  const gestureHandler = useAnimatedGestureHandler(
-    {
-      onStart(_, context) {
-        context.startPos = posY.value;
-      },
-      onActive(event, context) {
-        posY.value = context.startPos + event.translationY;
-        if (posY.value < minPos) {
-          posY.value = minPos;
-        }
-        //console.log(scrollViewY);
-      },
-      onEnd() {
-        if (posY.value < minPos + 200) {
-          posY.value = withTiming(minPos, {
-            duration: ((posY.value - minPos) / speed) * 1.8,
-          });
-        } else {
-          posY.value = withTiming(maxPos, {
-            duration: (maxPos - posY.value) / speed,
-          });
-        }
-      },
-    },
-    []
+  const onRegisterLastScroll = Animated.event(
+    [{ nativeEvent: { contentOffset: { y: lastScrollY } } }],
+    { useNativeDriver: true }
   );
+
+  const onReleaseBottomSheet = ({ nativeEvent }) => {
+    if (nativeEvent.oldState === State.ACTIVE) {
+      let { translationY } = nativeEvent;
+      dragY.setValue(0);
+      translateYOffset.extractOffset();
+      translateYOffset.setValue(translationY);
+      translateYOffset.flattenOffset();
+      var sheetDestination = 0;
+      if (translationY > sheetHeight / 2) {
+        sheetDestination = closePos;
+      }
+      animateBottomSheet(sheetDestination, translationY);
+    }
+  };
 
   return (
     <View>
       <View>{children(openBottomSheet)}</View>
       <Modal animationType="none" transparent={true} visible={modalVisible}>
-        <TapGestureHandler maxDurationMs={100000} ref={masterSheet} maxDeltaY={maxPos}>
-          <Animated.View
-            style={[
-              backgroundStyle,
-              {
-                flex: 1,
-                backgroundColor: "black",
-              },
-            ]}
+        <Animated.View style={[styles.background, { opacity: sheetOpacity }]}>
+          <TapGestureHandler
+            maxDurationMs={100000}
+            ref={masterSheet}
+            maxDeltaY={sheetHeight}
           >
             <Animated.View
               style={[
-                sheetAnimatedStyle,
+                { transform: [{ translateY: translateY }] },
                 {
                   ...styles.bottomSheet,
-                  top: spaceFromTop,
-                  height: maxPos,
+                  height: sheetHeight,
                   ...sheetStyle,
                 },
               ]}
@@ -149,6 +133,7 @@ const BottomSheetTrigger = ({
                 ref={sheet}
                 simultaneousHandlers={[scroll, masterSheet]}
                 onGestureEvent={gestureHandler}
+                onHandlerStateChange={onReleaseBottomSheet}
               >
                 <Animated.View style={{ flex: 1 }}>
                   <NativeViewGestureHandler
@@ -159,9 +144,7 @@ const BottomSheetTrigger = ({
                     <Animated.ScrollView
                       style={{ flex: 1 }}
                       bounces={false}
-                      onScrollBeginDrag={(event) =>
-                        onScrollToTop(event.nativeEvent.contentOffset.y)
-                      }
+                      onScrollBeginDrag={onRegisterLastScroll}
                       scrollEventThrottle={5}
                     >
                       {renderContent !== undefined && renderContent(closeBottomSheet)}
@@ -171,8 +154,8 @@ const BottomSheetTrigger = ({
               </PanGestureHandler>
               {headerComponent !== undefined && headerComponent(closeBottomSheet)}
             </Animated.View>
-          </Animated.View>
-        </TapGestureHandler>
+          </TapGestureHandler>
+        </Animated.View>
       </Modal>
     </View>
   );
@@ -189,6 +172,10 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 10,
     overflow: "hidden",
     flex: 1,
+  },
+  background: {
+    flex: 1,
+    backgroundColor: "black",
   },
 });
 
