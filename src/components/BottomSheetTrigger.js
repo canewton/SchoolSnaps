@@ -1,13 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { View, StyleSheet, Modal, Dimensions, Animated } from "react-native";
 import {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  useDerivedValue,
-  runOnJS,
-} from "react-native-reanimated";
-import {
   PanGestureHandler,
   NativeViewGestureHandler,
   TapGestureHandler,
@@ -27,7 +20,7 @@ const BottomSheetTrigger = ({
   const closePos = sheetHeight;
   const openPos = 0;
   const dragY = new Animated.Value(0);
-  const translateYOffset = new Animated.Value(closePos);
+  const translateYOffset = new Animated.Value(0);
   const lastScrollY = new Animated.Value(0);
   const reverseLastScrollY = Animated.multiply(new Animated.Value(-1), lastScrollY);
 
@@ -80,6 +73,9 @@ const BottomSheetTrigger = ({
       useNativeDriver: true,
     }).start(() => {
       if (destination === closePos) {
+        if (sheetIsOpen === true) {
+          setSheetIsOpen(false);
+        }
         setModalVisible(false);
       }
     });
