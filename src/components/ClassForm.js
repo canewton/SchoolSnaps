@@ -150,6 +150,7 @@ const ClassForm = ({ onSubmit, initialValues, headerTitle }) => {
       >
         <ChooseIconGrid onPressCallback={() => setIconIsOpen(false)} />
       </AccordionListItem>
+      <View style={{ height: 2000, backgroundColor: "blue" }} />
     </View>
   );
 };

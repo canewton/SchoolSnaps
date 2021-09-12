@@ -6,7 +6,7 @@ import AddButton from "../components/AddButton";
 import CoursesList from "../components/CoursesList";
 import { ItemArray } from "../classes/ItemArray";
 import { Colors } from "../classes/Colors";
-import BottomSheetTrigger from "../components/BottomSheetTrigger";
+import BottomSheet from "../components/BottomSheet";
 import ClassForm from "../components/ClassForm";
 import Styles from "../classes/Styles";
 
@@ -16,6 +16,7 @@ const HomeScreen = () => {
   const bottomSheet = useRef();
 
   const [activeTab, setActiveTab] = useState("Current");
+  //console.log(bottomSheet);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -23,21 +24,7 @@ const HomeScreen = () => {
         <View style={{ height: Styles.classesHeaderHeight }}>
           <View style={Styles.header.container}>
             <Text style={Styles.header.text}>My Courses</Text>
-            {/* <BottomSheetTrigger
-              sheetStyle={{ backgroundColor: Colors.backgroundColor }}
-              ref={bottomSheet}
-              renderContent={
-                <ClassForm
-                  initialValues={null}
-                  onSubmit={(classSubmitted) => {
-                    classes.add(classSubmitted);
-                  }}
-                  headerTitle="New Class"
-                />
-              }
-            >
-              {<AddButton onPressCallback={() => {}} />}
-            </BottomSheetTrigger> */}
+            <AddButton onPressCallback={() => bottomSheet.current.open()} />
           </View>
           <View style={{ marginBottom: 12.5 }} />
           <View
@@ -65,8 +52,6 @@ const HomeScreen = () => {
     });
   });
 
-  console.log(bottomSheet);
-
   return (
     <View style={{ flex: 1, marginBottom: 85 }}>
       {activeTab === "Current" && (
@@ -80,6 +65,17 @@ const HomeScreen = () => {
           classesToDisplay={ItemArray.filter(classes.state, "status", "Completed")}
         />
       )}
+
+      <BottomSheet ref={bottomSheet}>
+        <ClassForm
+          initialValues={null}
+          onSubmit={(classSubmitted) => {
+            classes.add(classSubmitted);
+            bottomSheet.current.close();
+          }}
+          headerTitle="New Class"
+        />
+      </BottomSheet>
     </View>
   );
 };

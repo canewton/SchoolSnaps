@@ -12,7 +12,7 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import { ItemArray } from "../classes/ItemArray";
 import { NoteGroup } from "../classes/NoteGroup";
 import { WrittenNote } from "../classes/WrittenNote";
-import BottomSheetTrigger from "../components/BottomSheetTrigger";
+import BottomSheet from "../components/BottomSheet";
 import ClassForm from "../components/ClassForm";
 import { Colors } from "../classes/Colors";
 import { Animated } from "react-native";
@@ -120,80 +120,59 @@ const NotesScreen = ({ route }) => {
           }}
         />
       )}
-
-      {/* Options Bottom Sheet Content */}
-      <BottomSheetTrigger
-        sheetStyle={{ backgroundColor: Colors.backgroundColor }}
-        onSheetClose={() => {
-          bottomSheetIsOpen.value = false;
+      <RBSheet
+        ref={optionsSheetRef}
+        closeOnDragDown={false}
+        height={290}
+        openDuration={250}
+        onClose={() => {
+          if (bottomSheetIsOpen.value === true) {
+            Animated.delay(200).start(() => {});
+          }
         }}
-        renderContent={(closeBottomSheet) => (
-          <ClassForm
-            initialValues={route.params}
-            onSubmit={(classSubmitted) => {
-              classes.edit(classSubmitted);
-              closeBottomSheet();
-            }}
-            headerTitle="Edit Class"
-          />
-        )}
       >
-        {(openBottomSheet) => (
-          <RBSheet
-            ref={optionsSheetRef}
-            closeOnDragDown={false}
-            height={290}
-            openDuration={250}
-            onClose={() => {
-              if (bottomSheetIsOpen.value === true) {
-                Animated.delay(200).start(() => openBottomSheet());
-              }
+        <View style={{ backgroundColor: "white" }}>
+          <IconNextToTextButton
+            title="Select notes"
+            iconName="Select"
+            buttonFunction={() => {
+              setMode(modes[1]);
+              optionsSheetRef.current.close();
             }}
-          >
-            <View style={{ backgroundColor: "white" }}>
-              <IconNextToTextButton
-                title="Select notes"
-                iconName="Select"
-                buttonFunction={() => {
-                  setMode(modes[1]);
-                  optionsSheetRef.current.close();
-                }}
-              />
-              <IconNextToTextButton title="Filter notes" iconName="Filter" />
-              <View style={styles.border} />
-              <IconNextToTextButton
-                title="Edit class"
-                iconName="Edit"
-                buttonFunction={() => {
-                  bottomSheetIsOpen.value = true;
-                  optionsSheetRef.current.close();
-                }}
-              />
-              <IconNextToTextButton
-                title={classIsArchived ? "Remove from archives" : "Archive class"}
-                iconName="Archive"
-                buttonFunction={() => {
-                  classes.edit({
-                    id: schoolClass.id,
-                    status: classIsArchived ? "Current" : "Completed",
-                  });
-                  setClassIsArchived(!classIsArchived);
-                  optionsSheetRef.current.close();
-                }}
-              />
-              <IconNextToTextButton
-                title="Delete class"
-                iconName="Delete"
-                buttonFunction={() => {
-                  classes.delete(schoolClass.id);
-                  optionsSheetRef.current.close();
-                  navigation.pop();
-                }}
-              />
-            </View>
-          </RBSheet>
-        )}
-      </BottomSheetTrigger>
+          />
+          <IconNextToTextButton title="Filter notes" iconName="Filter" />
+          <View style={styles.border} />
+          <IconNextToTextButton
+            title="Edit class"
+            iconName="Edit"
+            buttonFunction={() => {
+              bottomSheetIsOpen.value = true;
+              optionsSheetRef.current.close();
+            }}
+          />
+          <IconNextToTextButton
+            title={classIsArchived ? "Remove from archives" : "Archive class"}
+            iconName="Archive"
+            buttonFunction={() => {
+              classes.edit({
+                id: schoolClass.id,
+                status: classIsArchived ? "Current" : "Completed",
+              });
+              setClassIsArchived(!classIsArchived);
+              optionsSheetRef.current.close();
+            }}
+          />
+          <IconNextToTextButton
+            title="Delete class"
+            iconName="Delete"
+            buttonFunction={() => {
+              classes.delete(schoolClass.id);
+              optionsSheetRef.current.close();
+              navigation.pop();
+            }}
+          />
+        </View>
+      </RBSheet>
 
       {/* Create Bottom Sheet Content */}
       <RBSheet
@@ -240,6 +219,17 @@ const NotesScreen = ({ route }) => {
           <IconNextToTextButton title="Add to assignment" iconName="Tasks" />
         </View>
       </RBSheet>
+
+      <BottomSheet sheetStyle={{ backgroundColor: Colors.backgroundColor }}>
+        <ClassForm
+          initialValues={route.params}
+          onSubmit={(classSubmitted) => {
+            classes.edit(classSubmitted);
+            closeBottomSheet();
+          }}
+          headerTitle="Edit Class"
+        />
+      </BottomSheet>
     </View>
   );
 };

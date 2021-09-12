@@ -20,7 +20,7 @@ import AccordionListItem from "./AccordianListItem";
 import { Assignment } from "../classes/Assignment";
 import { Colors } from "../classes/Colors";
 import FormBottomSheetHeader from "../components/FormBottomSheetHeader";
-import BottomSheetTrigger from "./BottomSheetTrigger";
+import BottomSheet from "./BottomSheet";
 import AttachNotesForm from "./AttachNotesForm";
 import NotesList from "./NotesList";
 import { ItemArray } from "../classes/ItemArray";
@@ -46,6 +46,8 @@ const AssignmentForm = ({ onSubmit, initialValues, headerTitle }) => {
   const [typeIsOpen, setTypeIsOpen] = useState(true);
   const [showCalendar, setShowCalendar] = useState(false);
   const [showCalendarModal, setShowCalendarModal] = useState(false);
+
+  const bottomSheet = useRef();
 
   useEffect(() => {
     if (initialValues !== null) {
@@ -197,41 +199,12 @@ const AssignmentForm = ({ onSubmit, initialValues, headerTitle }) => {
           {"Date:  " + Calendar.getDateInWords(date)}
         </Text>
       </TouchableOpacity>
-      <BottomSheetTrigger
-        sheetStyle={{ backgroundColor: Colors.backgroundColor }}
-        renderContent={() => <AttachNotesForm schoolClass={schoolClass} />}
-        onSheetClose={() => selectedNotes.clear()}
-        headerComponent={(closeBottomSheet) => (
-          <View style={styles.attachNotesButtonContainer}>
-            <TouchableOpacity
-              onPress={() => {
-                setAttachedNotesIDs(selectedNotes.state);
-                closeBottomSheet();
-              }}
-            >
-              <View
-                style={{
-                  ...styles.attachNotesButton,
-                  backgroundColor: schoolClass.primaryColor,
-                }}
-              >
-                <Text style={{ fontSize: 18, color: "white", fontWeight: "500" }}>
-                  {"Attach " + selectedNotes.state.length + " Notes"}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        )}
-      >
-        {(openBottomSheet) => (
-          <AttachNotesButton
-            onPressCallback={() => {
-              attachedNotesIDs.forEach((noteID) => selectedNotes.add(noteID));
-              openBottomSheet();
-            }}
-          />
-        )}
-      </BottomSheetTrigger>
+      <AttachNotesButton
+        onPressCallback={() => {
+          attachedNotesIDs.forEach((noteID) => selectedNotes.add(noteID));
+          bottomSheet.current.open();
+        }}
+      />
       <AttachedNotesList attachedNotesIDs={attachedNotesIDs} />
       <View style={{ height: 1000, backgroundColor: "red" }} />
       {showCalendarModal && (
@@ -259,6 +232,34 @@ const AssignmentForm = ({ onSubmit, initialValues, headerTitle }) => {
           </TouchableWithoutFeedback>
         </Modal>
       )}
+
+      <BottomSheet
+        ref={bottomSheet}
+        headerContent={() => (
+          <View style={styles.attachNotesButtonContainer}>
+            <TouchableOpacity
+              onPress={() => {
+                setAttachedNotesIDs(selectedNotes.state);
+                bottomSheet.current.close();
+              }}
+            >
+              <View
+                style={{
+                  ...styles.attachNotesButton,
+                  backgroundColor: schoolClass.primaryColor,
+                }}
+              >
+                <Text style={{ fontSize: 18, color: "white", fontWeight: "500" }}>
+                  {"Attach " + selectedNotes.state.length + " Notes"}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        )}
+        onSheetClose={() => selectedNotes.clear()}
+      >
+        <AttachNotesForm schoolClass={schoolClass} />
+      </BottomSheet>
     </View>
   );
 };

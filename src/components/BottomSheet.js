@@ -1,11 +1,13 @@
-import React, { useState, useEffect, useRef, Component } from "react";
+import React, { Component } from "react";
 import { View, StyleSheet, Modal, Dimensions, Animated } from "react-native";
 import {
   PanGestureHandler,
   NativeViewGestureHandler,
   TapGestureHandler,
   State,
+  ScrollView,
 } from "react-native-gesture-handler";
+import { Colors } from "../classes/Colors";
 
 const viewHeight = Dimensions.get("window").height;
 const spaceFromTop = 40;
@@ -14,7 +16,7 @@ const closePos = sheetHeight;
 const openPos = 0;
 const sheetSpeed = 1;
 
-export default class BottomSheetTrigger extends Component {
+export default class BottomSheet extends Component {
   scroll = React.createRef();
   sheet = React.createRef();
   masterSheet = React.createRef();
@@ -25,7 +27,7 @@ export default class BottomSheetTrigger extends Component {
       modalVisible: false,
     };
     this.dragY = new Animated.Value(0);
-    this.translateYOffset = new Animated.Value(0);
+    this.translateYOffset = new Animated.Value(closePos);
     this.lastScrollY = new Animated.Value(0);
     this.reverseLastScrollY = Animated.multiply(new Animated.Value(-1), this.lastScrollY);
 
@@ -96,14 +98,12 @@ export default class BottomSheetTrigger extends Component {
   };
 
   render() {
-    const { children, sheetStyle, renderContent, headerComponent, onSheetClose } =
-      this.props;
+    const { children, headerComponent, onSheetClose } = this.props;
 
     const { modalVisible } = this.state;
 
     return (
       <View>
-        <View>{children}</View>
         <Modal animationType="none" transparent={true} visible={modalVisible}>
           <Animated.View style={[styles.background, { opacity: this.sheetOpacity }]}>
             <TapGestureHandler
@@ -117,7 +117,6 @@ export default class BottomSheetTrigger extends Component {
                   {
                     ...styles.bottomSheet,
                     height: sheetHeight,
-                    ...sheetStyle,
                   },
                 ]}
               >
@@ -134,12 +133,16 @@ export default class BottomSheetTrigger extends Component {
                       waitFor={this.masterSheet}
                     >
                       <Animated.ScrollView
-                        style={{ flex: 1 }}
+                        style={{
+                          backgroundColor: Colors.backgroundColor,
+                        }}
                         bounces={false}
                         onScrollBeginDrag={this.onRegisterLastScroll}
                         scrollEventThrottle={5}
+                        onScroll={() => console.log("ugh")}
                       >
-                        {renderContent !== undefined && renderContent}
+                        {/* <View style={{ backgroundColor: "green", height: 3000 }} /> */}
+                        {children !== undefined && children}
                       </Animated.ScrollView>
                     </NativeViewGestureHandler>
                   </Animated.View>

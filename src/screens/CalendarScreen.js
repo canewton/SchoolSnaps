@@ -5,7 +5,7 @@ import AddButton from "../components/AddButton";
 import { Colors } from "../classes/Colors";
 import AssignmentsList from "../components/AssignmentsList";
 import { Context as AssignmentContext } from "../context/AssignmentsContext";
-import BottomSheetTrigger from "../components/BottomSheetTrigger";
+import BottomSheet from "../components/BottomSheet";
 import AssignmentForm from "../components/AssignmentForm";
 import Styles from "../classes/Styles";
 import TopTabs from "../components/TopTabs";
@@ -23,24 +23,7 @@ const CalendarScreen = () => {
         <View style={{ height: Styles.assignmentsHeaderHeight }}>
           <View style={Styles.header.container}>
             <Text style={Styles.header.text}>Assignments</Text>
-            <BottomSheetTrigger
-              ref={bottomSheet}
-              sheetStyle={{ backgroundColor: Colors.backgroundColor }}
-              renderContent={(closeBottomSheet) => (
-                <AssignmentForm
-                  initialValues={null}
-                  onSubmit={(assignmentSubmitted) => {
-                    assignments.add(assignmentSubmitted);
-                    closeBottomSheet();
-                  }}
-                  headerTitle="New Assignment"
-                />
-              )}
-            >
-              {(openBottomSheet) => (
-                <AddButton onPressCallback={() => openBottomSheet()} />
-              )}
-            </BottomSheetTrigger>
+            <AddButton onPressCallback={() => bottomSheet.current.open()} />
           </View>
           <View style={{ marginBottom: 12.5 }} />
           <View
@@ -133,6 +116,17 @@ const CalendarScreen = () => {
           descending={false}
         />
       )}
+
+      <BottomSheet ref={bottomSheet}>
+        <AssignmentForm
+          initialValues={null}
+          onSubmit={(assignmentSubmitted) => {
+            assignments.add(assignmentSubmitted);
+            bottomSheet.current.close();
+          }}
+          headerTitle="New Assignment"
+        />
+      </BottomSheet>
     </View>
   );
 };
