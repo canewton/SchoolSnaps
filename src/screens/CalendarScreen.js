@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AddButton from "../components/AddButton";
@@ -15,6 +15,7 @@ const CalendarScreen = () => {
   const [activeTab, setActiveTab] = useState("Current");
   const assignments = useContext(AssignmentContext);
   const tabButtons = [{ name: "Current" }, { name: "Late" }, { name: "Completed" }];
+  const bottomSheet = useRef();
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -23,6 +24,7 @@ const CalendarScreen = () => {
           <View style={Styles.header.container}>
             <Text style={Styles.header.text}>Assignments</Text>
             <BottomSheetTrigger
+              ref={bottomSheet}
               sheetStyle={{ backgroundColor: Colors.backgroundColor }}
               renderContent={(closeBottomSheet) => (
                 <AssignmentForm
@@ -58,6 +60,8 @@ const CalendarScreen = () => {
       ),
     });
   });
+
+  //console.log(bottomSheet);
 
   /* Filter assignments based on their lateness and completeness */
   const getCurrentAssignments = (assignmentsInput) => {

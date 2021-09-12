@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useRef } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Context as ClassesContext } from "../context/ClassesContext";
 import { useNavigation } from "@react-navigation/native";
@@ -13,6 +13,7 @@ import Styles from "../classes/Styles";
 const HomeScreen = () => {
   const classes = useContext(ClassesContext);
   const navigation = useNavigation();
+  const bottomSheet = useRef();
 
   const [activeTab, setActiveTab] = useState("Current");
 
@@ -22,23 +23,21 @@ const HomeScreen = () => {
         <View style={{ height: Styles.classesHeaderHeight }}>
           <View style={Styles.header.container}>
             <Text style={Styles.header.text}>My Courses</Text>
-            <BottomSheetTrigger
+            {/* <BottomSheetTrigger
               sheetStyle={{ backgroundColor: Colors.backgroundColor }}
-              renderContent={(closeBottomSheet) => (
+              ref={bottomSheet}
+              renderContent={
                 <ClassForm
                   initialValues={null}
                   onSubmit={(classSubmitted) => {
                     classes.add(classSubmitted);
-                    closeBottomSheet();
                   }}
                   headerTitle="New Class"
                 />
-              )}
+              }
             >
-              {(openBottomSheet) => (
-                <AddButton onPressCallback={() => openBottomSheet()} />
-              )}
-            </BottomSheetTrigger>
+              {<AddButton onPressCallback={() => {}} />}
+            </BottomSheetTrigger> */}
           </View>
           <View style={{ marginBottom: 12.5 }} />
           <View
@@ -65,6 +64,8 @@ const HomeScreen = () => {
       ),
     });
   });
+
+  console.log(bottomSheet);
 
   return (
     <View style={{ flex: 1, marginBottom: 85 }}>

@@ -91,6 +91,8 @@ const NotesScreen = ({ route }) => {
     });
   });
 
+  //console.log(optionsSheetRef);
+
   return (
     <View
       style={{
