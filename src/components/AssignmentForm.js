@@ -9,6 +9,7 @@ import {
   Modal,
   Animated,
   Easing,
+  LogBox,
 } from "react-native";
 import { Calendar } from "../classes/Calendar";
 import { Context as ClassesContext } from "../context/ClassesContext";
@@ -50,6 +51,10 @@ const AssignmentForm = ({ onSubmit, initialValues, headerTitle }) => {
   const bottomSheet = useRef();
 
   useEffect(() => {
+    LogBox.ignoreLogs([
+      "VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.",
+    ]);
+
     if (initialValues !== null) {
       setId(initialValues.id);
       setTitle(initialValues.title);
@@ -206,7 +211,6 @@ const AssignmentForm = ({ onSubmit, initialValues, headerTitle }) => {
         }}
       />
       <AttachedNotesList attachedNotesIDs={attachedNotesIDs} />
-      <View style={{ height: 1000, backgroundColor: "red" }} />
       {showCalendarModal && (
         <Modal transparent={true}>
           <TouchableWithoutFeedback onPress={() => setShowCalendar(false)}>
@@ -235,7 +239,7 @@ const AssignmentForm = ({ onSubmit, initialValues, headerTitle }) => {
 
       <BottomSheet
         ref={bottomSheet}
-        headerContent={() => (
+        footerComponent={() => (
           <View style={styles.attachNotesButtonContainer}>
             <TouchableOpacity
               onPress={() => {
@@ -284,7 +288,7 @@ const styles = StyleSheet.create({
   attachNotesButtonContainer: {
     position: "absolute",
     alignSelf: "center",
-    bottom: 80 + 56 / 2,
+    bottom: 40 + 56 / 2,
     width: 220,
   },
   attachNotesButton: {

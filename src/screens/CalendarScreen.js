@@ -44,8 +44,6 @@ const CalendarScreen = () => {
     });
   });
 
-  //console.log(bottomSheet);
-
   /* Filter assignments based on their lateness and completeness */
   const getCurrentAssignments = (assignmentsInput) => {
     return assignmentsInput.filter((assignment) => {

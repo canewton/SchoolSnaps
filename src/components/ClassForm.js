@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   TextInput,
-  FlatList,
   Dimensions,
   TouchableOpacity,
 } from "react-native";
@@ -47,21 +46,37 @@ const ClassForm = ({ onSubmit, initialValues, headerTitle }) => {
     }
   }, []);
 
+  const separateDataIntoRows = (data, numColumns) => {
+    const data2dArray = new Array(Math.ceil(data.length / numColumns));
+    var dataIndex = 0;
+
+    for (let i = 0; i < data2dArray.length; i++) {
+      const rowArray = new Array();
+      for (let j = 0; j < numColumns; j++) {
+        if (dataIndex < data.length) {
+          rowArray.push(data[dataIndex]);
+          dataIndex++;
+        }
+      }
+      data2dArray[i] = rowArray;
+    }
+    return data2dArray;
+  };
+
   const ChooseColorGrid = ({ onPressCallback }) => {
+    const data = Colors.classColors;
+    const data2dArray = separateDataIntoRows(data, optionColumns);
     return (
       <View style={{ margin: edgeMargin }}>
-        <FlatList
-          data={Colors.classColors}
-          keyExtractor={(index) => index.primaryColor}
-          numColumns={optionColumns}
-          scrollEnabled={false}
-          renderItem={({ item }) => {
-            return (
+        {data2dArray.map((rowData, rowIndex) => (
+          <View style={{ flexDirection: "row" }} key={"row " + rowIndex}>
+            {rowData.map((item, columnIndex) => (
               <TouchableOpacity
                 onPress={() => {
                   setPrimaryColor(item.primaryColor);
                   onPressCallback();
                 }}
+                key={"column " + columnIndex}
               >
                 <View style={{ ...styles.color, backgroundColor: item.primaryColor }}>
                   {/* if this is the color that the user selects, put a checkmark on it */}
@@ -70,52 +85,48 @@ const ClassForm = ({ onSubmit, initialValues, headerTitle }) => {
                   )}
                 </View>
               </TouchableOpacity>
-            );
-          }}
-        />
+            ))}
+          </View>
+        ))}
       </View>
     );
   };
 
   const ChooseIconGrid = ({ onPressCallback }) => {
+    const data = ClassIcons.iconList(22, "white");
+    const data2dArray = separateDataIntoRows(data, optionColumns);
+
+    const selectedStyle = { ...styles.color, backgroundColor: primaryColor };
+    const defaultStyle = {
+      ...styles.color,
+      backgroundColor: primaryColor,
+      opacity: 0.25,
+    };
     return (
       <View style={{ margin: edgeMargin }}>
-        <FlatList
-          data={ClassIcons.iconList(22, "white")}
-          keyExtractor={(index) => index.name + ""}
-          numColumns={optionColumns}
-          scrollEnabled={false}
-          renderItem={({ item }) => {
-            return (
+        {data2dArray.map((rowData, rowIndex) => (
+          <View style={{ flexDirection: "row" }} key={"row " + rowIndex}>
+            {rowData.map((item, columnIndex) => (
               <TouchableOpacity
                 onPress={() => {
                   setIconName(item.name);
                   onPressCallback();
                 }}
+                key={"column " + columnIndex}
               >
-                <View
-                  style={
-                    iconName === item.name
-                      ? { ...styles.color, backgroundColor: primaryColor }
-                      : {
-                          ...styles.color,
-                          backgroundColor: primaryColor,
-                          opacity: 0.25,
-                        }
-                  }
-                >
+                <View style={iconName === item.name ? selectedStyle : defaultStyle}>
                   {item.icon}
                 </View>
               </TouchableOpacity>
-            );
-          }}
-        />
+            ))}
+          </View>
+        ))}
       </View>
     );
   };
 
   return (
-    <View>
+    <View style={{ backgroundColor: Colors.backgroundColor }}>
       <FormBottomSheetHeader
         title={headerTitle}
         onSaveCallback={() => {
@@ -150,7 +161,6 @@ const ClassForm = ({ onSubmit, initialValues, headerTitle }) => {
       >
         <ChooseIconGrid onPressCallback={() => setIconIsOpen(false)} />
       </AccordionListItem>
-      <View style={{ height: 2000, backgroundColor: "blue" }} />
     </View>
   );
 };
