@@ -1,6 +1,5 @@
 import React, { useState, useContext } from "react";
 import { View, StyleSheet, TouchableOpacity, Dimensions, ScrollView } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import WrittenNoteForm from "../components/WrittenNoteForm";
 import { WrittenNote } from "../classes/WrittenNote";
 import { Context as NotesContext } from "../context/NotesContext";
@@ -16,6 +15,7 @@ const DraggableNote = ({ onLongPress, isDraggable, note, deleteNote }) => {
   const fullscreenNoteHeight = Dimensions.get("window").height;
   const defaultNoteHeight = 300;
 
+  //Change the style of the note when it is not fullscreened and when it is fullscreened
   const WrittenNoteThatCanBeFullscreened = () => {
     return (
       <ScrollView showsVerticalScrollIndicator={false} scrollEnabled={isFullscreened}>
@@ -35,6 +35,7 @@ const DraggableNote = ({ onLongPress, isDraggable, note, deleteNote }) => {
     );
   };
 
+  //Put buttons on the header of the note group
   const FullscreenHeader = ({ onCloseCallback }) => {
     return (
       <View
@@ -64,6 +65,7 @@ const DraggableNote = ({ onLongPress, isDraggable, note, deleteNote }) => {
   };
 
   return (
+    /* Allow the note to become fullscreened when the user taps it */
     <Lightbox
       underlayColor="white"
       swipeToDismiss={false}

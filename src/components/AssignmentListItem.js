@@ -8,10 +8,14 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { GeneralIcons } from "../icons/GeneralIcons";
+import { useNavigation } from "@react-navigation/native";
 
 const AssignmentListItem = ({ item, onPressCheckmark }) => {
+  const navigation = useNavigation();
   const [completed, setCompleted] = useState(item.completed);
   const opacityAnimationRef = useRef(new Animated.Value(1)).current;
+
+  //variables that allow the assignment to fade out when the checkmark is pressed
   const fadeAnimation = {
     duration: 800,
     toValue: 0,
@@ -26,12 +30,15 @@ const AssignmentListItem = ({ item, onPressCheckmark }) => {
     <Animated.View
       style={{ flexDirection: "row", justifyContent: "flex-end", opacity: opacity }}
     >
+      {/* Assignment button that displays more assignment info when pressed */}
       <TouchableOpacity
         onPress={() =>
-          navigation.navigate("Edit Assignment", {
-            assignment: item,
-            weeksArray: weeksArray,
-            monthDataArray: monthDataArray,
+          navigation.navigate("Assignment Info", {
+            name:
+              item.title === ""
+                ? item.schoolClass.name + " " + item.iconName
+                : item.title,
+            primaryColor: item.schoolClass.primaryColor,
           })
         }
         style={{
@@ -39,6 +46,7 @@ const AssignmentListItem = ({ item, onPressCheckmark }) => {
           backgroundColor: item.schoolClass.primaryColor,
         }}
       >
+        {/* Checkmark box that changes assignment properties when pressed */}
         <TouchableWithoutFeedback
           onPress={() => {
             item.toggleCompleted();
@@ -52,6 +60,7 @@ const AssignmentListItem = ({ item, onPressCheckmark }) => {
               borderColor: item.schoolClass.primaryColor,
             }}
           >
+            {/* display a checkmark if the user has pressed the box */}
             {completed && (
               <View>
                 {GeneralIcons.findIcon("Check", 16, item.schoolClass.primaryColor)}

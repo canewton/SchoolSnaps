@@ -11,6 +11,7 @@ import SettingsScreen from "./src/screens/SettingsScreen";
 import NotesScreen from "./src/screens/NotesScreen";
 import NotesEditScreen from "./src/screens/NotesEditScreen";
 import CameraSceen from "./src/screens/CameraScreen";
+import AssignmentInfoScreen from "./src/screens/AssignmentInfoScreen";
 
 import { BottomTabIcons } from "./src/icons/BottomTabIcons";
 import { Colors } from "./src/classes/Colors";
@@ -25,6 +26,7 @@ const MainStack = createStackNavigator();
 const HomeStack = createStackNavigator();
 const CalendarStack = createStackNavigator();
 const SettingsStack = createStackNavigator();
+const AssignmentInfoStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 //edit the default theme to customize the background color and header color
@@ -126,6 +128,18 @@ const SettingsStackScreen = () => {
   );
 };
 
+/* const AssignmentInfoStackSceen = () => {
+  return (
+    <AssignmentInfoStack.Navigator>
+      <AssignmentInfoStack.Screen
+        name="Assignment Info"
+        component={AssignmentInfoScreen}
+        options={classHeaderStyle(route.params.primaryColor, route.params.name)}
+      />
+    </AssignmentInfoStack.Navigator>
+  );
+}; */
+
 const TabNavigator = () => {
   return (
     <Tab.Navigator tabBarOptions={customTabBarStyle}>
@@ -176,6 +190,13 @@ const MainStackScreen = () => {
         component={NotesEditScreen}
         options={({ route }) =>
           classHeaderStyle(route.params.schoolClass.primaryColor, "")
+        }
+      />
+      <MainStack.Screen
+        name="Assignment Info"
+        component={AssignmentInfoScreen}
+        options={({ route }) =>
+          classHeaderStyle(route.params.primaryColor, route.params.name)
         }
       />
     </MainStack.Navigator>
